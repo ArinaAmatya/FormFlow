@@ -2,12 +2,13 @@
     -----------------------------------------------------------------------
                                 THEME GUIDLINES
     -----------------------------------------------------------------------
-    Primary font    | Josefin Sans | for most aesthetic things
-    Secondary font  | Prompt       | for serious things
-    Primary color   | #0084c6      | for logo/text
-    Secondary color | #c3ccd6      | for contrasting background
-    Tertiary color  | #e4eaf1      | for background
-    Grey            | #dddddd      | for boring stuff
+    Main font          | Josefin Sans | for most aesthetic things
+    Data font          | Prompt       | for serious things
+    Logo/text color    | #0084c6      | for logo/text
+    BG color           | #e4eaf1      | for background
+    Theme color 1      | #b7cbe2      | for contrasting background
+    Theme color 2      | #cad8e7      | for contrasting background
+    Theme color 3      | #dddddd      | for boring grey stuff
 */
 
 body {
