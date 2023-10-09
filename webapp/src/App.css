@@ -1,34 +1,45 @@
 /*
-    ---------------
-    THEME GUIDLINES
-    ---------------
-    Primary Font - Josefin Sans
-    Secondary Font - Prompt
-    Main color for logo/text - #0084C6
-    Secondary color for background - #E4EAF1
-    Grey for boring stuff - #DDDDDD
+    -----------------------------------------------------------------------
+                                THEME GUIDLINES
+    -----------------------------------------------------------------------
+    Primary font    | Josefin Sans | for most aesthetic things
+    Secondary font  | Prompt       | for serious things
+    Primary color   | #0084c6      | for logo/text
+    Secondary color | #c3ccd6      | for contrasting background
+    Tertiary color  | #e4eaf1      | for background
+    Grey            | #dddddd      | for boring stuff
 */
 
 body {
-    color: #0084C6;
-    background-color: #E4EAF1;
+    color: #0084c6;
+    background-color: #e4eaf1;
     font-weight: bold;
     font-family: "Josefin Sans";
 }
 
-.searchbar-container {
-    padding: 10px;
-    border-radius: 12px;
-}
-
-.vertically-center-no-padding {
+.searchbar-col {
     margin-top: auto;
     margin-bottom: auto;
     padding: 0px;
 }
 
 .searchbar-input-box-container {
-    padding-left: 10px;
-    padding-right: 7px;
+    border-radius: 12px 0px 0px 12px;
+    background-color: #b7cbe2;
+    padding: 10px;
     width: 1000px;
+}
+
+.search-button {
+    border-radius: 0px 12px 12px 0px;
+    border-color: #cad8e7;
+    border-width: 4px;
+    padding: 11px 6px;
+    background-color: #cad8e7;
+}
+
+.bi.search-icon {
+    height: 38px;
+    width: 38px;
+    fill: #0084C6;
 }
