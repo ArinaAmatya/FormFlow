@@ -18,24 +18,20 @@ body {
     font-family: "Josefin Sans";
 }
 
-.searchbar-col {
-    margin-top: auto;
-    margin-bottom: auto;
-    padding: 0px;
+.searchbar-container {
+    display: flex;
 }
 
 .searchbar-input-box-container {
     border-radius: 12px 0px 0px 12px;
     background-color: #b7cbe2;
     padding: 10px;
-    width: 1000px;
+    width: 500px;
 }
 
-.search-button {
+.MuiButtonBase-root.search-button {
     border-radius: 0px 12px 12px 0px;
-    border-color: #cad8e7;
-    border-width: 4px;
-    padding: 11px 6px;
+    border-color: #b7cbe2;
     background-color: #cad8e7;
 }
 
