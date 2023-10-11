@@ -1,0 +1,19 @@
+/*
+    -----------------------------------------------------------------------
+                                THEME GUIDLINES
+    -----------------------------------------------------------------------
+    Main font          | Josefin Sans | for most aesthetic things
+    Data font          | Prompt       | for serious things
+    Logo/text color    | #0084c6      | for logo/text
+    BG color           | #e4eaf1      | for background
+    Theme color 1      | #b7cbe2      | for contrasting background
+    Theme color 2      | #cad8e7      | for contrasting background
+    Theme color 3      | #dddddd      | for boring grey stuff
+*/
+
+body {
+    color: #0084c6;
+    background-color: #e4eaf1;
+    font-weight: bold;
+    font-family: "Josefin Sans";
+}
