@@ -18,6 +18,7 @@ public class FrontendController {
   /* 
    * Fetch file metadata rows based on a search query originating from the frontend
    * @param query The query originating from the frontend web application
+   * @return String that holds the JSON file metadata
    * */
   @GetMapping("/getFileMetadata?{query}")
   public String getFileMetadata(@PathVariable("query") String query) {
@@ -27,6 +28,7 @@ public class FrontendController {
   /* 
    * Fetch file object based on a search query originating from the frontend
    * @param filePath The path of the object in the file store database
+   * @return File object that was fetched
    * */
   @GetMapping("/getFileObject/{filePath}")
   public String getFileObject(@PathVariable("filePath") String filePath) {
@@ -36,6 +38,7 @@ public class FrontendController {
   /* 
    * Received information on the current state of frontend web application
    * @param state The updated state of the web application
+   * @return Status code indicating the result of processing the message body information
    * */
   @PostMapping(path="/postApplicationState",
     consumes = {"application/json"})

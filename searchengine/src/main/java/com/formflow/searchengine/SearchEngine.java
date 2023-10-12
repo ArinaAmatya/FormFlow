@@ -17,8 +17,7 @@ public class SearchEngine {
    */
   public String getFileMetadata(String frontendQuery) {
     String sqlQuery = parseFrontendQuery(frontendQuery);
-    // Next, fetch from database and return the JSON
-    return "Fetching File Metadata!";
+    return db.fetchFileMetadata(sqlQuery);
   }
 
   /*
