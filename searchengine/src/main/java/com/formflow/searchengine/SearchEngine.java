@@ -1,6 +1,7 @@
 package com.formflow.searchengine;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.Session;
 
 /* Performs main searching functionality for documents, metadata, and user profiles */
 public class SearchEngine {
@@ -8,6 +9,9 @@ public class SearchEngine {
   /* Wrapper object to perform all database query calls */
   @Autowired
   public SupabaseWrapper db;
+
+  @Autowired
+  private Session session;
 
   /*
    * Fetches the file metadata corresponding to a query selection
@@ -27,6 +31,16 @@ public class SearchEngine {
    * @return String of MySQL to query the database based on the frontend query
    */
   private String parseFrontendQuery(String frontendQuery) {
+    // Parse the frontend query
+    String[] parameters = frontendQuery.split("&");
+    for (String parameter : parameters) {
+      String[] keyValuePair = parameter.split("=");
+      String key = keyValuePair[0];
+      String[] values = keyValuePair[1].split(",");
+    }
+
+    // TODO: create a SQL query based on the parsed frontend query
+
     return null;
   }
 }
