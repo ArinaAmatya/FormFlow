@@ -6,10 +6,6 @@ import org.hibernate.Session;
 /* Performs main searching functionality for documents, metadata, and user profiles */
 public class SearchEngine {
 
-  /* Wrapper object to perform all database query calls */
-  @Autowired
-  public SupabaseWrapper db;
-
   @Autowired
   private Session session;
 

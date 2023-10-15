@@ -17,10 +17,4 @@ public class Config {
   public Session createHibernateSession() {
     return new HibernateUtil().openSession();
   }
-
-  /* SupabaseWrapper Bean */
-  @Bean
-  public SupabaseWrapper supabaseWrapper() {
-    return new SupabaseWrapper();
-  }
 }
