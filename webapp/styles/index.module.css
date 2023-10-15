@@ -1,0 +1,39 @@
+/*
+    -----------------------------------------------------------------------
+                                THEME GUIDLINES
+    -----------------------------------------------------------------------
+    Main font          | Josefin Sans | for most aesthetic things
+    Data font          | Prompt       | for serious things
+    Logo/text color    | #0084c6      | for logo/text
+    BG color           | #e4eaf1      | for background
+    Theme color 1      | #b7cbe2      | for contrasting background
+    Theme color 2      | #cad8e7      | for contrasting background
+    Theme color 3      | #dddddd      | for boring grey stuff
+*/
+
+.home-container {
+    margin: 0;
+    position: fixed;
+    text-align: center;
+    top: calc(50% - 356px);
+    left: calc((100% - 300px)/2);
+}
+
+.login {
+    height: 40px;
+    width: 100px;
+    margin: 5px;
+    background-color: #0084c6;
+}
+
+.sign-up {
+    height: 40px;
+    width: 100px;
+    margin: 5px;
+    color: black;
+    background-color: #b7cbe2
+}
+
+.sign-up:hover {
+    background-color: #afc3da
+}
