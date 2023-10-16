@@ -1,6 +1,11 @@
 package com.formflow.searchengine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +19,31 @@ public class FrontendController {
   /* The search engine singleton */
   @Autowired
   public SearchEngine searchEngine;
+
+  @Autowired
+	RepositoryInterface repositoryInterface;
+
+  @GetMapping("/testConnection")
+  public ResponseEntity<List<Model>> testConnection() {
+    try {
+			List<Model> tutorials = new ArrayList<Model>();
+
+			repositoryInterface.findAll().forEach(tutorials::add);
+
+      System.out.println(tutorials);
+
+			if (tutorials.isEmpty()) {
+        System.out.println("empty");
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+      System.out.println("good");
+			return new ResponseEntity<>(tutorials, HttpStatus.OK);
+		} catch (Exception e) {
+      System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+  }
 
   /* 
    * Fetch file metadata rows based on a search query originating from the frontend

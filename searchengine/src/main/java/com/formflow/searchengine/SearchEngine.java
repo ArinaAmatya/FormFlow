@@ -6,9 +6,6 @@ import org.hibernate.Session;
 /* Performs main searching functionality for documents, metadata, and user profiles */
 public class SearchEngine {
 
-  @Autowired
-  private Session session;
-
   /*
    * Fetches the file metadata corresponding to a query selection
    * @param query The string query received from the frontend

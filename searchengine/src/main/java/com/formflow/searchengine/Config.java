@@ -12,9 +12,4 @@ public class Config {
   public SearchEngine searchEngine() {
     return new SearchEngine();
   }
-
-  @Bean
-  public Session createHibernateSession() {
-    return new HibernateUtil().openSession();
-  }
 }
