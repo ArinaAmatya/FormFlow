@@ -33,14 +33,11 @@ public class FrontendController {
       System.out.println(tutorials);
 
 			if (tutorials.isEmpty()) {
-        System.out.println("empty");
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-      System.out.println("good");
 			return new ResponseEntity<>(tutorials, HttpStatus.OK);
 		} catch (Exception e) {
-      System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
   }

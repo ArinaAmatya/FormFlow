@@ -15,6 +15,8 @@ public class Model {
   @Column(name="attachment_type")
   private String attachment_type;
 
+  public Model() {}
+
   public Model(long proposal_id, long attachment_id, String attachment_type) {
     this.proposal_id = proposal_id;
     this.attachment_id = attachment_id;
