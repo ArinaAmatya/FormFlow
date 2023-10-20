@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class AttachProposals {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name="proposal_id")
   private long proposal_id;
 
   @Column(name="attachment_id")
@@ -15,7 +16,8 @@ public class AttachProposals {
   @Column(name="attachment_type")
   private String attachment_type;
 
-  public AttachProposals() {}
+  public AttachProposals() {
+  }
 
   public AttachProposals(long proposal_id, long attachment_id, String attachment_type) {
     this.proposal_id = proposal_id;
