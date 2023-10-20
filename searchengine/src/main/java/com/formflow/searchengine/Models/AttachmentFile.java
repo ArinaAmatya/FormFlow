@@ -23,7 +23,7 @@ public class AttachmentFile {
 
     @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
-    private java.util.Date dateCreated;
+    private java.util.Date create_date;
 
     public AttachmentFile() {
     }
@@ -34,7 +34,7 @@ public class AttachmentFile {
         this.description = description;
         this.file_name = file_name;
         this.file_path = file_path;
-        this.dateCreated = dateCreated;
+        this.create_date = create_date;
     }
 
     public long getAttachment_id() {
@@ -69,11 +69,11 @@ public class AttachmentFile {
         this.file_path = file_path;
     }
 
-    public java.util.Date getDateCreated() {
-        return dateCreated;
+    public java.util.Date getCreate_date() {
+        return create_date;
     }
 
-    public void setDateCreated(java.util.Date dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setCreate_date(java.util.Date create_date) {
+        this.create_date = create_date;
     }
 }
