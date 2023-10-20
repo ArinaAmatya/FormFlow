@@ -1,10 +1,10 @@
-package com.formflow.searchengine;
+package com.formflow.searchengine.Models;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="attach_proposal")
-public class Model {
+public class AttachProposals {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long proposal_id;
@@ -15,9 +15,9 @@ public class Model {
   @Column(name="attachment_type")
   private String attachment_type;
 
-  public Model() {}
+  public AttachProposals() {}
 
-  public Model(long proposal_id, long attachment_id, String attachment_type) {
+  public AttachProposals(long proposal_id, long attachment_id, String attachment_type) {
     this.proposal_id = proposal_id;
     this.attachment_id = attachment_id;
     this.attachment_type = attachment_type;

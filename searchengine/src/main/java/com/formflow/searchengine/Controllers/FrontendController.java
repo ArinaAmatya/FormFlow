@@ -1,4 +1,4 @@
-package com.formflow.searchengine;
+package com.formflow.searchengine.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.formflow.searchengine.RepositoryInterface;
+import com.formflow.searchengine.SearchEngine;
+import com.formflow.searchengine.Models.AttachProposals;
+
 /* Controller to expose the REST API endpoints for the server */
 @RestController
 public class FrontendController {
@@ -24,9 +28,9 @@ public class FrontendController {
 	RepositoryInterface repositoryInterface;
 
   @GetMapping("/testConnection")
-  public ResponseEntity<List<Model>> testConnection() {
+  public ResponseEntity<List<AttachProposals>> testConnection() {
     try {
-			List<Model> tutorials = new ArrayList<Model>();
+			List<AttachProposals> tutorials = new ArrayList<AttachProposals>();
 
 			repositoryInterface.findAll().forEach(tutorials::add);
 
