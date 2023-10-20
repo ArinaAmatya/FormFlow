@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class AucInfo {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name="commitment_period_id")
+  @Column(name="auction_id")
   private long auction_id;
 
   @Column(name="commitment_period_id")
