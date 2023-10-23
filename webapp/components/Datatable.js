@@ -2,8 +2,24 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 
+// just sample data 
+// TODO connect to the backend
+function retrieveFiles() {
+    return [
+        { projectid: 1, FileType: 'pdf', ProjectName: 'Jon', length: 35 },
+        { projectid: 2, FileType: 'csv', ProjectName: 'Cersei', length: 42 },
+        { projectid: 3, FileType: 'pdf', ProjectName: 'Jaime', length: 45 },
+        { projectid: 4, FileType: 'csv', ProjectName: 'Arya', length: 16 },
+        { projectid: 5, FileType: 'png', ProjectName: 'Daenerys', length: null },
+        { projectid: 6, FileType: 'txt', ProjectName: null, length: 150 },
+        { projectid: 7, FileType: 'txt', ProjectName: 'Ferrara', length: 44 },
+        { projectid: 8, FileType: 'png', ProjectName: 'Rossini', length: 36 },
+        { projectid: 9, FileType: 'csv', ProjectName: 'Harvey', length: 65 },
+      ];
+}
+
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'projectid', headerName: 'Project ID', width: 90 },
   {
     field: 'ProjectName',
     headerName: 'Project name',
@@ -34,17 +50,7 @@ const columns = [
 //   },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+const rows = retrieveFiles();
 
 export default function DataGridDemo() {
   return (
