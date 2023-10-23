@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /*
     -----------------------------------------------------------------------
                                 THEME GUIDLINES
@@ -15,9 +11,29 @@
     Theme color 3      | #dddddd      | for boring grey stuff
 */
 
-body {
-    color: #0084c6;
-    background-color: #e4eaf1;
-    font-weight: bold;
-    font-family: "Josefin Sans";
+.home-container {
+    margin: 0;
+    position: fixed;
+    text-align: center;
+    top: calc(50% - 356px);
+    left: calc((100% - 300px)/2);
+}
+
+.login {
+    height: 40px;
+    width: 100px;
+    margin: 5px;
+    background-color: #0084c6;
+}
+
+.sign-up {
+    height: 40px;
+    width: 100px;
+    margin: 5px;
+    color: black;
+    background-color: #b7cbe2
+}
+
+.sign-up:hover {
+    background-color: #afc3da
 }

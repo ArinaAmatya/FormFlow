@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Searchbar from '../components/Searchbar';
 import '../styles/search.module.css';
 import '@fontsource/roboto/300.css';
