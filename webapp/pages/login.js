@@ -16,7 +16,7 @@ import { useRouter } from 'next/router'
 
 import styles from '../styles/login.module.css';
 
-function LoginPage() {
+export default function LoginPage() {
   const router = useRouter();
   
   const tryLogin = () => {
@@ -27,7 +27,7 @@ function LoginPage() {
   return (
     <>
       <div className={styles["logo-container"]}>
-      <Image
+      <Image className={styles["logo-img"]}
         src={logo}
         width={300}
         height={300}
@@ -69,5 +69,3 @@ function LoginPage() {
     </>
   );
 }
-
-export default LoginPage;
