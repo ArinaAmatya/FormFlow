@@ -54,7 +54,7 @@ const rows = retrieveFiles();
 
 export default function DataGridDemo() {
   return (
-    <Box sx={{ height: 400, width: '100%' , marginLeft: '150px', }}>
+    <Box className="h-[400px] w-[30%]">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -72,5 +72,3 @@ export default function DataGridDemo() {
     </Box>
   );
 }
-
-

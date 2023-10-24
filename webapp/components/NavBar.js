@@ -17,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { useRouter } from 'next/router';
 import ResultsRack from './ResultsRack';
 import Searchbar from './Searchbar';
+import DataGridDemo from '../components/Datatable.js';
 
 const drawerWidth = 240;
 
@@ -136,6 +137,8 @@ export default function NavBar() {
       <Main open={open}>
         <DrawerHeader />
         <ResultsRack />
+        <br/>
+        <DataGridDemo />
       </Main>
     </Box>
   );
