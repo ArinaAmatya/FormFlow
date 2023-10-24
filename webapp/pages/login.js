@@ -20,10 +20,11 @@ export default function LoginPage() {
   const router = useRouter();
   
   const tryLogin = () => {
-  // TODO: Hook into backend and validate stuff
+    // TODO: Hook into backend and validate stuff
 
-  router.push('/search');
-}
+    router.push('/search');
+  }
+  
   return (
     <>
       <div className={styles["logo-container"]}>
