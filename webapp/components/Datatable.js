@@ -59,23 +59,6 @@ function retrieveFiles() {
         },
         {
           id: 4,
-          projectID: "957225754",
-          fileType: 'docx',
-          projectName: 'ManilaCo_boiler Permit',
-          fileSize: "32MB",
-          proposalName: "ManilaCo Big Boiler House",
-          proposalID: "000006534",
-          autionID: "000000478",
-          periodID: "000000021",
-          customerID: "379434341",
-          customerName: "ManilaCo",
-          resourceID: "000000100",
-          resourceType: "Big Generator",
-          dateBegin: "06/01/2020",
-          dateEnd: "06/01/2021"
-        },
-        {
-          id: 5,
           projectID: "968434563",
           fileType: 'xls',
           projectName: 'ManilaCo Boiler Cost Table',
@@ -92,7 +75,7 @@ function retrieveFiles() {
           dateEnd: "06/01/2021"
         },
         {
-          id: 6,
+          id: 5,
           projectID: "634576784",
           fileType: 'pdf',
           projectName: "boiler_proj_det_manilaco",
@@ -109,7 +92,7 @@ function retrieveFiles() {
           dateEnd: "06/01/2021"
         },
         {
-          id: 7,
+          id: 6,
           projectID: "536854525",
           fileType: 'xls',
           projectName: 'ManilaCo_q3_20',
@@ -126,7 +109,7 @@ function retrieveFiles() {
           dateEnd: "06/01/2021"
         },
         {
-          id: 8,
+          id: 7,
           projectID: "836324654",
           fileType: 'png',
           projectName: 'ManilaCo Boiler Ex',
@@ -143,7 +126,7 @@ function retrieveFiles() {
           dateEnd: "06/01/2021"
         },
         {
-          id: 9,
+          id: 8,
           projectID: "298973111",
           fileType: 'csv',
           projectName: 'CaprioMax',
