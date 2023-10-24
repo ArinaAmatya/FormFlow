@@ -13,12 +13,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Searchbar from './Searchbar';
-import HelpIcon from '@mui/icons-material/Help';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useRouter } from 'next/router';
+import ResultsRack from './ResultsRack';
 
 const drawerWidth = 240;
 
@@ -68,6 +65,26 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const router = useRouter();
+
+  const queryForFiles = () => {
+    // TODO: Create query to backend
+
+    return null;
+  }
+
+  const tryPreview = () => {
+    let query = queryForFiles();
+
+    router.push('/preview');
+  }
+
+  const tryDownload = () => {
+    // TODO: Get zipped files from backend
+
+    let query = queryForFiles();
+  }
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
@@ -93,8 +110,6 @@ export default function NavBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Searchbar>
-          </Searchbar>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -117,12 +132,9 @@ export default function NavBar() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Favorite', 'File Types'].map((text, index) => (
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <FavoriteIcon /> : <FavoriteIcon /> }
-                </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
@@ -130,12 +142,9 @@ export default function NavBar() {
         </List>
         <Divider />
         <List>
-          {['All Files', 'Help'].map((text, index) => (
+          {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <ContentCopyIcon /> : <HelpIcon />}
-                </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
@@ -144,6 +153,7 @@ export default function NavBar() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        <ResultsRack />
       </Main>
     </Box>
   );
