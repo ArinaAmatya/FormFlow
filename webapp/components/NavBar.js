@@ -13,12 +13,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { useRouter } from 'next/router';
+import ResultsRack from './ResultsRack';
 import Searchbar from './Searchbar';
-import HelpIcon from '@mui/icons-material/Help';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const drawerWidth = 240;
 
@@ -93,8 +91,7 @@ export default function NavBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Searchbar>
-          </Searchbar>
+          <Searchbar />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -117,12 +114,9 @@ export default function NavBar() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Favorite', 'File Types'].map((text, index) => (
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <FavoriteIcon /> : <FavoriteIcon /> }
-                </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
@@ -130,12 +124,9 @@ export default function NavBar() {
         </List>
         <Divider />
         <List>
-          {['All Files', 'Help'].map((text, index) => (
+          {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <ContentCopyIcon /> : <HelpIcon />}
-                </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
@@ -144,6 +135,7 @@ export default function NavBar() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        <ResultsRack />
       </Main>
     </Box>
   );

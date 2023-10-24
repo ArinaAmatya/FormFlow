@@ -2,12 +2,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 
-function Searchbar() {
+export default function Searchbar() {
     const router = useRouter();
 
     const search = () => {
         // TODO: hook into the backend here
-    
     }
 
     return (
@@ -34,5 +33,3 @@ function Searchbar() {
         </div>
   );
 }
-
-export default Searchbar;
