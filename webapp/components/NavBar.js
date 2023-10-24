@@ -19,8 +19,10 @@ import Searchbar from './Searchbar';
 import HelpIcon from '@mui/icons-material/Help';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Typography from '@mui/material/Typography';
 
 const drawerWidth = 240;
+const imageUrl = "webapp/FormFlow_Logo_Option_1.png";
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -58,13 +60,13 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')(({ theme, open }) =>  ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
+  justifyContent: open ? 'space-between' : 'flex-end', 
 }));
 
 export default function NavBar() {
@@ -110,10 +112,12 @@ export default function NavBar() {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader open={open}>
+          
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
+          <img src={imageUrl} alt="FormFlow Logo" />
         </DrawerHeader>
         <Divider />
         <List>

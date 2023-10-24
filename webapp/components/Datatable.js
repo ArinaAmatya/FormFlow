@@ -6,55 +6,55 @@ import { DataGrid } from '@mui/x-data-grid';
 // TODO connect to the backend
 function retrieveFiles() {
     return [
-        { projectid: 1, FileType: 'pdf', ProjectName: 'Jon', length: 35 },
-        { projectid: 2, FileType: 'csv', ProjectName: 'Cersei', length: 42 },
-        { projectid: 3, FileType: 'pdf', ProjectName: 'Jaime', length: 45 },
-        { projectid: 4, FileType: 'csv', ProjectName: 'Arya', length: 16 },
-        { projectid: 5, FileType: 'png', ProjectName: 'Daenerys', length: null },
-        { projectid: 6, FileType: 'txt', ProjectName: null, length: 150 },
-        { projectid: 7, FileType: 'txt', ProjectName: 'Ferrara', length: 44 },
-        { projectid: 8, FileType: 'png', ProjectName: 'Rossini', length: 36 },
-        { projectid: 9, FileType: 'csv', ProjectName: 'Harvey', length: 65 },
+        { id: 1, lastName: 'pdf', firstName: 'Jon', age: 35 },
+        { id: 2, lastName: 'csv', firstName: 'Cersei', age: 42 },
+        { id: 3, lastName: 'pdf', firstName: 'Jaime', age: 45 },
+        { id: 4, lastName: 'csv', firstName: 'Arya', age: 16 },
+        { id: 5, lastName: 'png', firstName: 'Daenerys', age: null },
+        { id: 6, lastName: 'txt', firstName: null, age: 150 },
+        { id: 7, lastName: 'txt', firstName: 'Ferrara', age: 44 },
+        { id: 8, lastName: 'png', firstName: 'Rossini', age: 36 },
+        { id: 9, lastName: 'csv', firstName: 'Harvey', age: 65 },
       ];
 }
 
 const columns = [
-  { field: 'projectid', headerName: 'Project ID', width: 90 },
-  {
-    field: 'ProjectName',
-    headerName: 'Project name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'FileType',
-    headerName: 'FileType',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'Length',
-    headerName: 'Length',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
-//   {
-//     field: 'fullName',
-//     headerName: 'Full name',
-//     description: 'This column has a value getter and is not sortable.',
-//     sortable: false,
-//     width: 160,
-//     valueGetter: (params) =>
-//       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-//   },
-];
+    { field: 'id', headerName: 'Project ID', width: 90 },
+    {
+      field: 'firstName',
+      headerName: 'Project Name',
+      width: 150,
+      editable: true,
+    },
+    {
+        field: 'lastName',
+        headerName: 'File Type',
+        width: 150,
+        editable: true,
+      },
+      {
+        field: 'age',
+        headerName: 'Length',
+        type: 'number',
+        width: 110,
+        editable: true,
+      },
+    //   {
+    //     field: 'fullName',
+    //     headerName: 'Full name',
+    //     description: 'This column has a value getter and is not sortable.',
+    //     sortable: false,
+    //     width: 160,
+    //     valueGetter: (params) =>
+    //       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    //   },
+    ];
 
 const rows = retrieveFiles();
 
 export default function DataGridDemo() {
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 400, width: '100%' , marginLeft: '150px', }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -72,3 +72,5 @@ export default function DataGridDemo() {
     </Box>
   );
 }
+
+

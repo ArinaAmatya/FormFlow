@@ -2,6 +2,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import styles from '../styles/search.module.css';
 
+
 function search() {
     // TODO: hook into the backend here
     
