@@ -16,6 +16,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useRouter } from 'next/router';
 import ResultsRack from './ResultsRack';
+import Searchbar from './Searchbar';
 
 const drawerWidth = 240;
 
@@ -65,26 +66,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function NavBar() {
-  const router = useRouter();
-
-  const queryForFiles = () => {
-    // TODO: Create query to backend
-
-    return null;
-  }
-
-  const tryPreview = () => {
-    let query = queryForFiles();
-
-    router.push('/preview');
-  }
-
-  const tryDownload = () => {
-    // TODO: Get zipped files from backend
-
-    let query = queryForFiles();
-  }
-
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
@@ -110,6 +91,7 @@ export default function NavBar() {
           >
             <MenuIcon />
           </IconButton>
+          <Searchbar />
         </Toolbar>
       </AppBar>
       <Drawer

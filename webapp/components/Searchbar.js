@@ -1,6 +1,7 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import styles from '../styles/search.module.css';
+import { useRouter } from 'next/router'
 
 export default function Searchbar() {
     const router = useRouter();
