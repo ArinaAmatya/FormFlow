@@ -1,4 +1,3 @@
-import '../styles/index.module.css';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -9,9 +8,7 @@ import logo from '../public/icons/logo512.png';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 
-import styles from '../styles/index.module.css';
-
-function HomePage() {
+export default function HomePage() {
   const router = useRouter();
 
   const loginRedirect = () => {
@@ -20,24 +17,24 @@ function HomePage() {
 
   return (
     <>
-      <div className={styles["home-container"]}>
-        <Image
-          src={logo}
-          width={300}
-          height={300}
-          alt="Formflow Logo"
-        />
-        <br />
-        <Button className={styles["login"]}
-          variant="contained"
-          onClick={loginRedirect}
-        > Login </Button>
-        <Button className={styles["sign-up"]}
-          variant="contained"
-        > Sign Up </Button>
+      <div className="h-screen flex content-center justify-center">
+        <div className="mt-[10%] text-center">
+          <Image
+            src={logo}
+            width={300}
+            height={300}
+            alt="Formflow Logo"
+          />
+          <br />
+          <Button className="h-[40px] w-[100px] m-[5px] bg-theme-logo-blue"
+            variant="contained"
+            onClick={loginRedirect}
+          > Login </Button>
+          <Button className="h-[40px] w-[100px] m-[5px] bg-theme-contrast-blue-dark text-black hover:bg-[#afc3da]"
+            variant="contained"
+          > Sign Up </Button>
+        </div>
       </div>
     </>
   );
 }
-
-export default HomePage;
