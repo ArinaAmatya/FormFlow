@@ -9,11 +9,11 @@ export default function FilePreview() {
     const getTabLabels = () => {
         // TODO: Hook into backend for this
 
-        return ["PDF", "XLS", "DOCX"];
+        return ["boiler_proj_det_manilaco.pdf", "ManilaCo Boiler Cost Table.xls", "ManilaCo_boiler Permit.docx", "ManilaCo_gen_32.docx", "ManilaCo_q3.xls", "ManilaCo Boiler Ex.png"];
     }
 
     const getTabs = () => {
-        return getTabLabels().map((v) => <Tab label={v} key={v}></Tab>);
+        return getTabLabels().map((v) => <Tab className="normal-case" label={v} key={v + Math.floor(Math.random() * 1000)}></Tab>);
     }
 
     const handleTab = (event, newValue) => {
