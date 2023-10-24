@@ -1,0 +1,54 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-SearchengineApplication<searchengine>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.formflow.searchengine.SearchengineApplication",
+      "projectName": "searchengine",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-SearchengineApplication<searchengine>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.formflow.searchengine.SearchengineApplication",
+      "projectName": "searchengine",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-SearchengineApplication<searchengine>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.formflow.searchengine.SearchengineApplication",
+      "projectName": "searchengine",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-SearchengineApplication<searchengine>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.formflow.searchengine.SearchengineApplication",
+      "projectName": "searchengine",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-SearchengineApplication<searchengine>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.formflow.searchengine.SearchengineApplication",
+      "projectName": "searchengine",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

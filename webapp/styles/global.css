@@ -6,13 +6,13 @@
     -----------------------------------------------------------------------
                                 THEME GUIDLINES
     -----------------------------------------------------------------------
-    Main font          | Josefin Sans | for most aesthetic things
-    Data font          | Prompt       | for serious things
-    Logo/text color    | #0084c6      | for logo/text
-    BG color           | #e4eaf1      | for background
-    Theme color 1      | #b7cbe2      | for contrasting background
-    Theme color 2      | #cad8e7      | for contrasting background
-    Theme color 3      | #dddddd      | for boring grey stuff
+    Main font                  | Josefin Sans | for most aesthetic things
+    Data font                  | Prompt       | for serious things
+    theme-logo-blue            | #0084c6      | for logo/text
+    theme-bg-blue              | #e4eaf1      | for background
+    theme-contrast-blue-dark   | #b7cbe2      | for contrasting background
+    theme-contrast-blue-light  | #cad8e7      | for contrasting background
+    theme-grey                 | #dddddd      | for boring grey stuff
 */
 
 body {
