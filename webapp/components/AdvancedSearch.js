@@ -50,6 +50,18 @@ export default function FormPropsTextFields() {
           type="search"
           variant="filled"
         />
+        <TextField
+          id="filled-search"
+          label="Commit Date: From"
+          type="search"
+          variant="filled"
+        />
+        <TextField
+          id="filled-search"
+          label="Commid Date: To"
+          type="search"
+          variant="filled"
+        />
       </div>
     </Box>
   );
