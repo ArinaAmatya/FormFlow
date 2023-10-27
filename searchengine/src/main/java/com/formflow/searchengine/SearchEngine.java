@@ -61,7 +61,7 @@ public class SearchEngine {
       ON proposal_info.resource_id = res_info.resource_id
       INNER JOIN
       auc_info
-      ON proposal_info.auction_id = auc_info.auction_id           //  NOTE USE AND
+      ON proposal_info.auction_id = auc_info.auction_id
       INNER JOIN
       auc_type
       ON auc_info.auction_type = auc_type.auction_type
@@ -73,7 +73,7 @@ public class SearchEngine {
       ON proposal_info.customer_id = cust_info.customer_id
       INNER JOIN
       period_info
-      ON auc_info.auction_period_id = period_info.period_id       // NOTE USE AND
+      ON auc_info.auction_period_id = period_info.period_id
       """;
 
     Query q = this.entityManager.createNativeQuery(sqlQueryString);
