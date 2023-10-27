@@ -51,9 +51,9 @@ public class FrontendController {
    * @return String that holds the JSON file metadata
    * */
   @GetMapping("/getFileMetadata/{query}")
-  public ResponseEntity<List<ResultMapping>> getFileMetadata(@PathVariable String query) {
+  public ResponseEntity<List<Object[]>> getFileMetadata(@PathVariable String query) {
     try {
-      List<ResultMapping> metadata = this.searchEngine.getFileMetadata(query);
+      List<Object[]> metadata = this.searchEngine.getFileMetadata(query);
 
       if (metadata.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
