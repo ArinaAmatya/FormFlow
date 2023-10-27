@@ -39,7 +39,11 @@ public class SearchEngine {
     // Parse the frontend query
     
     String sqlQueryString = """
-      SELECT * 
+      SELECT 
+      proposal_info.project_id, attach_type.description, proj_info.project_name, 
+      proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, 
+      proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, 
+      res_info.resource_type, period_info.begin_date, period_info.end_date 
       FROM attach_proposal 
       INNER JOIN 
       proposal_info
@@ -74,7 +78,14 @@ public class SearchEngine {
       INNER JOIN
       period_info
       ON auc_info.auction_period_id = period_info.period_id
-      """;
+    """;
+
+    // String[] parameters = frontendQuery.split("&");
+    // for (String parameter : parameters) {
+    //   String[] keyValuePair = parameter.split("=");
+    //   String key = keyValuePair[0];
+    //   String[] values = keyValuePair[1].split(",");
+    // }
 
     Query q = this.entityManager.createNativeQuery(sqlQueryString);
     
