@@ -2,6 +2,8 @@ package com.formflow.searchengine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.formflow.searchengine.Models.ResultMapping;
+import com.formflow.searchengine.Models.ResultMapping;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -21,12 +23,25 @@ public class SearchEngine {
    * @return JSON object containing all rows of information from the file metadata
    *         database that matches the selections from the input query
    */
-  public List<Object[]> getFileMetadata(String frontendQuery) {
-    String q = "select a1_0.proposal_id,a1_0.attachment_id,a1_0.attachment_type from attach_proposal a1_0";// INNER JOIN attach_type ON attach_proposal.attachment_type=attach_type.attachment_type
-    List<Object[]> results = this.entityManager.createNativeQuery(q).getResultList();
+  public List<ResultMapping> getFileMetadata(String frontendQuery) {
+
+    List<ResultMapping> results = this.entityManager.createNativeQuery(parseFrontendQuery(frontendQuery), ResultMapping.class).getResultList();
+
     return results;
     // String sqlQuery = parseFrontendQuery(frontendQuery);
     // return db.fetchFileMetadata(sqlQuery);
+  }
+
+  private List<Object[]> parseResults(List<Object[]> resultList) {
+
+
+    for (Object[] row : resultList) {
+      for (Object object : row) {
+        System.out.println(object);
+      }
+    }
+
+    return resultList;
   }
 
   /*
@@ -45,6 +60,7 @@ public class SearchEngine {
     }
 
     // TODO: create a SQL query based on the parsed frontend query
+    
 
     return null;
   }
