@@ -34,8 +34,6 @@ public class FrontendController {
 
 			repositoryInterface.findAll().forEach(tutorials::add);
 
-      System.out.println(tutorials);
-
 			if (tutorials.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
@@ -51,9 +49,19 @@ public class FrontendController {
    * @param query The query originating from the frontend web application
    * @return String that holds the JSON file metadata
    * */
-  @GetMapping("/getFileMetadata?{query}")
-  public String getFileMetadata(@PathVariable("query") String query) {
-    return searchEngine.getFileMetadata(query);
+  @GetMapping("/getFileMetadata/{query}")
+  public ResponseEntity<List<Object[]>> getFileMetadata(@PathVariable String query) {
+    try {
+      List<Object[]> metadata = this.searchEngine.getFileMetadata(query);
+
+      if (metadata.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+      return new ResponseEntity<>(metadata, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /* 

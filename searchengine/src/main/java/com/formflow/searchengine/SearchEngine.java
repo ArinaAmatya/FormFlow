@@ -1,10 +1,19 @@
 package com.formflow.searchengine;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import java.util.List;
+
 import org.hibernate.Session;
 
 /* Performs main searching functionality for documents, metadata, and user profiles */
 public class SearchEngine {
+
+  @PersistenceContext
+  private EntityManager entityManager;
 
   /*
    * Fetches the file metadata corresponding to a query selection
@@ -12,9 +21,12 @@ public class SearchEngine {
    * @return JSON object containing all rows of information from the file metadata
    *         database that matches the selections from the input query
    */
-  public String getFileMetadata(String frontendQuery) {
-    String sqlQuery = parseFrontendQuery(frontendQuery);
-    return db.fetchFileMetadata(sqlQuery);
+  public List<Object[]> getFileMetadata(String frontendQuery) {
+    String q = "select a1_0.proposal_id,a1_0.attachment_id,a1_0.attachment_type from attach_proposal a1_0";// INNER JOIN attach_type ON attach_proposal.attachment_type=attach_type.attachment_type
+    List<Object[]> results = this.entityManager.createNativeQuery(q).getResultList();
+    return results;
+    // String sqlQuery = parseFrontendQuery(frontendQuery);
+    // return db.fetchFileMetadata(sqlQuery);
   }
 
   /*
