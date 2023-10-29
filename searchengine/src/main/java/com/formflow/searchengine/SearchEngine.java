@@ -11,6 +11,7 @@ import jakarta.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.hibernate.Session;
 
@@ -85,30 +86,50 @@ public class SearchEngine {
     HashMap<String, String> parameterNameToValueMap = new HashMap<String, String>();
     String[] filters = frontendQuery.split("&");
     String parameterName;
-    
+
     for (String filter : filters) {
       String[] keyValuePair = filter.split("=");
+      if (keyValuePair.length != 2) {
+        continue;
+      }
       String filterName = keyValuePair[0];
       String[] values = keyValuePair[1].split(",");
+
+      sqlQueryString += " WHERE ";
       for (int i = 0; i < values.length - 1; i++) {
         // Don't need parenthesis with the following since AND have priority over OR in sql
         parameterName = filterName + i;
-        sqlQueryString += " WHERE " + filterName + " = :" + parameterName + " OR";
+        sqlQueryString += filterName + " = :" + parameterName + " OR ";
         parameterNameToValueMap.put(parameterName, values[i]);
       }
       parameterName = filterName + (values.length - 1);
-      sqlQueryString += " WHERE " + filterName + " = :" + filterName;
+      sqlQueryString += filterName + " = :" + parameterName;
       parameterNameToValueMap.put(parameterName, values[values.length - 1]);
     }
 
     // Create the query out of the String
     Query q = this.entityManager.createNativeQuery(sqlQueryString);
-    
+
     // Now, inject the parameters into the sql statement safely using the EntityManager
     for (Map.Entry<String, String> entry : parameterNameToValueMap.entrySet()) {
-      q.setParameter(entry.getKey(), entry.getValue());
+      // 2 types of parameters currently exist here for our purposes: Integer, String
+      // TODO need to expand this to incorperate Boolean, Data, etc.
+      // Find way to do this cleaner
+      if (this.isNumeric(entry.getValue())) {
+        q.setParameter(entry.getKey(), Integer.parseInt(entry.getValue()));
+      } else {
+        q.setParameter(entry.getKey(), entry.getValue());
+      }
     }
 
     return q;
+  }
+
+  private Boolean isNumeric(String s) {
+    Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+    if (s == null) {
+      return false; 
+    }
+    return pattern.matcher(s).matches();
   }
 }
