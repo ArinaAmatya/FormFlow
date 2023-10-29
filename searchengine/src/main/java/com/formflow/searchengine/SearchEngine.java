@@ -8,7 +8,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 
@@ -80,15 +82,33 @@ public class SearchEngine {
       ON auc_info.auction_period_id = period_info.period_id
     """;
 
-    // String[] parameters = frontendQuery.split("&");
-    // for (String parameter : parameters) {
-    //   String[] keyValuePair = parameter.split("=");
-    //   String key = keyValuePair[0];
-    //   String[] values = keyValuePair[1].split(",");
-    // }
+    HashMap<String, String> parameterNameToValueMap = new HashMap<String, String>();
+    String[] filters = frontendQuery.split("&");
+    String parameterName;
+    
+    for (String filter : filters) {
+      String[] keyValuePair = filter.split("=");
+      String filterName = keyValuePair[0];
+      String[] values = keyValuePair[1].split(",");
+      for (int i = 0; i < values.length - 1; i++) {
+        // Don't need parenthesis with the following since AND have priority over OR in sql
+        parameterName = filterName + i;
+        sqlQueryString += " WHERE " + filterName + " = :" + parameterName + " OR";
+        parameterNameToValueMap.put(parameterName, values[i]);
+      }
+      parameterName = filterName + (values.length - 1);
+      sqlQueryString += " WHERE " + filterName + " = :" + filterName;
+      parameterNameToValueMap.put(parameterName, values[values.length - 1]);
+    }
 
+    // Create the query out of the String
     Query q = this.entityManager.createNativeQuery(sqlQueryString);
     
+    // Now, inject the parameters into the sql statement safely using the EntityManager
+    for (Map.Entry<String, String> entry : parameterNameToValueMap.entrySet()) {
+      q.setParameter(entry.getKey(), entry.getValue());
+    }
+
     return q;
   }
 }
