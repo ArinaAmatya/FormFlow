@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import ResultsRack from './ResultsRack';
 import Searchbar from './Searchbar';
 import DataGridDemo from '../components/Datatable.js';
+import AdvancedSearch from '../components/AdvancedSearch.js';
 
 const drawerWidth = 240;
 
@@ -69,6 +70,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function NavBar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  let advSearch = <></>;
+
+  const [chips, setChips] = useState([]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -78,8 +82,12 @@ export default function NavBar() {
     setOpen(false);
   };
 
+  const advancedSearch = () => {
+    advSearch = <AdvancedSearch />;
+  }
+
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box className="flex">
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -92,7 +100,7 @@ export default function NavBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Searchbar />
+          <Searchbar chips={chips} />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -114,24 +122,14 @@ export default function NavBar() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <AdvancedSearch setChips={setChips}/>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <ListItem key="Search History" disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Search History" />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>

@@ -8,19 +8,18 @@ function retrieveFiles() {
   return [
     {
       id: 1,
-      projectName: "ManilaCo Boiler 32",
-      projectID: "223953562",
-      fileType: 'DOCX',
       fileName: 'ManilaCo_boiler Permit',
-      fileSize: "5MB",
-      proposalName: "ManilaCo Big Boiler House",
-      proposalID: "000006534",
-      auctionID: "000000478",
-      periodID: "000000021",
+      fileType: 'DOCX',
       customerID: "379434341",
       customerName: "ManilaCo",
+      projectID: "223953562",
+      projectName: "ManilaCo Boiler 32",
+      proposalID: "000006534",
+      proposalName: "ManilaCo Big Boiler House",
       resourceID: "000000100",
       resourceType: "Big Generator",
+      auctionID: "000000478",
+      periodID: "000000021",
       dateBegin: "06/01/2020",
       dateEnd: "06/01/2021"
     },
@@ -30,7 +29,6 @@ function retrieveFiles() {
       projectID: "384595373",
       fileType: 'DOCX',
       fileName: 'vert_gen_32',
-      fileSize: "9MB",
       proposalName: "ManilaCo Big Boiler House",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -48,7 +46,6 @@ function retrieveFiles() {
       projectID: "276067546",
       fileType: 'PDF',
       fileName: 'Array023Permit3',
-      fileSize: "16MB",
       proposalName: "VolRay Maine Field",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -66,7 +63,6 @@ function retrieveFiles() {
       projectID: "968434563",
       fileType: 'XLS',
       fileName: 'ManilaCo Boiler Cost Table',
-      fileSize: "4MB",
       proposalName: "ManilaCo Big Boiler House",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -84,7 +80,6 @@ function retrieveFiles() {
       projectID: "634576784",
       fileType: 'PDF',
       fileName: "boiler_proj_det_manilaco",
-      fileSize: "34MB",
       proposalName: "ManilaCo Big Boiler House",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -102,7 +97,6 @@ function retrieveFiles() {
       projectID: "536854525",
       fileType: 'XLS',
       fileName: 'ManilaCo_roof_costtable',
-      fileSize: "6MB",
       proposalName: "ManilaCo Big Boiler House",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -120,7 +114,6 @@ function retrieveFiles() {
       projectID: "836324654",
       fileType: 'PNG',
       fileName: 'ManilaCo Boiler Ex',
-      fileSize: "56MB",
       proposalName: "ManilaCo Big Boiler House",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -138,7 +131,6 @@ function retrieveFiles() {
       projectID: "298973111",
       fileType: 'XLS',
       fileName: 'cmax_expansion_res',
-      fileSize: "3MB",
       proposalName: "CaprioMax Expansion",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -156,7 +148,6 @@ function retrieveFiles() {
       projectID: "536854525",
       fileType: 'XLS',
       fileName: 'ManilaCo_q3_20',
-      fileSize: "6MB",
       proposalName: "ManilaCo Big Boiler House",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -174,7 +165,6 @@ function retrieveFiles() {
       projectID: "836324654",
       fileType: 'PNG',
       fileName: 'north-aerial-view',
-      fileSize: "56MB",
       proposalName: "CaprioMax Sunwalk",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -192,7 +182,6 @@ function retrieveFiles() {
       projectID: "298973111",
       fileType: 'CSV',
       fileName: 'south-rsrces2433',
-      fileSize: "3MB",
       proposalName: "CaprioMax Sunwalk",
       proposalID: "000006534",
       auctionID: "000000478",
@@ -228,12 +217,6 @@ const columns = [
     field: 'fileType',
     headerName: 'File Type',
     width: 80,
-    headerClassName: "bg-theme-contrast-blue-light"
-  },
-  {
-    field: 'fileSize',
-    headerName: 'File Size',
-    width: 100,
     headerClassName: "bg-theme-contrast-blue-light"
   },
   {
@@ -314,7 +297,7 @@ const rows = retrieveFiles();
 
 export default function DataGridDemo() {
   return (
-    <div className="max-w-[2032px]">
+    <div className="max-w-[1932px]">
       <Box className="max-w-[calc(90vw-240px)]">
         <DataGrid
           rows={rows}
