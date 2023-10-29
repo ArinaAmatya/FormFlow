@@ -87,17 +87,19 @@ public class SearchEngine {
     String[] filters = frontendQuery.split("&");
     String parameterName;
 
-    for (String filter : filters) {
-      String[] keyValuePair = filter.split("=");
+    if (filters.length > 0) {
+      sqlQueryString += " WHERE ";
+    }
+
+    for (int j = 0; j < filters.length; j++) {
+      String[] keyValuePair = filters[j].split("=");
       if (keyValuePair.length != 2) {
         continue;
       }
       String filterName = keyValuePair[0];
       String[] values = keyValuePair[1].split(",");
-
-      sqlQueryString += " WHERE ";
+      sqlQueryString += "(";
       for (int i = 0; i < values.length - 1; i++) {
-        // Don't need parenthesis with the following since AND have priority over OR in sql
         parameterName = filterName + i;
         sqlQueryString += filterName + " = :" + parameterName + " OR ";
         parameterNameToValueMap.put(parameterName, values[i]);
@@ -105,6 +107,12 @@ public class SearchEngine {
       parameterName = filterName + (values.length - 1);
       sqlQueryString += filterName + " = :" + parameterName;
       parameterNameToValueMap.put(parameterName, values[values.length - 1]);
+
+      if (j < filters.length - 1) {
+        sqlQueryString += ") AND ";
+      } else {
+        sqlQueryString += ") ";
+      }
     }
 
     // Create the query out of the String
