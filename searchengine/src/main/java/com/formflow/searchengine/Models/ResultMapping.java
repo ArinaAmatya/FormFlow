@@ -3,21 +3,37 @@ package com.formflow.searchengine.Models;
 import java.util.Date;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 @Entity
-@Table(name = "result_mapping")
+@SqlResultSetMapping(name="ResultMapping", classes = {
+  @ConstructorResult(targetClass = ResultMapping.class, 
+  columns = {
+    @ColumnResult(name = "project_id", type = Integer.class),
+    @ColumnResult(name = "description", type = String.class),
+    @ColumnResult(name = "project_name", type = String.class),
+    @ColumnResult(name = "proposal_label", type = String.class),
+    @ColumnResult(name = "proposal_id", type = Integer.class),
+    @ColumnResult(name = "auction_id", type = Integer.class),
+    @ColumnResult(name = "period_id", type = Integer.class),
+    @ColumnResult(name = "customer_id", type = Integer.class),
+    @ColumnResult(name = "customer_name", type = String.class),
+    @ColumnResult(name = "resource_id", type = Integer.class),
+    @ColumnResult(name = "resource_type", type = String.class),
+    @ColumnResult(name = "begin_date", type = Date.class),
+    @ColumnResult(name = "end_date", type = Date.class)
+  })
+})
 public class ResultMapping {
+  @Id
   private int id;
   @Column(name = "project_id")
   private Integer projectID;
-  @Column(name = "file_type")
-  private String fileType;
+  @Column(name = "description")
+  private String description;
   @Column(name = "project_name")
   private String projectName;
   @Column(name = "proposal_name")
   private String proposalName;
-  @Id
   @Column(name = "proposal_id")
   private Integer proposalID;
   @Column(name = "auction_id")
@@ -54,12 +70,12 @@ public class ResultMapping {
     this.projectID = projectID;
   }
 
-  public String getFileType() {
-    return this.fileType;
+  public String getDescription() {
+    return this.description;
   }
 
-  public void setFileType(String fileType) {
-    this.fileType = fileType;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public String getProjectName() {
@@ -155,7 +171,7 @@ public class ResultMapping {
     return "{" +
       " id='" + getId() + "'" +
       ", projectID='" + getProjectID() + "'" +
-      ", fileType='" + getFileType() + "'" +
+      ", fileType='" + getDescription() + "'" +
       ", projectName='" + getProjectName() + "'" +
       ", proposalName='" + getProposalName() + "'" +
       ", proposalID='" + getProposalID() + "'" +
@@ -172,10 +188,11 @@ public class ResultMapping {
 
   private static int counter = 0;
 
-  public ResultMapping(Integer projectID, String fileType, String projectName, String proposalName, Integer proposalID, Integer auctionID, Integer periodID, Integer customerID, String customerName, Integer resourceID, String resourceType, Date dateBegin, Date dateEnd) {
+  public ResultMapping(Integer projectID, String description, String projectName, String proposalName, Integer proposalID, Integer auctionID, Integer periodID, Integer customerID, String customerName, Integer resourceID, String resourceType, Date dateBegin, Date dateEnd) {
+    // I think we should change this counter, it should go back to zero every new API call. Its not doing that right now.
     this.id = ResultMapping.counter++;
     this.projectID = projectID;
-    this.fileType = fileType;
+    this.description = description;
     this.projectName = projectName;
     this.proposalName = proposalName;
     this.proposalID = proposalID;

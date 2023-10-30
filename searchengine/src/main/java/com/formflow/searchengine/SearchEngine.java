@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import com.formflow.searchengine.Models.ResultMapping;
 
 /* Performs main searching functionality for documents, metadata, and user profiles */
 public class SearchEngine {
@@ -23,14 +24,16 @@ public class SearchEngine {
    * @return JSON object containing all rows of information from the file metadata
    *         database that matches the selections from the input query
    */
-  public List<Object[]> getFileMetadata(String frontendQuery) {
+  public List<ResultMapping> getFileMetadata(String frontendQuery) {
     Query sqlQuery = this.parseFrontendQuery(frontendQuery);
     
     if (sqlQuery == null) {
       return null;
     }
 
-    return sqlQuery.getResultList();
+    @SuppressWarnings("unchecked")
+    List<ResultMapping> jsonMapping = sqlQuery.getResultList();
+    return jsonMapping;
   }
 
   /*
@@ -116,8 +119,8 @@ public class SearchEngine {
       }
     }
 
-    // Create the query out of the String
-    Query q = this.entityManager.createNativeQuery(sqlQueryString);
+    // Create the query out of the String and map it to the ResultMapping class for API response
+    Query q = this.entityManager.createNativeQuery(sqlQueryString, "ResultMapping");
 
     // Now, inject the parameters into the sql statement safely using the EntityManager
     for (Map.Entry<String, String> entry : parameterNameToValueMap.entrySet()) {

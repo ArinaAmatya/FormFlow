@@ -51,9 +51,9 @@ public class FrontendController {
    * @return String that holds the JSON file metadata
    * */
   @GetMapping("/getFileMetadata/{query}")
-  public ResponseEntity<List<Object[]>> getFileMetadata(@PathVariable String query) {
+  public ResponseEntity<List<ResultMapping>> getFileMetadata(@PathVariable String query) {
     try {
-      List<Object[]> metadata = this.searchEngine.getFileMetadata(query);
+      List<ResultMapping> metadata = this.searchEngine.getFileMetadata(query);
 
       if (metadata == null) {
         return new ResponseEntity<>(null, HttpStatus.PRECONDITION_FAILED);
