@@ -55,6 +55,10 @@ public class FrontendController {
     try {
       List<Object[]> metadata = this.searchEngine.getFileMetadata(query);
 
+      if (metadata == null) {
+        return new ResponseEntity<>(null, HttpStatus.PRECONDITION_FAILED);
+      }
+
       if (metadata.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
