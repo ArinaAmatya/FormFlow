@@ -1,40 +1,41 @@
 package com.formflow.searchengine.Models;
 
+import java.util.Date;
+
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 @Entity
 @Table(name = "result_mapping")
 public class ResultMapping {
   private int id;
   @Column(name = "project_id")
-  private String projectID;
+  private Integer projectID;
   @Column(name = "file_type")
   private String fileType;
   @Column(name = "project_name")
   private String projectName;
-  @Column(name = "file_size")
-  private String fileSize;
   @Column(name = "proposal_name")
   private String proposalName;
   @Id
   @Column(name = "proposal_id")
-  private String proposalID;
+  private Integer proposalID;
   @Column(name = "auction_id")
-  private String auctionID;
+  private Integer auctionID;
   @Column(name = "period_id")
-  private String periodID;
+  private Integer periodID;
   @Column(name = "customer_id")
-  private String customerID;
+  private Integer customerID;
   @Column(name = "customer_name")
   private String customerName;
   @Column(name = "resource_id")
-  private String resourceID;
+  private Integer resourceID;
   @Column(name = "resource_type")
   private String resourceType;
   @Column(name = "date_begin")
-  private String dateBegin;
+  private Date dateBegin;
   @Column(name = "date_end")
-  private String dateEnd;
+  private Date dateEnd;
 
 
   public int getId() {
@@ -45,11 +46,11 @@ public class ResultMapping {
     this.id = id;
   }
 
-  public String getProjectID() {
+  public Integer getProjectID() {
     return this.projectID;
   }
 
-  public void setProjectID(String projectID) {
+  public void setProjectID(Integer projectID) {
     this.projectID = projectID;
   }
 
@@ -69,14 +70,6 @@ public class ResultMapping {
     this.projectName = projectName;
   }
 
-  public String getFileSize() {
-    return this.fileSize;
-  }
-
-  public void setFileSize(String fileSize) {
-    this.fileSize = fileSize;
-  }
-
   public String getProposalName() {
     return this.proposalName;
   }
@@ -85,35 +78,35 @@ public class ResultMapping {
     this.proposalName = proposalName;
   }
 
-  public String getProposalID() {
+  public Integer getProposalID() {
     return this.proposalID;
   }
 
-  public void setProposalID(String proposalID) {
+  public void setProposalID(Integer proposalID) {
     this.proposalID = proposalID;
   }
 
-  public String getAuctionID() {
+  public Integer getAuctionID() {
     return this.auctionID;
   }
 
-  public void setAuctionID(String auctionID) {
+  public void setAuctionID(Integer auctionID) {
     this.auctionID = auctionID;
   }
 
-  public String getPeriodID() {
+  public Integer getPeriodID() {
     return this.periodID;
   }
 
-  public void setPeriodID(String periodID) {
+  public void setPeriodID(Integer periodID) {
     this.periodID = periodID;
   }
 
-  public String getCustomerID() {
+  public Integer getCustomerID() {
     return this.customerID;
   }
 
-  public void setCustomerID(String customerID) {
+  public void setCustomerID(Integer customerID) {
     this.customerID = customerID;
   }
 
@@ -125,11 +118,11 @@ public class ResultMapping {
     this.customerName = customerName;
   }
 
-  public String getResourceID() {
+  public Integer getResourceID() {
     return this.resourceID;
   }
 
-  public void setResourceID(String resourceID) {
+  public void setResourceID(Integer resourceID) {
     this.resourceID = resourceID;
   }
 
@@ -141,19 +134,19 @@ public class ResultMapping {
     this.resourceType = resourceType;
   }
 
-  public String getDateBegin() {
+  public Date getDateBegin() {
     return this.dateBegin;
   }
 
-  public void setDateBegin(String dateBegin) {
+  public void setDateBegin(Date dateBegin) {
     this.dateBegin = dateBegin;
   }
 
-  public String getDateEnd() {
+  public Date getDateEnd() {
     return this.dateEnd;
   }
 
-  public void setDateEnd(String dateEnd) {
+  public void setDateEnd(Date dateEnd) {
     this.dateEnd = dateEnd;
   }
 
@@ -164,7 +157,6 @@ public class ResultMapping {
       ", projectID='" + getProjectID() + "'" +
       ", fileType='" + getFileType() + "'" +
       ", projectName='" + getProjectName() + "'" +
-      ", fileSize='" + getFileSize() + "'" +
       ", proposalName='" + getProposalName() + "'" +
       ", proposalID='" + getProposalID() + "'" +
       ", auctionID='" + getAuctionID() + "'" +
@@ -180,12 +172,11 @@ public class ResultMapping {
 
   private static int counter = 0;
 
-  public ResultMapping(String projectID, String fileType, String projectName, String fileSize, String proposalName, String proposalID, String auctionID, String periodID, String customerID, String customerName, String resourceID, String resourceType, String dateBegin, String dateEnd) {
+  public ResultMapping(Integer projectID, String fileType, String projectName, String proposalName, Integer proposalID, Integer auctionID, Integer periodID, Integer customerID, String customerName, Integer resourceID, String resourceType, Date dateBegin, Date dateEnd) {
     this.id = ResultMapping.counter++;
     this.projectID = projectID;
     this.fileType = fileType;
     this.projectName = projectName;
-    this.fileSize = fileSize;
     this.proposalName = proposalName;
     this.proposalID = proposalID;
     this.auctionID = auctionID;
