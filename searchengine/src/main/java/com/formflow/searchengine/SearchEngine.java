@@ -1,19 +1,15 @@
 package com.formflow.searchengine;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.formflow.searchengine.Models.ResultMapping;
-import com.formflow.searchengine.Models.ResultMapping;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import org.hibernate.Session;
 
 /* Performs main searching functionality for documents, metadata, and user profiles */
 public class SearchEngine {
@@ -29,6 +25,11 @@ public class SearchEngine {
    */
   public List<Object[]> getFileMetadata(String frontendQuery) {
     Query sqlQuery = this.parseFrontendQuery(frontendQuery);
+    
+    if (sqlQuery == null) {
+      return null;
+    }
+
     return sqlQuery.getResultList();
   }
 
@@ -120,11 +121,18 @@ public class SearchEngine {
 
     // Now, inject the parameters into the sql statement safely using the EntityManager
     for (Map.Entry<String, String> entry : parameterNameToValueMap.entrySet()) {
-      // 2 types of parameters currently exist here for our purposes: Integer, String
-      // TODO need to expand this to incorperate Boolean, Data, etc.
+      // 3 types of parameters currently exist here for our purposes: Integer, String, Date
       // Find way to do this cleaner
       if (this.isNumeric(entry.getValue())) {
         q.setParameter(entry.getKey(), Integer.parseInt(entry.getValue()));
+      } else if (entry.getValue().matches("\\d{4}-\\d{2}-\\d{2}")) {
+        try {
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          Date convertedDate = sdf.parse(entry.getValue());
+          q.setParameter(entry.getKey(), convertedDate);
+        } catch (java.text.ParseException e) {
+          return null;
+        }
       } else {
         q.setParameter(entry.getKey(), entry.getValue());
       }
