@@ -1,5 +1,6 @@
 package com.formflow.searchengine.Models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import jakarta.persistence.*;
@@ -151,7 +152,7 @@ public class ResultMapping {
   }
 
   public Date getDateBegin() {
-    return this.dateBegin;
+    return formatDate(this.dateBegin);
   }
 
   public void setDateBegin(Date dateBegin) {
@@ -159,7 +160,7 @@ public class ResultMapping {
   }
 
   public Date getDateEnd() {
-    return this.dateEnd;
+    return formatDate(this.dateEnd);
   }
 
   public void setDateEnd(Date dateEnd) {
@@ -184,12 +185,23 @@ public class ResultMapping {
       ", dateBegin='" + getDateBegin() + "'" +
       ", dateEnd='" + getDateEnd() + "'" +
       "}";
-  }  
+  }
+
+  // TODO: is there a better way to do this?
+  private Date formatDate(Date date) {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      return sdf.parse(date.toString());
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return date;
+    }
+  }
 
   private static int counter = 0;
 
   public ResultMapping(Integer projectID, String description, String projectName, String proposalName, Integer proposalID, Integer auctionID, Integer periodID, Integer customerID, String customerName, Integer resourceID, String resourceType, Date dateBegin, Date dateEnd) {
-    // I think we should change this counter, it should go back to zero every new API call. Its not doing that right now.
+    // TODO: I think we should change this counter, it should go back to zero every new API call. Its not doing that right now.
     this.id = ResultMapping.counter++;
     this.projectID = projectID;
     this.description = description;
