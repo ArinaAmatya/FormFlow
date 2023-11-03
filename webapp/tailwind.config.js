@@ -12,7 +12,8 @@ module.exports = {
         'theme-bg-blue': '#e4eaf1',
         'theme-contrast-blue-dark': '#b7cbe2',
         'theme-contrast-blue-light': '#cad8e7',
-        'theme-grey': '#dddddd'
+        'theme-grey': '#dddddd',
+        'theme-grey-light': '#eeeeee'
       }
     },
   },
