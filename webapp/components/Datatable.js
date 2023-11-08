@@ -298,7 +298,7 @@ const rows = retrieveFiles();
 export default function DataGridDemo() {
   return (
     <div className="max-w-[1932px]">
-      <Box className="max-w-[calc(90vw-240px)]">
+      <Box className="max-w-[calc(95vw-380px)]">
         <DataGrid
           rows={rows}
           columns={columns}
