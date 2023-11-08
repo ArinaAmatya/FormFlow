@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -102,6 +103,10 @@ public class SearchEngine {
       }
       String filterName = keyValuePair[0];
       String[] values = keyValuePair[1].split(",");
+      // skip the period_info.begin_date and period_info.end_date filters
+      if (filterName.equals("period_info.begin_date") || filterName.equals("period_info.end_date")) {
+        continue;
+      }
       sqlQueryString += "(";
       for (int i = 0; i < values.length - 1; i++) {
         parameterName = filterName + i;
@@ -117,6 +122,47 @@ public class SearchEngine {
       } else {
         sqlQueryString += ") ";
       }
+    }
+
+    // TODO: We might want to change from Date to java.time stuff.
+
+    // Add the date filters
+    if (hasDateFilters(filters)) {
+      // set default beginDate (earliest right now is 1900) and endDate
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      Calendar cal = Calendar.getInstance();
+      cal.set(Calendar.YEAR, 0000);
+      cal.set(Calendar.MONTH, Calendar.JANUARY);
+      cal.set(Calendar.DAY_OF_MONTH, 1);
+      Date beginDate = cal.getTime();
+      Date endDate = new Date();
+
+      String parameterNameBegin = "period_info.begin_date";
+      String parameterNameEnd = "period_info.end_date";
+
+      sqlQueryString += "AND (period_info.begin_date <= :" + parameterNameEnd + ") AND (period_info.end_date >= :" + parameterNameBegin + ") ";
+
+      for (String filter : filters) {
+        if (filter.split("=")[0].equals(parameterNameBegin)) {
+          String value = filter.split("=")[1];
+          try {
+            beginDate = value.matches("\\d{4}-\\d{2}-\\d{2}") ? sdf.parse(value) : beginDate;
+          } catch (java.text.ParseException e) {
+            return null;
+          }
+        }
+        else if (filter.split("=")[0].equals(parameterNameEnd)) {
+          String value = filter.split("=")[1];
+          try {
+            endDate = value.matches("\\d{4}-\\d{2}-\\d{2}") ? sdf.parse(value) : endDate;
+          } catch (java.text.ParseException e) {
+            return null;
+          }
+        }
+      }
+      
+      parameterNameToValueMap.put(parameterNameBegin, sdf.format(beginDate));
+      parameterNameToValueMap.put(parameterNameEnd, sdf.format(endDate));
     }
 
     // Create the query out of the String and map it to the ResultMapping class for API response
@@ -142,6 +188,15 @@ public class SearchEngine {
     }
 
     return q;
+  }
+
+  private Boolean hasDateFilters(String[] filters) {
+    for (String filter : filters) {
+      if (filter.split("=")[0].equals("period_info.begin_date") || filter.split("=")[0].equals("period_info.end_date")) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private Boolean isNumeric(String s) {
