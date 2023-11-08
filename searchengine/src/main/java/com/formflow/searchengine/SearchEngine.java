@@ -128,22 +128,20 @@ public class SearchEngine {
 
     // Add the date filters
     if (hasDateFilters(filters)) {
-      // set default beginDate (earliest right now is 1900) and endDate
+      // set default beginDate and endDate
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      Calendar cal = Calendar.getInstance();
-      cal.set(Calendar.YEAR, 0000);
-      cal.set(Calendar.MONTH, Calendar.JANUARY);
-      cal.set(Calendar.DAY_OF_MONTH, 1);
+      Calendar cal = Calendar.getInstance(); 
+      cal.set(0000, Calendar.JANUARY, 1);
       Date beginDate = cal.getTime();
       Date endDate = new Date();
+      int dateFilterCount = 0;
 
       String parameterNameBegin = "period_info.begin_date";
       String parameterNameEnd = "period_info.end_date";
 
-      sqlQueryString += "AND (period_info.begin_date <= :" + parameterNameEnd + ") AND (period_info.end_date >= :" + parameterNameBegin + ") ";
-
       for (String filter : filters) {
         if (filter.split("=")[0].equals(parameterNameBegin)) {
+          dateFilterCount++;
           String value = filter.split("=")[1];
           try {
             beginDate = value.matches("\\d{4}-\\d{2}-\\d{2}") ? sdf.parse(value) : beginDate;
@@ -152,6 +150,7 @@ public class SearchEngine {
           }
         }
         else if (filter.split("=")[0].equals(parameterNameEnd)) {
+          dateFilterCount++;
           String value = filter.split("=")[1];
           try {
             endDate = value.matches("\\d{4}-\\d{2}-\\d{2}") ? sdf.parse(value) : endDate;
@@ -161,6 +160,11 @@ public class SearchEngine {
         }
       }
       
+      // Add an AND if there are other filters
+      if (filters.length > dateFilterCount) {
+        sqlQueryString += "AND ";
+      }
+      sqlQueryString += "(period_info.begin_date <= :" + parameterNameEnd + ") AND (period_info.end_date >= :" + parameterNameBegin + ") ";
       parameterNameToValueMap.put(parameterNameBegin, sdf.format(beginDate));
       parameterNameToValueMap.put(parameterNameEnd, sdf.format(endDate));
     }
