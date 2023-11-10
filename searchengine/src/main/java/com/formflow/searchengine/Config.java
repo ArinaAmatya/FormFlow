@@ -1,6 +1,5 @@
 package com.formflow.searchengine;
 
-import org.hibernate.Session;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,4 +1,4 @@
-package com.formflow.searchengine;
+package com.formflow.searchengine.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.formflow.searchengine.RepositoryInterface;
+import com.formflow.searchengine.SearchEngine;
+import com.formflow.searchengine.Models.AttachProposals;
+import com.formflow.searchengine.Models.ResultMapping;
+
 /* Controller to expose the REST API endpoints for the server */
 @RestController
 public class FrontendController {
@@ -24,13 +29,11 @@ public class FrontendController {
 	RepositoryInterface repositoryInterface;
 
   @GetMapping("/testConnection")
-  public ResponseEntity<List<Model>> testConnection() {
+  public ResponseEntity<List<AttachProposals>> testConnection() {
     try {
-			List<Model> tutorials = new ArrayList<Model>();
+			List<AttachProposals> tutorials = new ArrayList<AttachProposals>();
 
 			repositoryInterface.findAll().forEach(tutorials::add);
-
-      System.out.println(tutorials);
 
 			if (tutorials.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,9 +50,24 @@ public class FrontendController {
    * @param query The query originating from the frontend web application
    * @return String that holds the JSON file metadata
    * */
-  @GetMapping("/getFileMetadata?{query}")
-  public String getFileMetadata(@PathVariable("query") String query) {
-    return searchEngine.getFileMetadata(query);
+  @GetMapping("/getFileMetadata/{query}")
+  public ResponseEntity<List<ResultMapping>> getFileMetadata(@PathVariable String query) {
+    try {
+      List<ResultMapping> metadata = this.searchEngine.getFileMetadata(query);
+
+      if (metadata == null) {
+        return new ResponseEntity<>(null, HttpStatus.PRECONDITION_FAILED);
+      }
+
+      if (metadata.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+      return new ResponseEntity<>(metadata, HttpStatus.OK);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /* 
