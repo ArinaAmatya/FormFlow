@@ -1,6 +1,5 @@
 package com.formflow.searchengine.Controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,38 +11,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.formflow.searchengine.RepositoryInterface;
 import com.formflow.searchengine.SearchEngine;
-import com.formflow.searchengine.Models.AttachProposals;
 import com.formflow.searchengine.Models.ResultMapping;
 
-/* Controller to expose the REST API endpoints for the server */
+/*
+ * Controller to expose the REST API endpoints for the server
+ * @author David Gerard
+ * @author Siddhartha Jaizee
+ * @author Tyler George
+ * @version 1.0.0
+ */
 @RestController
 public class FrontendController {
 
-  /* The search engine singleton */
+  /*
+   * The search engine singleton
+   */
   @Autowired
   public SearchEngine searchEngine;
-
-  @Autowired
-	RepositoryInterface repositoryInterface;
-
-  @GetMapping("/testConnection")
-  public ResponseEntity<List<AttachProposals>> testConnection() {
-    try {
-			List<AttachProposals> tutorials = new ArrayList<AttachProposals>();
-
-			repositoryInterface.findAll().forEach(tutorials::add);
-
-			if (tutorials.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(tutorials, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-  }
 
   /* 
    * Fetch file metadata rows based on a search query originating from the frontend

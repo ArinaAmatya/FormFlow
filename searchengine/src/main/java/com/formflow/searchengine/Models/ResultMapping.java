@@ -5,6 +5,13 @@ import java.util.Date;
 
 import jakarta.persistence.*;
 
+/*
+ * Maps the metadata query result column names to the values returned by the database
+ * @author David Gerard
+ * @author Siddhartha Jaizee
+ * @author Tyler George
+ * @version 1.0.0
+ */
 @Entity
 @SqlResultSetMapping(name="ResultMapping", classes = {
   @ConstructorResult(targetClass = ResultMapping.class, 

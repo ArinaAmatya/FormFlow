@@ -13,17 +13,27 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import com.formflow.searchengine.Models.ResultMapping;
 
-/* Performs main searching functionality for documents, metadata, and user profiles */
+/*
+ * Performs main searching functionality for documents, metadata, and user profiles.
+ * @author David Gerard
+ * @author Siddhartha Jaizee
+ * @author Tyler George
+ * @version 1.0.0
+ */
 public class SearchEngine {
 
+  /*
+   * The entity manager generated automatically by Spring Boot
+   */
   @PersistenceContext
   private EntityManager entityManager;
 
   /*
-   * Fetches the file metadata corresponding to a query selection
+   * Fetches the file metadata corresponding to a frontend styled query selection
    * @param query The string query received from the frontend
-   * @return JSON object containing all rows of information from the file metadata
-   *         database that matches the selections from the input query
+   * @return A list of result mappings that represent the JSON object containing all rows 
+   *         of information from the file metadata database that matches the selections 
+   *         from the input query
    */
   public List<ResultMapping> getFileMetadata(String frontendQuery) {
     Query sqlQuery = this.parseFrontendQuery(frontendQuery);
@@ -38,10 +48,10 @@ public class SearchEngine {
   }
 
   /*
-   * Parses a frontend query that was embedded within the GET request link
-   * @param frontendQuery A query that was embedded in the original link
-   *                      ex. type=PDF&project_name=NAME ...
-   * @return Query of MySQL to query the database based on the frontend query
+   * Parses a frontend styled query that was embedded within the GET request link to safely
+   * build the corresponding MySQL query.
+   * @param frontendQuery The String query
+   * @return Query object of MySQL to query the database
    */
   private Query parseFrontendQuery(String frontendQuery) {
     // Parse the frontend query
@@ -194,6 +204,11 @@ public class SearchEngine {
     return q;
   }
 
+  /*
+   * Checks if the list of filters found in the query has date range-related information
+   * @param filter The list of all the filters that are being used to query data
+   * @return Boolean that is true if the filters include a date filter otherwise false
+   */
   private Boolean hasDateFilters(String[] filters) {
     for (String filter : filters) {
       if (filter.split("=")[0].equals("period_info.begin_date") || filter.split("=")[0].equals("period_info.end_date")) {
@@ -203,6 +218,11 @@ public class SearchEngine {
     return false;
   }
 
+  /*
+   * Checks if a String is an integer
+   * @param s The input String
+   * @return Boolean that is true if the String represents and integer and false otherwise
+   */
   private Boolean isNumeric(String s) {
     Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
     if (s == null) {
