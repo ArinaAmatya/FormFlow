@@ -5,7 +5,7 @@ import java.util.Date;
 
 import jakarta.persistence.*;
 
-/*
+/**
  * Maps the metadata query result column names to the values returned by the database
  * @author David Gerard
  * @author Siddhartha Jaizee
@@ -60,7 +60,6 @@ public class ResultMapping {
   private Date dateBegin;
   @Column(name = "date_end")
   private Date dateEnd;
-
 
   public int getId() {
     return this.id;

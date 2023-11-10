@@ -22,16 +22,16 @@ import com.formflow.searchengine.Models.ResultMapping;
  */
 public class SearchEngine {
 
-  /*
+  /**
    * The entity manager generated automatically by Spring Boot
    */
   @PersistenceContext
   private EntityManager entityManager;
 
-  /*
+  /**
    * Fetches the file metadata corresponding to a frontend styled query selection
    * @param query The string query received from the frontend
-   * @return A list of result mappings that represent the JSON object containing all rows 
+   * @return List<ResultMapping> A list of result mappings that represent the JSON object containing all rows 
    *         of information from the file metadata database that matches the selections 
    *         from the input query
    */
@@ -47,7 +47,7 @@ public class SearchEngine {
     return jsonMapping;
   }
 
-  /*
+  /**
    * Parses a frontend styled query that was embedded within the GET request link to safely
    * build the corresponding MySQL query.
    * @param frontendQuery The String query
@@ -204,7 +204,7 @@ public class SearchEngine {
     return q;
   }
 
-  /*
+  /**
    * Checks if the list of filters found in the query has date range-related information
    * @param filter The list of all the filters that are being used to query data
    * @return Boolean that is true if the filters include a date filter otherwise false

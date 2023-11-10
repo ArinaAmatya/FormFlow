@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.formflow.searchengine.SearchEngine;
 import com.formflow.searchengine.Models.ResultMapping;
 
-/*
+/**
  * Controller to expose the REST API endpoints for the server
  * @author David Gerard
  * @author Siddhartha Jaizee
@@ -24,13 +24,13 @@ import com.formflow.searchengine.Models.ResultMapping;
 @RestController
 public class FrontendController {
 
-  /*
+  /**
    * The search engine singleton
    */
   @Autowired
   public SearchEngine searchEngine;
 
-  /* 
+  /**
    * Fetch file metadata rows based on a search query originating from the frontend
    * @param query The query originating from the frontend web application
    * @return String that holds the JSON file metadata
@@ -65,7 +65,7 @@ public class FrontendController {
     return "Fetching File Object...";
   }
 
-  /* 
+  /**
    * Received information on the current state of frontend web application
    * @param state The updated state of the web application
    * @return Status code indicating the result of processing the message body information
