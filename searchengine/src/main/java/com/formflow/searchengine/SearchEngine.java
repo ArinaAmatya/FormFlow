@@ -6,24 +6,36 @@ import jakarta.persistence.Query;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Dictionary;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import com.formflow.searchengine.Models.ResultMapping;
 
-/* Performs main searching functionality for documents, metadata, and user profiles */
+/**
+ * Performs main searching functionality for documents, metadata, and user profiles.
+ * @author David Gerard
+ * @author Siddhartha Jaiswal
+ * @author Tyler George
+ * @version 1.0.0
+ */
 public class SearchEngine {
 
+  /**
+   * The entity manager generated automatically by Spring Boot
+   */
   @PersistenceContext
   private EntityManager entityManager;
 
-  /*
-   * Fetches the file metadata corresponding to a query selection
+  /**
+   * Fetches the file metadata corresponding to a frontend styled query selection
    * @param query The string query received from the frontend
-   * @return JSON object containing all rows of information from the file metadata
-   *         database that matches the selections from the input query
+   * @return List<ResultMapping> A list of result mappings that represent the JSON object containing all rows 
+   *         of information from the file metadata database that matches the selections 
+   *         from the input query
    */
   public List<ResultMapping> getFileMetadata(String frontendQuery) {
     Query sqlQuery = this.parseFrontendQuery(frontendQuery);
@@ -37,11 +49,11 @@ public class SearchEngine {
     return jsonMapping;
   }
 
-  /*
-   * Parses a frontend query that was embedded within the GET request link
-   * @param frontendQuery A query that was embedded in the original link
-   *                      ex. type=PDF&project_name=NAME ...
-   * @return Query of MySQL to query the database based on the frontend query
+  /**
+   * Parses a frontend styled query that was embedded within the GET request link to safely
+   * build the corresponding MySQL query.
+   * @param frontendQuery The String query
+   * @return Query object of MySQL to query the database
    */
   private Query parseFrontendQuery(String frontendQuery) {
     // Parse the frontend query
@@ -51,7 +63,8 @@ public class SearchEngine {
       proposal_info.project_id, attach_type.description, proj_info.project_name, 
       proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, 
       proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, 
-      res_info.resource_type, period_info.begin_date, period_info.end_date 
+      res_info.resource_type, period_info.begin_date, period_info.end_date, attachment_file.file_name,
+      attachment_file.file_path
       FROM attach_proposal 
       INNER JOIN 
       proposal_info
@@ -96,12 +109,29 @@ public class SearchEngine {
       sqlQueryString += " WHERE ";
     }
 
+    Dictionary<String, String> filterDict= new Hashtable<>();
+    filterDict.put("projectName", "proj_info.project_name");
+    filterDict.put("projectID", "proposal_info.project_id");
+    filterDict.put("fileType", "attach_type.description");
+    filterDict.put("fileName", "attachment_file.file_name"); // new
+    filterDict.put("filePath", "attachment_file.file_path"); //new
+    filterDict.put("proposalName", "proposal_info.proposal_label");
+    filterDict.put("proposalID", "proposal_info.proposal_id");
+    filterDict.put("auctionID", "proposal_info.auction_id");
+    filterDict.put("periodID", "proposal_info.period_id");
+    filterDict.put("customerID", "cust_info.customer_id");
+    filterDict.put("customerName", "cust_info.customer_name");
+    filterDict.put("resourceID", "res_info.resource_id");
+    filterDict.put("resourceType", "res_info.resource_type");
+    filterDict.put("dateBegin", "period_info.begin_date");
+    filterDict.put("dateEnd", "period_info.end_date");
+
     for (int j = 0; j < filters.length; j++) {
       String[] keyValuePair = filters[j].split("=");
       if (keyValuePair.length != 2) {
         continue;
       }
-      String filterName = keyValuePair[0];
+      String filterName = filterDict.get(keyValuePair[0]);
       String[] values = keyValuePair[1].split(",");
       // skip the period_info.begin_date and period_info.end_date filters
       if (filterName.equals("period_info.begin_date") || filterName.equals("period_info.end_date")) {
@@ -136,8 +166,8 @@ public class SearchEngine {
       Date endDate = new Date();
       int dateFilterCount = 0;
 
-      String parameterNameBegin = "period_info.begin_date";
-      String parameterNameEnd = "period_info.end_date";
+      String parameterNameBegin = "dateBegin";
+      String parameterNameEnd = "dateEnd";
 
       for (String filter : filters) {
         if (filter.split("=")[0].equals(parameterNameBegin)) {
@@ -194,15 +224,25 @@ public class SearchEngine {
     return q;
   }
 
+  /**
+   * Checks if the list of filters found in the query has date range-related information
+   * @param filter The list of all the filters that are being used to query data
+   * @return Boolean that is true if the filters include a date filter otherwise false
+   */
   private Boolean hasDateFilters(String[] filters) {
     for (String filter : filters) {
-      if (filter.split("=")[0].equals("period_info.begin_date") || filter.split("=")[0].equals("period_info.end_date")) {
+      if (filter.split("=")[0].equals("dateBegin") || filter.split("=")[0].equals("dateEnd")) {
         return true;
       }
     }
     return false;
   }
 
+  /**
+   * Checks if a String is an integer
+   * @param s The input String
+   * @return Boolean that is true if the String represents and integer and false otherwise
+   */
   private Boolean isNumeric(String s) {
     Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
     if (s == null) {
