@@ -13,10 +13,10 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import com.formflow.searchengine.Models.ResultMapping;
 
-/*
+/**
  * Performs main searching functionality for documents, metadata, and user profiles.
  * @author David Gerard
- * @author Siddhartha Jaizee
+ * @author Siddhartha Jaiswal
  * @author Tyler George
  * @version 1.0.0
  */
@@ -218,7 +218,7 @@ public class SearchEngine {
     return false;
   }
 
-  /*
+  /**
    * Checks if a String is an integer
    * @param s The input String
    * @return Boolean that is true if the String represents and integer and false otherwise

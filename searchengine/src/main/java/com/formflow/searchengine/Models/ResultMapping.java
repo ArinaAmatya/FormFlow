@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 /**
  * Maps the metadata query result column names to the values returned by the database
  * @author David Gerard
- * @author Siddhartha Jaizee
+ * @author Siddhartha Jaiswal
  * @author Tyler George
  * @version 1.0.0
  */

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Defines the Beans for this server application to enforce max one instance of each class
  * @author David Gerard
- * @author Siddhartha Jaizee
+ * @author Siddhartha Jaiswal
  * @author Tyler George
  * @version 1.0.0
  */

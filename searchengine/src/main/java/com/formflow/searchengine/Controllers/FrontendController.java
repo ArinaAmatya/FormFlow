@@ -17,7 +17,7 @@ import com.formflow.searchengine.Models.ResultMapping;
 /**
  * Controller to expose the REST API endpoints for the server
  * @author David Gerard
- * @author Siddhartha Jaizee
+ * @author Siddhartha Jaiswal
  * @author Tyler George
  * @version 1.0.0
  */
