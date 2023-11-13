@@ -28,7 +28,9 @@ import jakarta.persistence.*;
     @ColumnResult(name = "resource_id", type = Integer.class),
     @ColumnResult(name = "resource_type", type = String.class),
     @ColumnResult(name = "begin_date", type = Date.class),
-    @ColumnResult(name = "end_date", type = Date.class)
+    @ColumnResult(name = "end_date", type = Date.class),
+    @ColumnResult(name = "file_name", type = String.class),
+    @ColumnResult(name = "file_path", type = String.class)
   })
 })
 public class ResultMapping {
@@ -60,6 +62,10 @@ public class ResultMapping {
   private Date dateBegin;
   @Column(name = "date_end")
   private Date dateEnd;
+  @Column(name = "file_name")
+  private String fileName;
+  @Column(name = "file_path")
+  private String filePath;
 
   public int getId() {
     return this.id;
@@ -173,6 +179,22 @@ public class ResultMapping {
     this.dateEnd = dateEnd;
   }
 
+  public String getFileName() {
+    return this.fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  public String getFilePath() {
+    return this.filePath;
+  }
+
+  public void setFilePath(String filePath) {
+    this.filePath = filePath;
+  }
+
   @Override
   public String toString() {
     return "{" +
@@ -190,6 +212,8 @@ public class ResultMapping {
       ", resourceType='" + getResourceType() + "'" +
       ", dateBegin='" + getDateBegin() + "'" +
       ", dateEnd='" + getDateEnd() + "'" +
+      ", fileName='" + getFileName() + "'" +
+      ", filePath='" + getFilePath() + "'" +
       "}";
   }
 
@@ -206,7 +230,7 @@ public class ResultMapping {
 
   private static int counter = 0;
 
-  public ResultMapping(Integer projectID, String description, String projectName, String proposalName, Integer proposalID, Integer auctionID, Integer periodID, Integer customerID, String customerName, Integer resourceID, String resourceType, Date dateBegin, Date dateEnd) {
+  public ResultMapping(Integer projectID, String description, String projectName, String proposalName, Integer proposalID, Integer auctionID, Integer periodID, Integer customerID, String customerName, Integer resourceID, String resourceType, Date dateBegin, Date dateEnd, String fileName, String filePath) {
     // TODO: I think we should change this counter, it should go back to zero every new API call. Its not doing that right now.
     this.id = ResultMapping.counter++;
     this.projectID = projectID;
@@ -222,6 +246,8 @@ public class ResultMapping {
     this.resourceType = resourceType;
     this.dateBegin = dateBegin;
     this.dateEnd = dateEnd;
+    this.fileName = fileName;
+    this.filePath = filePath;
   }
   
 }

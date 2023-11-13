@@ -6,8 +6,10 @@ import jakarta.persistence.Query;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Dictionary;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -61,7 +63,8 @@ public class SearchEngine {
       proposal_info.project_id, attach_type.description, proj_info.project_name, 
       proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, 
       proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, 
-      res_info.resource_type, period_info.begin_date, period_info.end_date 
+      res_info.resource_type, period_info.begin_date, period_info.end_date, attachment_file.file_name,
+      attachment_file.file_path
       FROM attach_proposal 
       INNER JOIN 
       proposal_info
@@ -106,12 +109,29 @@ public class SearchEngine {
       sqlQueryString += " WHERE ";
     }
 
+    Dictionary<String, String> filterDict= new Hashtable<>();
+    filterDict.put("projectName", "proj_info.project_name");
+    filterDict.put("projectID", "proposal_info.project_id");
+    filterDict.put("fileType", "attach_type.description");
+    filterDict.put("fileName", "attachment_file.file_name"); // new
+    filterDict.put("filePath", "attachment_file.file_path"); //new
+    filterDict.put("proposalName", "proposal_info.proposal_label");
+    filterDict.put("proposalID", "proposal_info.proposal_id");
+    filterDict.put("auctionID", "proposal_info.auction_id");
+    filterDict.put("periodID", "proposal_info.period_id");
+    filterDict.put("customerID", "cust_info.customer_id");
+    filterDict.put("customerName", "cust_info.customer_name");
+    filterDict.put("resourceID", "res_info.resource_id");
+    filterDict.put("resourceType", "res_info.resource_type");
+    filterDict.put("dateBegin", "period_info.begin_date");
+    filterDict.put("dateEnd", "period_info.end_date");
+
     for (int j = 0; j < filters.length; j++) {
       String[] keyValuePair = filters[j].split("=");
       if (keyValuePair.length != 2) {
         continue;
       }
-      String filterName = keyValuePair[0];
+      String filterName = filterDict.get(keyValuePair[0]);
       String[] values = keyValuePair[1].split(",");
       // skip the period_info.begin_date and period_info.end_date filters
       if (filterName.equals("period_info.begin_date") || filterName.equals("period_info.end_date")) {
@@ -146,8 +166,8 @@ public class SearchEngine {
       Date endDate = new Date();
       int dateFilterCount = 0;
 
-      String parameterNameBegin = "period_info.begin_date";
-      String parameterNameEnd = "period_info.end_date";
+      String parameterNameBegin = "dateBegin";
+      String parameterNameEnd = "dateEnd";
 
       for (String filter : filters) {
         if (filter.split("=")[0].equals(parameterNameBegin)) {
@@ -211,7 +231,7 @@ public class SearchEngine {
    */
   private Boolean hasDateFilters(String[] filters) {
     for (String filter : filters) {
-      if (filter.split("=")[0].equals("period_info.begin_date") || filter.split("=")[0].equals("period_info.end_date")) {
+      if (filter.split("=")[0].equals("dateBegin") || filter.split("=")[0].equals("dateEnd")) {
         return true;
       }
     }
