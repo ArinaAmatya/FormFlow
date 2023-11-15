@@ -82,6 +82,7 @@ export default function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true)
+    const [data, setData] = useState(null);
     const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
@@ -99,6 +100,8 @@ export default function Search() {
         dateBegin: "",
         dateEnd: ""
     });
+    const dataMap = new Map(); 
+    let url = "http://localhost:8080/getFileMetadata/";
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -132,6 +135,12 @@ export default function Search() {
         if (filter === "all") {
             for (const [type, value] of Object.entries(inputs)) {
                 addChip(type);
+                /*
+                if (!dataMap.has(type)){
+                    dataMap.set(type, [value]);
+                } else{
+                    dataMap.get(type).push(value);
+                }*/
             }
         } else if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
             let chip = {
@@ -173,8 +182,32 @@ export default function Search() {
         }
     }
 
+    const chipsSearch = (c) => {
+        if (!dataMap.has(c.type)){
+            dataMap.set(c.type, [c.value]);
+        } else{
+            dataMap.get(c.type).push(c.value);
+        }
+    }
+
     const search = () => {
-        
+        chips.map(c => chipsSearch(c));
+        for (const [key, value] of dataMap) {
+            url += key + "=";
+            for (let i = 0; i < value.length - 1; i++){
+              url += value[i] + ",";
+            }
+            url += value[value.length-1] + "&";
+          }
+          url = url.substring(0, url.length-1);
+          console.log("url: " + url);
+            //console.log(`${key} = ${value}`);
+          fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data)
+            setLoading(false)
+          }); 
     }
 
     const filterAndSearch = () => {
@@ -485,8 +518,9 @@ export default function Search() {
                 <DrawerHeader />
                 <ResultsRack />
                 <br/>
-                <DataGridDemo />
+                <DataGridDemo props={data}/>
             </Main>
+            console.log(data); 
         </Box>
     );
 }
