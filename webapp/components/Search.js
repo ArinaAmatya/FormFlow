@@ -135,12 +135,6 @@ export default function Search() {
         if (filter === "all") {
             for (const [type, value] of Object.entries(inputs)) {
                 addChip(type);
-                /*
-                if (!dataMap.has(type)){
-                    dataMap.set(type, [value]);
-                } else{
-                    dataMap.get(type).push(value);
-                }*/
             }
         } else if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
             let chip = {
@@ -201,7 +195,6 @@ export default function Search() {
           }
           url = url.substring(0, url.length-1);
           console.log("url: " + url);
-            //console.log(`${key} = ${value}`);
           fetch(url)
           .then((res) => res.json())
           .then((data) => {
