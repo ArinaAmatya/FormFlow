@@ -28,6 +28,7 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import SearchHistory from './SearchHistory.js';
 
 const drawerWidth = 380;
 
@@ -99,6 +100,7 @@ export default function Search() {
         dateBegin: "",
         dateEnd: ""
     });
+    const [history, setHistory] = useState([]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -144,6 +146,14 @@ export default function Search() {
         }
     }
 
+    const generateChip = (c) => {
+        return (<Chip className="ml-[5px] mr-[5px] mt-[2px] bg-theme-logo-blue text-white"
+            key={c.id}
+            label={c.type + ": " + c.value}
+            onDelete={() => handleDelete(c.id)}
+        />);
+    }
+
     useEffect(() => {
         if (chips.length === 0) {
             setAddFiltersButtonVisible(true);
@@ -174,7 +184,7 @@ export default function Search() {
     }
 
     const search = () => {
-        
+        setHistory(prev => prev.concat([chips]));
     }
 
     const filterAndSearch = () => {
@@ -203,13 +213,7 @@ export default function Search() {
                                     variant="contained"
                                     onClick={handleDrawerOpen}
                                 >Add Filters</Button>
-                                {chips.sort(chipSort).map(c =>
-                                    <Chip className="ml-[5px] mr-[5px] mt-[2px] bg-theme-logo-blue text-white"
-                                        key={c.id}
-                                        label={c.type + ": " + c.value}
-                                        onDelete={() => handleDelete(c.id)}
-                                    />
-                                )}
+                                {chips.sort(chipSort).map((c) => generateChip(c))}
                             </div>
                         </div>
                         <Button className="rounded-r-xl rounded-l-none border-none bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
@@ -473,13 +477,9 @@ export default function Search() {
                 </AccordionDetails>
                 </Accordion>
                 <Divider />
-                <List>
-                <ListItem key="Search History" disablePadding>
-                    <ListItemButton>
-                    <ListItemText primary="Search History" />
-                    </ListItemButton>
-                </ListItem>
-                </List>
+                <SearchHistory
+                    history={history}
+                />
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
