@@ -46,6 +46,7 @@ public class SearchEngine {
    */
   public String getFileObject(String path, String destinationDirectory) throws IOException {
     String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/TestBucket/Star db.sql?download";
+    
     URL obj = new URL(GET_URL);
     HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
     // httpURLConnection.setRequestMethod("GET");
