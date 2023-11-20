@@ -24,6 +24,11 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import SearchHistory from './SearchHistory.js';
 
 const drawerWidth = 380;
 
@@ -80,16 +85,23 @@ export default function Search() {
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true)
     const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
-        file: "",
-        extension: "",
-        customer: "",
-        project: "",
-        proposal: "",
-        resource: "",
-        auction: "",
-        begin: "",
-        end: ""
+        fileName: "",
+        fileID: "",
+        fileType: "",
+        customerName: "",
+        customerID: "",
+        projectName: "",
+        projectID: "",
+        proposalName: "",
+        proposalID: "",
+        resourceName: "",
+        resourceID: "",
+        auctionID: "",
+        dateBegin: "",
+        dateEnd: ""
     });
+    const [prevSearches, setPrevSearches] = useState([]);
+    const [searchFlag, setSearchFlag] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -119,20 +131,37 @@ export default function Search() {
         return 0;
     }
 
-    const addChip = (filter) => {
-        if (filter === "all") {
-            for (const [type, value] of Object.entries(inputs)) {
-                addChip(type);
-            }
-        } else if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
-            let chip = {
-                id: idInc++,
-                type: filter,
-                value: inputs[filter]
-            };
+    const addChip = (filterType) => {
+        let filters = [];
+        let chipsToAdd = [];
 
-            setChips(prev => prev.concat(chip));
+        if (filterType === "all") {
+            for (const [type, value] of Object.entries(inputs)) {
+                filters.push(type);
+            }
+        } else {
+            filters.push(filterType);
         }
+        
+        filters.forEach(filter => {
+                if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
+                chipsToAdd.push({
+                    id: idInc++,
+                    type: filter,
+                    value: inputs[filter]
+                });
+            }
+        });
+
+        setChips(prev => prev.concat(chipsToAdd));
+    }
+
+    const generateChip = (c) => {
+        return (<Chip className="ml-[5px] mr-[5px] mt-[2px] bg-theme-logo-blue text-white"
+            key={c.id}
+            label={c.type + ": " + c.value}
+            onDelete={() => handleDelete(c.id)}
+        />);
     }
 
     useEffect(() => {
@@ -141,12 +170,25 @@ export default function Search() {
         } else {
             setAddFiltersButtonVisible(false);
         }
-    }, [chips])
 
-    const filterUpdateHandler = (e) => {
+        if (searchFlag) {
+            setSearchFlag(prev => false);
+            search();
+        }
+    }, [chips]);
+
+    const filterUpdateHandler = (e, type) => {
+        let value;
+        if (type === "dateBegin" || type === "dateEnd") {
+            let date = dayjs(e).format();
+            value = date.slice(0, date.indexOf("T"));
+        } else {
+            value = e.target.value;
+        }
+
         setInputs(prev => ({
             ...prev,
-            [e.target.id]: e.target.value,
+            [type]: value,
         }));
     }
 
@@ -157,12 +199,20 @@ export default function Search() {
     }
 
     const search = () => {
-        
+        setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
     }
 
     const filterAndSearch = () => {
+        setSearchFlag(prev => true);
         addChip("all");
-        search();
+    }
+
+    const handleAddFiltersButton = () => {
+        if (!open) {
+            handleDrawerOpen();
+        } else {
+            addChip("all");
+        }
     }
 
     return (
@@ -182,14 +232,11 @@ export default function Search() {
                     <div className="flex">
                         <div className="rounded-l-xl bg-theme-contrast-blue-dark p-[10px] min-h-[56px] min-w-[320px]">
                             <div>
-                                <Button className={addFiltersButtonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"} variant="contained">Add Filters</Button>
-                                {chips.sort(chipSort).map(c =>
-                                    <Chip className="ml-[5px] mr-[5px] mt-[2px] bg-theme-logo-blue text-white"
-                                        key={c.id}
-                                        label={c.type + ": " + c.value}
-                                        onDelete={() => handleDelete(c.id)}
-                                    />
-                                )}
+                                <Button className={addFiltersButtonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"}
+                                    variant="contained"
+                                    onClick={handleAddFiltersButton}
+                                >Add Filters</Button>
+                                {chips.sort(chipSort).map((c) => generateChip(c))}
                             </div>
                         </div>
                         <Button className="rounded-r-xl rounded-l-none border-none bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
@@ -212,7 +259,11 @@ export default function Search() {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>FORMFLOW LOGO HERE
+                <DrawerHeader>
+                <img className="max-w-[310px] mt-[10px] mb-[10px]"
+                    src={"/logo.png"}
+                    alt="FormFlow Logo"
+                />
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
@@ -231,214 +282,214 @@ export default function Search() {
                     <Typography>Filters</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="file"
-                        label="File Name/ID"
-                        type="search"
-                        variant="filled"
-                        value={inputs.file}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "file")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("file")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <TextField className="w-[320px]"
+                            id="fileName"
+                            label="File Name"
+                            type="search"
+                            variant="filled"
+                            value={inputs.file}
+                            onChange={e => filterUpdateHandler(e, "fileName")}
+                            onKeyDown={(e) => keyHandler(e, "fileName")}
+                        />
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("fileName")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="extension"
-                        label="File Type"
-                        type="search"
-                        variant="filled"
-                        value={inputs.extension}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "extension")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("extension")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <TextField className="w-[320px]"
+                            id="fileType"
+                            label="File Type"
+                            type="search"
+                            variant="filled"
+                            value={inputs.extension}
+                            onChange={e => filterUpdateHandler(e, "fileType")}
+                            onKeyDown={(e) => keyHandler(e, "fileType")}
+                        />
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("fileType")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="customer"
-                        label="Customer Name/ID"
-                        type="search"
-                        variant="filled"
-                        value={inputs.customer}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "customer")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("customer")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <TextField className="w-[320px]"
+                            id="customerName"
+                            label="Customer Name"
+                            type="search"
+                            variant="filled"
+                            value={inputs.customer}
+                            onChange={e => filterUpdateHandler(e, "customerName")}
+                            onKeyDown={(e) => keyHandler(e, "customerName")}
+                        />
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("customerName")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="project"
-                        label="Project Name/ID"
-                        type="search"
-                        variant="filled"
-                        value={inputs.project}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "project")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("project")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <TextField className="w-[320px]"
+                            id="projectName"
+                            label="Project Name"
+                            type="search"
+                            variant="filled"
+                            value={inputs.project}
+                            onChange={e => filterUpdateHandler(e, "projectName")}
+                            onKeyDown={(e) => keyHandler(e, "projectName")}
+                        />
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("projectName")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="proposal"
-                        label="Proposal Name/ID"
-                        type="search"
-                        variant="filled"
-                        value={inputs.proposal}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "proposal")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("proposal")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <TextField className="w-[320px]"
+                            id="proposalName"
+                            label="Proposal Name"
+                            type="search"
+                            variant="filled"
+                            value={inputs.proposal}
+                            onChange={e => filterUpdateHandler(e, "proposalName")}
+                            onKeyDown={(e) => keyHandler(e, "proposalName")}
+                        />
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("proposalName")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="resource"
-                        label="Resource Type/ID"
-                        type="search"
-                        variant="filled"
-                        value={inputs.resource}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "resource")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("resource")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <TextField className="w-[320px]"
+                            id="resourceName"
+                            label="Resource Type"
+                            type="search"
+                            variant="filled"
+                            value={inputs.resource}
+                            onChange={e => filterUpdateHandler(e, "resourceName")}
+                            onKeyDown={(e) => keyHandler(e, "resourceName")}
+                        />
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("resourceName")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="auction"
-                        label="Auction ID"
-                        type="search"
-                        variant="filled"
-                        value={inputs.auction}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "auction")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("auction")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <TextField className="w-[320px]"
+                            id="auctionID"
+                            label="Auction ID"
+                            type="search"
+                            variant="filled"
+                            value={inputs.auction}
+                            onChange={e => filterUpdateHandler(e, "auctionID")}
+                            onKeyDown={(e) => keyHandler(e, "auctionID")}
+                        />
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("auctionID")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="begin"
-                        label="Begin Date"
-                        type="search"
-                        variant="filled"
-                        value={inputs.begin}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "begin")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("begin")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker className="w-[320px]"
+                                label="Begin Date"
+                                value={inputs.end}
+                                onChange={v => filterUpdateHandler(v, "dateBegin")}
+                                onKeyDown={(e) => keyHandler(e, "dateBegin")}
+                                slotProps={{ textField: { variant: 'filled' } }}
+                            />
+                        </LocalizationProvider>
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("dateBegin")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <div className="h-[56px] w-[347px] flex">
-                    <TextField className="w-[320px]"
-                        id="end"
-                        label="End Date"
-                        type="search"
-                        variant="filled"
-                        value={inputs.end}
-                        onChange={filterUpdateHandler}
-                        onKeyDown={(e) => keyHandler(e, "end")}
-                    />
-                    <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                        variant="outlined"
-                        onClick={() => addChip("end")}
-                    >
-                        <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="1em"
-                        viewBox="0 0 512 512"
+                    <div className="h-[56px] w-[347px] flex mb-[8px]">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker className="w-[320px]"
+                                label="End Date"
+                                value={inputs.end}
+                                onChange={v => filterUpdateHandler(v, "dateEnd")}
+                                onKeyDown={(e) => keyHandler(e, "dateEnd")}
+                                slotProps={{ textField: { variant: 'filled' } }}
+                            />
+                        </LocalizationProvider>
+                        <Button className="flex h-[56px] min-w-[6px] w-[32px] p-[0px] rounded-r-xl rounded-l-none border-0 border-b bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
+                            variant="outlined"
+                            onClick={() => addChip("dateEnd")}
                         >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                        </svg>
-                    </Button>
+                            <svg className="h-[16px] w-[16px] fill-theme-logo-blue"
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                            >
+                            <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                            </svg>
+                        </Button>
                     </div>
-                    <Button className="h-[56px] w-[316px] mt-[13px] ml-[13px] shadow shadow-theme-logo-blue rounded-xl bg-theme-contrast-blue-light text-xl font-extrabold hover:bg-[#afc3da] hover:border-none"
+                    <Button className="h-[56px] w-[316px] mt-[5px] ml-[13px] shadow shadow-theme-logo-blue rounded-xl bg-theme-contrast-blue-light text-xl font-extrabold hover:bg-[#afc3da] hover:border-none"
                         onClick={filterAndSearch}
                     >
                         <svg className="h-[32px] w-[32px] fill-theme-logo-blue mr-[20px]"
@@ -453,13 +504,9 @@ export default function Search() {
                 </AccordionDetails>
                 </Accordion>
                 <Divider />
-                <List>
-                <ListItem key="Search History" disablePadding>
-                    <ListItemButton>
-                    <ListItemText primary="Search History" />
-                    </ListItemButton>
-                </ListItem>
-                </List>
+                <SearchHistory
+                    history={prevSearches}
+                />
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
