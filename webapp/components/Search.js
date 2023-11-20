@@ -28,6 +28,7 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import SearchHistory from './SearchHistory.js';
 
 const drawerWidth = 380;
 
@@ -99,6 +100,8 @@ export default function Search() {
         dateBegin: "",
         dateEnd: ""
     });
+    const [prevSearches, setPrevSearches] = useState([]);
+    const [searchFlag, setSearchFlag] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -128,20 +131,37 @@ export default function Search() {
         return 0;
     }
 
-    const addChip = (filter) => {
-        if (filter === "all") {
-            for (const [type, value] of Object.entries(inputs)) {
-                addChip(type);
-            }
-        } else if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
-            let chip = {
-                id: idInc++,
-                type: filter,
-                value: inputs[filter]
-            };
+    const addChip = (filterType) => {
+        let filters = [];
+        let chipsToAdd = [];
 
-            setChips(prev => prev.concat(chip));
+        if (filterType === "all") {
+            for (const [type, value] of Object.entries(inputs)) {
+                filters.push(type);
+            }
+        } else {
+            filters.push(filterType);
         }
+        
+        filters.forEach(filter => {
+                if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
+                chipsToAdd.push({
+                    id: idInc++,
+                    type: filter,
+                    value: inputs[filter]
+                });
+            }
+        });
+
+        setChips(prev => prev.concat(chipsToAdd));
+    }
+
+    const generateChip = (c) => {
+        return (<Chip className="ml-[5px] mr-[5px] mt-[2px] bg-theme-logo-blue text-white"
+            key={c.id}
+            label={c.type + ": " + c.value}
+            onDelete={() => handleDelete(c.id)}
+        />);
     }
 
     useEffect(() => {
@@ -150,7 +170,12 @@ export default function Search() {
         } else {
             setAddFiltersButtonVisible(false);
         }
-    }, [chips])
+
+        if (searchFlag) {
+            setSearchFlag(prev => false);
+            search();
+        }
+    }, [chips]);
 
     const filterUpdateHandler = (e, type) => {
         let value;
@@ -174,12 +199,20 @@ export default function Search() {
     }
 
     const search = () => {
-        
+        setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
     }
 
     const filterAndSearch = () => {
+        setSearchFlag(prev => true);
         addChip("all");
-        search();
+    }
+
+    const handleAddFiltersButton = () => {
+        if (!open) {
+            handleDrawerOpen();
+        } else {
+            addChip("all");
+        }
     }
 
     return (
@@ -201,15 +234,9 @@ export default function Search() {
                             <div>
                                 <Button className={addFiltersButtonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"}
                                     variant="contained"
-                                    onClick={handleDrawerOpen}
+                                    onClick={handleAddFiltersButton}
                                 >Add Filters</Button>
-                                {chips.sort(chipSort).map(c =>
-                                    <Chip className="ml-[5px] mr-[5px] mt-[2px] bg-theme-logo-blue text-white"
-                                        key={c.id}
-                                        label={c.type + ": " + c.value}
-                                        onDelete={() => handleDelete(c.id)}
-                                    />
-                                )}
+                                {chips.sort(chipSort).map((c) => generateChip(c))}
                             </div>
                         </div>
                         <Button className="rounded-r-xl rounded-l-none border-none bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
@@ -232,7 +259,11 @@ export default function Search() {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>FORMFLOW LOGO HERE
+                <DrawerHeader>
+                <img className="max-w-[310px] mt-[10px] mb-[10px]"
+                    src={"/logo.png"}
+                    alt="FormFlow Logo"
+                />
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
@@ -473,13 +504,9 @@ export default function Search() {
                 </AccordionDetails>
                 </Accordion>
                 <Divider />
-                <List>
-                <ListItem key="Search History" disablePadding>
-                    <ListItemButton>
-                    <ListItemText primary="Search History" />
-                    </ListItemButton>
-                </ListItem>
-                </List>
+                <SearchHistory
+                    history={prevSearches}
+                />
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
