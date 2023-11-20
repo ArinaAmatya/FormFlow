@@ -7,6 +7,12 @@ import jakarta.persistence.Query;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -29,6 +35,47 @@ public class SearchEngine {
    */
   @PersistenceContext
   private EntityManager entityManager;
+
+  /**
+   * Fetches the file object found in the database at a given path and sends
+   * the file to the frontend
+   * @param path The string path for the file in the database
+   * @param destinationDirectory The String directory at which to send the file on the frontend server
+   * @return String The name of the file for reference by the frontend
+   * @throws IOException
+   */
+  public String getFileObject(String path, String destinationDirectory) throws IOException {
+    String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/TestBucket/Star db.sql?download";
+    URL obj = new URL(GET_URL);
+    HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
+    // httpURLConnection.setRequestMethod("GET");
+    int responseCode = httpURLConnection.getResponseCode();
+    System.out.println("GET Response Code :: " + responseCode);
+    //SET TIMEOUT
+    if (responseCode == HttpURLConnection.HTTP_OK) { // success
+        BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in .readLine()) != null) {
+            response.append(inputLine);
+        } in .close();
+        System.out.println("Stuff happens here");
+        File myfile = new File("D:/School/fullscript.py");
+        if (myfile.createNewFile()){
+            System.out.println("File created: " + myfile.getName());
+            //FIGURE OUT HOW THE FUCK TO WRITE TO A FILE HERE!
+                
+        } else {
+            System.out.println("Error");
+        } 
+
+
+    } else {
+        System.out.println("GET request not worked");
+    }
+
+  }
 
   /**
    * Fetches the file metadata corresponding to a frontend styled query selection
