@@ -207,6 +207,14 @@ export default function Search() {
         addChip("all");
     }
 
+    const handleAddFiltersButton = () => {
+        if (!open) {
+            handleDrawerOpen();
+        } else {
+            addChip("all");
+        }
+    }
+
     return (
         <Box className="flex">
             <CssBaseline />
@@ -226,7 +234,7 @@ export default function Search() {
                             <div>
                                 <Button className={addFiltersButtonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"}
                                     variant="contained"
-                                    onClick={handleDrawerOpen}
+                                    onClick={handleAddFiltersButton}
                                 >Add Filters</Button>
                                 {chips.sort(chipSort).map((c) => generateChip(c))}
                             </div>
