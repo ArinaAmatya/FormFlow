@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"com.formflow.demo","l":"Config"},{"p":"com.formflow.demo","l":"FrontendController"},{"p":"com.formflow.demo","l":"ResultMapping"},{"p":"com.formflow.demo","l":"SearchEngine"},{"p":"com.formflow.demo","l":"SearchengineApplication"}];updateSearchResults();
