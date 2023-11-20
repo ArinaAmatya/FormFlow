@@ -259,7 +259,11 @@ export default function Search() {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>FORMFLOW LOGO HERE
+                <DrawerHeader>
+                <img className="max-w-[310px] mt-[10px] mb-[10px]"
+                    src={"/logo.png"}
+                    alt="FormFlow Logo"
+                />
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
