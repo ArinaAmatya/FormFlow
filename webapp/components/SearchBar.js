@@ -15,10 +15,10 @@ import Chip from '@mui/material/Chip';
  * and its functionality.
  * 
  * @param {Object} props - Component props.
- * @param {ChipData[]} chips - The filter chips.
- * @param {function(string):void} handleDelete - Handles the deletion of a chip of input ID.
- * @param {boolean} buttonVisible - Determines if the add filters button is visible.
- * @param {function():void} handleButton - Handles the add filters button behavior.
+ * @param {ChipData[]} props.chips - The filter chips.
+ * @param {function(string):void} props.handleDelete - Handles the deletion of a chip of input ID.
+ * @param {boolean} props.buttonVisible - Determines if the add filters button is visible.
+ * @param {function():void} props.handleButton - Handles the add filters button behavior.
  * @returns {React.ReactElement} - FilterInput component
  */
 function SearchBar({ chips, handleDelete, handleButton, buttonVisible, handleSearch }) {

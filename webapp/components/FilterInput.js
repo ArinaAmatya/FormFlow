@@ -10,11 +10,11 @@ import dayjs from 'dayjs';
  * and its functionality.
  * 
  * @param {Object} props - Component props.
- * @param {string} label - The label for the filter.
+ * @param {string} props.label - The label for the filter.
  * @param {string} props.type - The type of filter to apply.
  * @param {string} props.input - Varaible to store input.
- * @param {function(Object):void} setInputs - Function to set inputs object of parent.
- * @param {function(string):void} addChip - Function to add the filter chip.
+ * @param {function(Object):void} props.setInputs - Function to set inputs object of parent.
+ * @param {function(string):void} props.addChip - Function to add the filter chip.
  * @returns {React.ReactElement} - FilterInput component.
  */
 function FilterInput({ label, type, input, date = false, setInputs, addChip }) {
