@@ -23,7 +23,7 @@ import Chip from '@mui/material/Chip';
  * @param {ChipData[][]} props.history - An array of ChipData arrays, each of which represent a single search's filters.
  * @returns {React.ReactElement} - SearchHistory component.
  */
-function SearchHistory({history = []}) {
+function SearchHistory({ history = [] }) {
     /**
      * Builds a MUI Chip component using an input ChipData object.
      * 
