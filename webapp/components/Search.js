@@ -329,7 +329,7 @@ function Search() {
                 open={open}
             >
                 <DrawerHeader>
-                <img className="max-w-[310px] mt-[10px] mb-[10px]"
+                <img className="max-w-[250px] ml-auto mr-auto mt-[10px] mb-[10px]"
                     src={"/logo.png"}
                     alt="FormFlow Logo"
                 />
@@ -576,6 +576,7 @@ function Search() {
                 <SearchHistory
                     history={prevSearches}
                 />
+                <Divider />
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />

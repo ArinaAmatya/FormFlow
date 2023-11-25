@@ -52,7 +52,7 @@ function SearchHistory({history = []}) {
             >
                 <Typography>Search History</Typography>
             </AccordionSummary>
-            <AccordionDetails className="max-h-[400px] overflow-y-scroll">
+            <AccordionDetails className="h-[400px] overflow-y-auto">
                 {history.map((snap, k) => {
                     return (
                         <div className="max-w-[347px] border-2 bg-theme-contrast-blue-dark rounded-3xl p-0.5 pb-1" key={k+1}>
