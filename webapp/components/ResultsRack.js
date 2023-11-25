@@ -1,14 +1,18 @@
+import React from 'react';
 import Button from '@mui/material/Button';
+import FileTable from './FileTable';
 import { useRouter } from 'next/router'
 
-export default function ResultsRack() {
+/**
+ * A React component that displays the search results table
+ * and provides the preview and download buttons for it.
+ * 
+ * @returns {React.ReactElement} - ResultsRack component.
+ * 
+ * @function
+ */
+function ResultsRack() {
     const router = useRouter();
-
-    const queryForFiles = () => {
-        // TODO: Create query to backend
-
-        return null;
-    }
 
     const tryPreview = () => {
         let query = queryForFiles();
@@ -38,6 +42,10 @@ export default function ResultsRack() {
                     Download Selected Files
                 </Button>
             </div>
+            <br />
+            <FileTable />
         </>
   );
 }
+
+export default ResultsRack;
