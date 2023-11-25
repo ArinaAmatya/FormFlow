@@ -1,6 +1,5 @@
-package com.formflow.searchengine;
+package com.formflow.searchengine.Controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,44 +11,48 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/* Controller to expose the REST API endpoints for the server */
+import com.formflow.searchengine.SearchEngine;
+import com.formflow.searchengine.Models.ResultMapping;
+
+/**
+ * Controller to expose the REST API endpoints for the server
+ * @author David Gerard
+ * @author Siddhartha Jaiswal
+ * @author Tyler George
+ * @version 1.0.0
+ */
 @RestController
 public class FrontendController {
 
-  /* The search engine singleton */
+  /**
+   * The search engine singleton
+   */
   @Autowired
   public SearchEngine searchEngine;
 
-  @Autowired
-	RepositoryInterface repositoryInterface;
-
-  @GetMapping("/testConnection")
-  public ResponseEntity<List<Model>> testConnection() {
-    try {
-			List<Model> tutorials = new ArrayList<Model>();
-
-			repositoryInterface.findAll().forEach(tutorials::add);
-
-      System.out.println(tutorials);
-
-			if (tutorials.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(tutorials, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-  }
-
-  /* 
+  /**
    * Fetch file metadata rows based on a search query originating from the frontend
    * @param query The query originating from the frontend web application
    * @return String that holds the JSON file metadata
    * */
-  @GetMapping("/getFileMetadata?{query}")
-  public String getFileMetadata(@PathVariable("query") String query) {
-    return searchEngine.getFileMetadata(query);
+  @GetMapping("/getFileMetadata/{query}")
+  public ResponseEntity<List<ResultMapping>> getFileMetadata(@PathVariable String query) {
+    try {
+      List<ResultMapping> metadata = this.searchEngine.getFileMetadata(query);
+
+      if (metadata == null) {
+        return new ResponseEntity<>(null, HttpStatus.PRECONDITION_FAILED);
+      }
+
+      if (metadata.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+      return new ResponseEntity<>(metadata, HttpStatus.OK);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /* 
@@ -62,7 +65,7 @@ public class FrontendController {
     return "Fetching File Object...";
   }
 
-  /* 
+  /**
    * Received information on the current state of frontend web application
    * @param state The updated state of the web application
    * @return Status code indicating the result of processing the message body information
