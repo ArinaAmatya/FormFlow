@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -16,19 +16,10 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import SearchHistory from './SearchHistory.js';
 import FilterInput from './FilterInput.js';
-
-/**
- * Represents the essential data of a filter chip.
- * 
- * @typedef {Object} ChipData
- * @property {number} id - The unique ID of the chip.
- * @property {string} type - The type the chip will filter for.
- * @property {number} value - The value that will be filtered for.
- */
+import SearchBar from './SearchBar.js';
 
 const drawerWidth = 380;
 
@@ -87,7 +78,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
-    const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true)
+    const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true);
     const [inputs, setInputs] = useState({
         fileName: "",
         fileID: "",
@@ -117,32 +108,6 @@ function Search() {
      */
     const handleDelete = (idNum) => {
         setChips(prev => prev.filter(c => c.id !== idNum));
-    }
-
-    /**
-     * Returns -1, 0, or 1 depending on which chip is alphabetically greater.
-     * Used for sorting of chips array alphabetically.
-     * 
-     * @param {ChipData} chip1
-     * @param {ChipData} chip2
-     * @returns {number} - -1 if chip2 is greater, 0 if neither is greater, 1 if chip1 is greater.
-     * 
-     * @function
-     */
-    const chipSort = (chip1, chip2) => {
-        if (chip1.type < chip2.type) {
-            return -1;
-        } else if (chip1.type > chip2.type) {
-            return 1;
-        }
-
-        if (chip1.value < chip2.value) {
-            return -1;
-        } else if (chip1.value > chip2.value) {
-            return 1;
-        }
-
-        return 0;
     }
 
     /**
@@ -176,22 +141,6 @@ function Search() {
         });
 
         setChips(prev => prev.concat(chipsToAdd));
-    }
-
-    /**
-     * Builds a MUI Chip component using an input ChipData object.
-     * 
-     * @param {ChipData} c - The data that is necessary to build the chip.
-     * @returns {React.ReactElement} - A Chip component.
-     * 
-     * @function
-     */
-    const generateChip = (c) => {
-        return (<Chip className="ml-[5px] mr-[5px] mt-[2px] bg-theme-logo-blue text-white"
-            key={c.id}
-            label={c.type + ": " + c.value}
-            onDelete={() => handleDelete(c.id)}
-        />);
     }
 
     useEffect(() => {
@@ -257,28 +206,13 @@ function Search() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <div className="flex">
-                        <div className="rounded-l-xl bg-theme-contrast-blue-dark p-[10px] min-h-[56px] min-w-[320px]">
-                            <div>
-                                <Button className={addFiltersButtonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"}
-                                    variant="contained"
-                                    onClick={handleAddFiltersButton}
-                                >Add Filters</Button>
-                                {chips.sort(chipSort).map((c) => generateChip(c))}
-                            </div>
-                        </div>
-                        <Button className="rounded-r-xl rounded-l-none border-none bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
-                            variant="outlined"
-                            onClick={search}
-                        >
-                            <svg className="h-[32px] w-[32px] fill-theme-logo-blue"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 16 16"
-                            >
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                            </svg>
-                        </Button>
-                    </div>
+                    <SearchBar
+                        chips={chips}
+                        handleDelete={handleDelete}
+                        handleButton={handleAddFiltersButton}
+                        buttonVisible={addFiltersButtonVisible}
+                        handleSearch={search}
+                    />
                 </Toolbar>
             </AppBar>
             <Drawer className={"flex w-[" + drawerWidth + "] shrink-0 [&_.MuiDrawer-paper]:" + drawerWidth + " [&_.MuiDrawer-paper]:box-border [&_.MuiDrawer-paper]:bg-theme-grey-light"}
@@ -311,69 +245,69 @@ function Search() {
                 </AccordionSummary>
                 <AccordionDetails>
                     <FilterInput
-                        label = "File Name"
-                        type = "fileName"
-                        input = {inputs.fileName}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        label="File Name"
+                        type="fileName"
+                        input={inputs.fileName}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "File Type"
-                        type = "fileType"
-                        input = {inputs.fileType}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        label="File Type"
+                        type="fileType"
+                        input={inputs.fileType}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "Customer Name"
-                        type = "customerName"
-                        input = {inputs.customerName}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        label="Customer Name"
+                        type="customerName"
+                        input={inputs.customerName}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "Project Name"
-                        type = "projectName"
-                        input = {inputs.projectName}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        label="Project Name"
+                        type="projectName"
+                        input={inputs.projectName}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "Proposal Name"
-                        type = "proposalName"
-                        input = {inputs.proposalName}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        label="Proposal Name"
+                        type="proposalName"
+                        input={inputs.proposalName}
+                        setInputs ={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "Resource Name"
-                        type = "resourceName"
-                        input = {inputs.resourceName}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        label="Resource Name"
+                        type="resourceName"
+                        input={inputs.resourceName}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "Auction ID"
-                        type = "auctionID"
-                        input = {inputs.auctionID}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        label="Auction ID"
+                        type="auctionID"
+                        input={inputs.auctionID}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "Begin Date"
-                        type = "dateBegin"
-                        input = {inputs.dateBegin}
+                        label="Begin Date"
+                        type="dateBegin"
+                        input={inputs.dateBegin}
                         date
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <FilterInput
-                        label = "End Date"
-                        type = "dateEnd"
+                        label="End Date"
+                        type="dateEnd"
                         date
-                        input = {inputs.dateEnd}
-                        setInputs = {setInputs}
-                        addChip = {addChip}
+                        input={inputs.dateEnd}
+                        setInputs={setInputs}
+                        addChip={addChip}
                     />
                     <Button className="h-[56px] w-[316px] mt-[5px] ml-[13px] shadow shadow-theme-logo-blue rounded-xl bg-theme-contrast-blue-light text-xl font-extrabold hover:bg-[#afc3da] hover:border-none"
                         onClick={filterAndSearch}
