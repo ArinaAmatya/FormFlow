@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
 
 // just sample data 
 // TODO connect to the backend
+let rows = []; 
 function retrieveFiles() {
   return [
     {
@@ -202,7 +204,7 @@ const columns = [
     headerClassName: "bg-theme-contrast-blue-light"
   },
   {
-    field: 'id',
+    field: 'fileDd',
     headerName: 'ID',
     width: 100,
     headerClassName: "bg-theme-contrast-blue-light"
@@ -273,12 +275,13 @@ const columns = [
     width: 100,
     headerClassName: "bg-theme-contrast-blue-light"
   },
+  /*
   {
     field: 'periodID',
     headerName: 'Period ID',
     width: 100,
     headerClassName: "bg-theme-contrast-blue-light"
-  },
+  },*/
   {
     field: 'dateBegin',
     headerName: 'Begin Date',
@@ -293,9 +296,13 @@ const columns = [
   }
 ];
 
-const rows = retrieveFiles();
+//const rows = retrieveFiles();
 
-export default function DataGridDemo() {
+export default function DataGridDemo(data) {
+  if (data.props){
+    rows = data.props;
+  }
+
   return (
     <div className="max-w-[1932px]">
       <Box className="max-w-[calc(95vw-380px)]">

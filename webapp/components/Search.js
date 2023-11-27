@@ -28,10 +28,13 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { ConstructionRounded } from '@mui/icons-material';
+//import useSWR from 'swr'; 
 
 const drawerWidth = 380;
 
 let idInc = 0;
+
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -101,7 +104,8 @@ export default function Search() {
         dateEnd: ""
     });
     const dataMap = new Map(); 
-    let url = "http://localhost:8080/getFileMetadata/";
+    let url = "";
+    //let url = "http://localhost:8080/getFileMetadata/";
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -184,7 +188,33 @@ export default function Search() {
         }
     }
 
+    const fetchData = async() => {
+        const res = await fetch(url);
+        console.log("data:" + res.json());
+        setData(res.json());
+        //const data = await res.json();
+        //return setData(data.results);
+    } 
+
+    const callAPI = async () => {
+        try {
+            const res = await fetch(
+                url, 
+                {
+                    method: 'GET',
+                    headers: {
+                    },
+                }
+            );
+            const stuff = await res.status(200).json();
+            console.log(stuff);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const search = () => {
+        url = "http://localhost:8080/getFileMetadata/"
         chips.map(c => chipsSearch(c));
         for (const [key, value] of dataMap) {
             url += key + "=";
@@ -194,13 +224,34 @@ export default function Search() {
             url += value[value.length-1] + "&";
           }
           url = url.substring(0, url.length-1);
+          url = url.replace(" ", "%20");
           console.log("url: " + url);
-          fetch(url)
-          .then((res) => res.json())
-          .then((data) => {
-            setData(data)
-            setLoading(false)
-          }); 
+          console.log(chips.length);
+          //callAPI();
+          //const { data, error, isLoading } = useSWR(url, fetcher);
+          //setInfo(data);
+          //console.log(data);
+
+          //fetchData();
+        if (chips.length !== 0){
+            fetch(url)
+            .then((res) => {
+                if (res.ok){
+                    return res.json();
+                }else{
+                    throw new Error("Status code error: " + res.status);
+                }})
+            .then((data) => {
+                setData(data)
+            })
+            .catch((err) => console.log(err));  
+        }else{
+            setData([]);
+        }
+          //const response = fetch(url, {mode: 'no-cors'});
+          //console.log(response);
+          //console.log(response.json());
+         // console.log(data);
     }
 
     const filterAndSearch = () => {
@@ -513,7 +564,7 @@ export default function Search() {
                 <br/>
                 <DataGridDemo props={data}/>
             </Main>
-            console.log(data); 
+            //console.log(data); 
         </Box>
     );
 }
