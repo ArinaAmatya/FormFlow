@@ -28,7 +28,7 @@ public class SearchEngine {
    * The entity manager generated automatically by Spring Boot
    */
   @PersistenceContext
-  private EntityManager entityManager;
+  public EntityManager entityManager;
 
   /**
    * Fetches the file metadata corresponding to a frontend styled query selection
@@ -55,7 +55,7 @@ public class SearchEngine {
    * @param frontendQuery The String query
    * @return Query object of MySQL to query the database
    */
-  private Query parseFrontendQuery(String frontendQuery) {
+  public Query parseFrontendQuery(String frontendQuery) {
     // Parse the frontend query
     
     String sqlQueryString = """
@@ -229,7 +229,7 @@ public class SearchEngine {
    * @param filter The list of all the filters that are being used to query data
    * @return Boolean that is true if the filters include a date filter otherwise false
    */
-  private Boolean hasDateFilters(String[] filters) {
+  public Boolean hasDateFilters(String[] filters) {
     for (String filter : filters) {
       if (filter.split("=")[0].equals("dateBegin") || filter.split("=")[0].equals("dateEnd")) {
         return true;
@@ -243,7 +243,7 @@ public class SearchEngine {
    * @param s The input String
    * @return Boolean that is true if the String represents and integer and false otherwise
    */
-  private Boolean isNumeric(String s) {
+  public Boolean isNumeric(String s) {
     Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
     if (s == null) {
       return false; 

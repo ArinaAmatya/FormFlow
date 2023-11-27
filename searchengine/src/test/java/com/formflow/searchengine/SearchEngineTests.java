@@ -1,14 +1,11 @@
 package com.formflow.searchengine;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-public class SearchEngineApplicationTests {
+import org.junit.jupiter.api.Test;
 
-	SearchEngine se = new SearchEngine();
+public class SearchEngineTests {
+  SearchEngine se = new SearchEngine();
 
   @Test
   void isNumeric1() {
@@ -80,5 +77,4 @@ public class SearchEngineApplicationTests {
     String p = se.parseFrontendQuery("projectID=123").getParameterValue(0).toString();
     assertEquals("123", "123");
   }
-
 }
