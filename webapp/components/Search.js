@@ -11,6 +11,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ResultsRack from './ResultsRack';
+import DataGridDemo from '../components/Datatable.js';
+import TextField from '@mui/material/TextField';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { ConstructionRounded } from '@mui/icons-material';
+//import useSWR from 'swr'; 
 import SearchHistory from './SearchHistory.js';
 import SearchBar from './SearchBar.js';
 import Filters from './Filters.js';
@@ -18,6 +33,7 @@ import Filters from './Filters.js';
 const drawerWidth = 380;
 
 let idInc = 0;
+
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -73,6 +89,8 @@ function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true);
+    const [data, setData] = useState(null);
+    const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
         fileID: "",
@@ -89,6 +107,9 @@ function Search() {
         dateBegin: "",
         dateEnd: ""
     });
+    const dataMap = new Map(); 
+    let url = "";
+    //let url = "http://localhost:8080/getFileMetadata/";
     const [chips, setChips] = useState([]);
     const [prevSearches, setPrevSearches] = useState([]);
     const [searchFlag, setSearchFlag] = useState(false);
@@ -157,6 +178,44 @@ function Search() {
      * @function
      */
     const search = () => {
+        url = "http://localhost:8080/getFileMetadata/"
+        chips.map(c => chipsSearch(c));
+        for (const [key, value] of dataMap) {
+            url += key + "=";
+            for (let i = 0; i < value.length - 1; i++){
+              url += value[i] + ",";
+            }
+            url += value[value.length-1] + "&";
+          }
+          url = url.substring(0, url.length-1);
+          url = url.replace(" ", "%20");
+          console.log("url: " + url);
+          console.log(chips.length);
+          //callAPI();
+          //const { data, error, isLoading } = useSWR(url, fetcher);
+          //setInfo(data);
+          //console.log(data);
+
+          //fetchData();
+        if (chips.length !== 0){
+            fetch(url)
+            .then((res) => {
+                if (res.ok){
+                    return res.json();
+                }else{
+                    throw new Error("Status code error: " + res.status);
+                }})
+            .then((data) => {
+                setData(data)
+            })
+            .catch((err) => console.log(err));  
+        }else{
+            setData([]);
+        }
+          //const response = fetch(url, {mode: 'no-cors'});
+          //console.log(response);
+          //console.log(response.json());
+         // console.log(data);
         setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
     }
 
@@ -240,7 +299,10 @@ function Search() {
             <Main open={open}>
                 <DrawerHeader />
                 <ResultsRack />
+                <br/>
+                <DataGridDemo props={data}/>
             </Main>
+            //console.log(data); 
         </Box>
     );
 }
