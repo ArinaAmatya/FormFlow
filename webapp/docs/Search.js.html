@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Search.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Search.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -11,21 +39,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ResultsRack from './ResultsRack';
-import DataGridDemo from '../components/Datatable.js';
-import TextField from '@mui/material/TextField';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Chip from '@mui/material/Chip';
-import Button from '@mui/material/Button';
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { ConstructionRounded } from '@mui/icons-material';
-//import useSWR from 'swr'; 
 import SearchHistory from './SearchHistory.js';
 import SearchBar from './SearchBar.js';
 import Filters from './Filters.js';
@@ -33,7 +46,6 @@ import Filters from './Filters.js';
 const drawerWidth = 380;
 
 let idInc = 0;
-
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -44,7 +56,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: `-${drawerWidth}px`,
-    ...(open && {
+    ...(open &amp;&amp; {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -61,7 +73,7 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(open && {
+  ...(open &amp;&amp; {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
     transition: theme.transitions.create(['margin', 'width'], {
@@ -80,7 +92,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 /**
- * A React component that represents the search bar and the filters & history
+ * A React component that represents the search bar and the filters &amp; history
  * drawer and their functionality.
  * 
  * @returns {React.ReactElement} - Search component.
@@ -89,8 +101,6 @@ function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true);
-    const [data, setData] = useState(null);
-    const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
         fileID: "",
@@ -107,9 +117,6 @@ function Search() {
         dateBegin: "",
         dateEnd: ""
     });
-    const dataMap = new Map(); 
-    let url = "";
-    //let url = "http://localhost:8080/getFileMetadata/";
     const [chips, setChips] = useState([]);
     const [prevSearches, setPrevSearches] = useState([]);
     const [searchFlag, setSearchFlag] = useState(false);
@@ -146,7 +153,7 @@ function Search() {
         }
         
         filters.forEach(filter => {
-                if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
+                if (inputs[filter] !== "" &amp;&amp; !chips.some(c => c.type === filter &amp;&amp; c.value === inputs[filter])) {
                 chipsToAdd.push({
                     id: idInc++,
                     type: filter,
@@ -178,44 +185,6 @@ function Search() {
      * @function
      */
     const search = () => {
-        url = "http://localhost:8080/getFileMetadata/"
-        chips.map(c => chipsSearch(c));
-        for (const [key, value] of dataMap) {
-            url += key + "=";
-            for (let i = 0; i < value.length - 1; i++){
-              url += value[i] + ",";
-            }
-            url += value[value.length-1] + "&";
-          }
-          url = url.substring(0, url.length-1);
-          url = url.replace(" ", "%20");
-          console.log("url: " + url);
-          console.log(chips.length);
-          //callAPI();
-          //const { data, error, isLoading } = useSWR(url, fetcher);
-          //setInfo(data);
-          //console.log(data);
-
-          //fetchData();
-        if (chips.length !== 0){
-            fetch(url)
-            .then((res) => {
-                if (res.ok){
-                    return res.json();
-                }else{
-                    throw new Error("Status code error: " + res.status);
-                }})
-            .then((data) => {
-                setData(data)
-            })
-            .catch((err) => console.log(err));  
-        }else{
-            setData([]);
-        }
-          //const response = fetch(url, {mode: 'no-cors'});
-          //console.log(response);
-          //console.log(response.json());
-         // console.log(data);
         setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
     }
 
@@ -232,7 +201,7 @@ function Search() {
     }
 
     /**
-     * Opens the filters & history drawer if it is closed, otherwise it adds
+     * Opens the filters &amp; history drawer if it is closed, otherwise it adds
      * all filter chips from the current filter inputs.
      * 
      * @function
@@ -246,65 +215,84 @@ function Search() {
     }
 
     return (
-        <Box className="flex">
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
+        &lt;Box className="flex">
+            &lt;CssBaseline />
+            &lt;AppBar position="fixed" open={open}>
+                &lt;Toolbar>
+                    &lt;IconButton
                         color="inherit"
                         aria-label="open drawer"
                         onClick={() => setOpen(true)}
                         edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                        sx={{ mr: 2, ...(open &amp;&amp; { display: 'none' }) }}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <SearchBar
+                        &lt;MenuIcon />
+                    &lt;/IconButton>
+                    &lt;SearchBar
                         chips={chips}
                         handleDelete={handleDelete}
                         handleButton={handleAddFiltersButton}
                         buttonVisible={addFiltersButtonVisible}
                         handleSearch={search}
                     />
-                </Toolbar>
-            </AppBar>
-            <Drawer className={"flex w-[" + drawerWidth + "] shrink-0 [&_.MuiDrawer-paper]:" + drawerWidth + " [&_.MuiDrawer-paper]:box-border [&_.MuiDrawer-paper]:bg-theme-grey-light"}
+                &lt;/Toolbar>
+            &lt;/AppBar>
+            &lt;Drawer className={"flex w-[" + drawerWidth + "] shrink-0 [&amp;_.MuiDrawer-paper]:" + drawerWidth + " [&amp;_.MuiDrawer-paper]:box-border [&amp;_.MuiDrawer-paper]:bg-theme-grey-light"}
                 sx={{ width: drawerWidth }}
                 variant="persistent"
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>
-                <img className="max-w-[250px] ml-auto mr-auto mt-[10px] mb-[10px]"
+                &lt;DrawerHeader>
+                &lt;img className="max-w-[250px] ml-auto mr-auto mt-[10px] mb-[10px]"
                     src={"/logo.png"}
                     alt="FormFlow Logo"
                 />
-                <IconButton onClick={() => setOpen(false)}>
-                    {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
-                </DrawerHeader>
-                <Divider />
-                <Filters
+                &lt;IconButton onClick={() => setOpen(false)}>
+                    {theme.direction === 'ltr' ? &lt;ChevronLeftIcon /> : &lt;ChevronRightIcon />}
+                &lt;/IconButton>
+                &lt;/DrawerHeader>
+                &lt;Divider />
+                &lt;Filters
                     inputs={inputs}
                     setInputs={setInputs}
                     addChip={addChip}
                     handleFilterAndSearchButton={filterAndSearch}
                 />
-                <Divider />
-                <SearchHistory
+                &lt;Divider />
+                &lt;SearchHistory
                     history={prevSearches}
                 />
-                <Divider />
-            </Drawer>
-            <Main open={open}>
-                <DrawerHeader />
-                <ResultsRack />
-                <br/>
-                <DataGridDemo props={data}/>
-            </Main>
-            //console.log(data); 
-        </Box>
+                &lt;Divider />
+            &lt;/Drawer>
+            &lt;Main open={open}>
+                &lt;DrawerHeader />
+                &lt;ResultsRack />
+            &lt;/Main>
+        &lt;/Box>
     );
 }
 
-export default Search;
+export default Search;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#FilePreview">FilePreview</a></li><li><a href="global.html#FileTable">FileTable</a></li><li><a href="global.html#FilterInput">FilterInput</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#ResultsRack">ResultsRack</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchHistory">SearchHistory</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Nov 25 2023 20:56:51 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
