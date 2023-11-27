@@ -9,7 +9,9 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -44,39 +46,45 @@ public class SearchEngine {
    * @return String The name of the file for reference by the frontend
    * @throws IOException
    */
-  public String getFileObject(String path, String destinationDirectory) throws IOException {
-    String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/TestBucket/Star db.sql?download";
-    
-    URL obj = new URL(GET_URL);
-    HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
-    // httpURLConnection.setRequestMethod("GET");
-    int responseCode = httpURLConnection.getResponseCode();
-    System.out.println("GET Response Code :: " + responseCode);
-    //SET TIMEOUT
-    if (responseCode == HttpURLConnection.HTTP_OK) { // success
-        BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in .readLine()) != null) {
-            response.append(inputLine);
-        } in .close();
-        System.out.println("Stuff happens here");
-        File myfile = new File("D:/School/fullscript.py");
-        if (myfile.createNewFile()){
-            System.out.println("File created: " + myfile.getName());
-            //FIGURE OUT HOW THE FUCK TO WRITE TO A FILE HERE!
-                
-        } else {
-            System.out.println("Error");
-        } 
-
-
-    } else {
-        System.out.println("GET request not worked");
-    }
-
-  }
+    public String getFileObject(String path, String destinationDirectory) throws IOException {
+        //When I was testing this I had the bucket file included in the path, but when finish and finalize things we can add it to the URL string instead of the path
+        String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/" + path + "?download";
+        URL obj = new URL(GET_URL);
+        String name = "";
+        HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
+        int responseCode = httpURLConnection.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        long curr = System.currentTimeMillis();
+        long end = curr + 10 * 1000;
+        boolean sent = false;
+        while(System.currentTimeMillis() < end){
+            if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                InputStream input = httpURLConnection.getInputStream();
+                String[] namer = path.split("/");
+                name = namer[namer.length-1];
+                FileOutputStream outputStream = new FileOutputStream(name);
+                int byter = -1;
+                byte[] buff = new byte[4096];
+                while ((byter = input.read(buff)) != -1){
+                    outputStream.write(buff, 0, byter);
+                }
+                outputStream.close();
+                input.close();
+                System.out.println("File downloaded");
+                sent = true;
+                break;
+            } 
+            else {
+                sent = false;
+                System.out.println("Error");
+                break;
+            }
+        }
+        if (sent != true){
+            return "Error";
+        }
+        return name;
+      }
 
   /**
    * Fetches the file metadata corresponding to a frontend styled query selection
