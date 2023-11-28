@@ -11,19 +11,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ResultsRack from './ResultsRack';
-import TextField from '@mui/material/TextField';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Chip from '@mui/material/Chip';
-import Button from '@mui/material/Button';
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { ConstructionRounded } from '@mui/icons-material';
 //import useSWR from 'swr'; 
 import SearchHistory from './SearchHistory.js';
 import SearchBar from './SearchBar.js';
@@ -178,6 +165,7 @@ function Search() {
             dataMap.get(c.type).push(c.value);
         }
     }
+
     /**
      * Calls to the backend to search the database using the current filters
      * and displays the results.
@@ -186,6 +174,7 @@ function Search() {
      */
     const search = () => {
         url = "http://localhost:8080/getFileMetadata/"
+
         chips.map(c => chipsSearch(c));
         for (const [key, value] of dataMap) {
             url += key + "=";
@@ -213,16 +202,16 @@ function Search() {
                     throw new Error("Status code error: " + res.status);
                 }})
             .then((data) => {
-                setData(data)
+                setData(data);
             })
             .catch((err) => console.log(err));  
         }else{
             setData([]);
         }
-          //const response = fetch(url, {mode: 'no-cors'});
-          //console.log(response);
-          //console.log(response.json());
-         // console.log(data);
+        //const response = fetch(url, {mode: 'no-cors'});
+        //console.log(response);
+        //console.log(response.json());
+        //console.log(data);
         setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
     }
 
@@ -315,9 +304,7 @@ function Search() {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
-                <ResultsRack />
-                <br/>
-                <FileTable props={data}/>
+                <ResultsRack files={data} />
             </Main>
         </Box>
     );

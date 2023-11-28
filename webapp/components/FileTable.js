@@ -8,22 +8,22 @@ const typedefs = require("../typedefs");
 /**
  * A React component that displays the files from a search in a table.
  * 
+ * @param {Object} props - Component props.
+ * @param {FileData[]} props.files - File metadata to display in table.
  * @returns {React.ReactElement} - FileTable component
  */
-function FileTable() {
-// just sample data 
-// TODO connect to the backend
-/**
- * Retrieves the metadata of the files from the search results.
- * 
- * @returns {FileData[]} - An array of file metadata.
- * 
- * @function
- */
-  //empty row array
-  let rows = [];  
+function FileTable({ files }) {
+  let rows = [];
+
+  /**
+   * Retrieves the metadata of the files from the search results.
+   * 
+   * @returns {FileData[]} - An array of file metadata.
+   * 
+   * @function
+   */
   const retrieveFiles = () => {
-    return [
+    return files?.length > 0 ? files : [
       {
         id: 1,
         fileName: 'ManilaCo_boiler Permit',
