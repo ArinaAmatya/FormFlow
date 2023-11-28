@@ -28,7 +28,8 @@ import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
  * 
  * @returns {React.ReactElement} - FileTable component
  */
-function FileTable() {
+function FileTable(data) {
+
   0// just sample data 
 // TODO connect to the backend
 /**
@@ -38,6 +39,8 @@ function FileTable() {
  * 
  * @function
  */
+  //empty row array
+  let rows = [];  
   const retrieveFiles = () => {
     return [
       {
@@ -230,7 +233,7 @@ function FileTable() {
     ];
   }
 
-  const rows = retrieveFiles();
+  //const rows = retrieveFiles();
 
   const columns = [
     {
@@ -329,11 +332,15 @@ function FileTable() {
     }
   ];
 
+  if (data.props){
+    rows = data.props;
+  }
+
   return (
     <div className="max-w-[1932px]">
       <Box className="max-w-[calc(95vw-380px)]">
         <DataGrid
-          rows={rows}
+          rows={retrieveFiles()}
           columns={columns}
           initialState={{
             sorting: {
