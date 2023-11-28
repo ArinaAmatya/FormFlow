@@ -186,6 +186,15 @@ function Search() {
         }
     }
 
+    /**
+     * Removes all filters from the search bar.
+     * 
+     * @function
+     */
+    const handleDeleteFiltersButton = () => {
+        setChips(prev => []);
+    }
+
     return (
         <Box className="flex">
             <CssBaseline />
@@ -203,7 +212,8 @@ function Search() {
                     <SearchBar
                         chips={chips}
                         handleDelete={handleDelete}
-                        handleButton={handleAddFiltersButton}
+                        handleAddAllButton={handleAddFiltersButton}
+                        handleDeleteAllButton={handleDeleteFiltersButton}
                         buttonVisible={addFiltersButtonVisible}
                         handleSearch={search}
                     />
