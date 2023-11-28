@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 const typedefs = require("../typedefs");
 /** @type {typedefs.ChipData} */
@@ -12,10 +13,11 @@ const typedefs = require("../typedefs");
  * @param {ChipData[]} props.chips - The filter chips.
  * @param {function(string):void} props.handleDelete - Handles the deletion of a chip of input ID.
  * @param {boolean} props.buttonVisible - Determines if the add filters button is visible.
- * @param {function():void} props.handleButton - Handles the add filters button behavior.
+ * @param {function():void} props.handleAddAllButton - Handles the add filters button behavior.
+ * @param {function():void} props.handleDeleteAllButton - Handles the delete all filters button behavior.
  * @returns {React.ReactElement} - FilterInput component
  */
-function SearchBar({ chips, handleDelete, handleButton, buttonVisible, handleSearch }) {
+function SearchBar({ chips, handleDelete, handleAddAllButton, handleDeleteAllButton, buttonVisible, handleSearch }) {
     /**
      * Returns -1, 0, or 1 depending on which chip is alphabetically greater.
      * Used for sorting of chips array alphabetically.
@@ -60,14 +62,18 @@ function SearchBar({ chips, handleDelete, handleButton, buttonVisible, handleSea
     
     return (
         <div className="flex">
-            <div className="rounded-l-xl bg-theme-contrast-blue-dark p-[10px] min-h-[56px] min-w-[320px]">
-                <div>
-                    <Button className={buttonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"}
-                        variant="contained"
-                        onClick={handleButton}
-                    >Add Filters</Button>
-                    {chips.sort(chipSort).map((c) => generateChip(c))}
-                </div>
+            <div className="rounded-l-xl bg-theme-contrast-blue-dark p-[10px] h-[56px] min-w-[320px] overflow-x-auto">
+                <Button className={buttonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"}
+                    variant="contained"
+                    onClick={handleAddAllButton}
+                >Add Filters</Button>
+                <Button className={!buttonVisible ? "bg-theme-logo-blue pl-[6px] pr-[6px] max-w-[24px] rounded-3xl" : "hidden"}
+                    variant="contained"
+                    onClick={handleDeleteAllButton}
+                >
+                    <HighlightOffIcon />
+                </Button>
+                {chips.sort(chipSort).map((c) => generateChip(c))}
             </div>
             <Button className="rounded-r-xl rounded-l-none border-none bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
                 variant="outlined"
