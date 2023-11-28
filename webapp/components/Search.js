@@ -11,7 +11,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ResultsRack from './ResultsRack';
-import DataGridDemo from '../components/Datatable.js';
 import TextField from '@mui/material/TextField';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -29,6 +28,7 @@ import { ConstructionRounded } from '@mui/icons-material';
 import SearchHistory from './SearchHistory.js';
 import SearchBar from './SearchBar.js';
 import Filters from './Filters.js';
+import FileTable from './FileTable.js';
 
 const drawerWidth = 380;
 
@@ -110,7 +110,7 @@ function Search() {
     const dataMap = new Map(); 
     let url = "";
     //let url = "http://localhost:8080/getFileMetadata/";
-    const [chips, setChips] = useState([]);
+    //const [chips, setChips] = useState([]);
     const [prevSearches, setPrevSearches] = useState([]);
     const [searchFlag, setSearchFlag] = useState(false);
 
@@ -171,6 +171,13 @@ function Search() {
         }
     }, [chips]);
 
+    const chipsSearch = (c) => {
+        if (!dataMap.has(c.type)){
+            dataMap.set(c.type, [c.value]);
+        } else{
+            dataMap.get(c.type).push(c.value);
+        }
+    }
     /**
      * Calls to the backend to search the database using the current filters
      * and displays the results.
@@ -310,9 +317,8 @@ function Search() {
                 <DrawerHeader />
                 <ResultsRack />
                 <br/>
-                <DataGridDemo props={data}/>
+                <FileTable props={data}/>
             </Main>
-            //console.log(data); 
         </Box>
     );
 }
