@@ -2,35 +2,16 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
 
-/**
- * Represents the metadata of a file for display in the results table.
- * 
- * @typedef {Object} FileData
- * @property {number} id - The unique ID of the file.
- * @property {string} fileName - The name of the file.
- * @property {string} fileType - The file extension for the file.
- * @property {string} customerID - The ID for the customer associated with the file.
- * @property {string} customerName - The name of the customer associated with the file.
- * @property {string} projectID - The ID of the project associated with the file.
- * @property {string} projectName - The name of the project associated with the file.
- * @property {string} proposalID - The ID of the proposal associated with the file.
- * @property {string} proposalName - The name of the proposal associated with the file.
- * @property {string} resourceID - The ID of the resource associated with the file.
- * @property {string} resourceType - The name of the resource associated with the file.
- * @property {string} auctionID - The ID of the auction associated with the file.
- * @property {string} periodID - The ID of the auction period associated with the file.
- * @property {string} dateBegin - The start date of the auction period associated with the file.
- * @property {string} dateEnd - The end date of the auction period associated with the file.
- */
+const typedefs = require("../typedefs");
+/** @type {typedefs.FileData} */
 
 /**
  * A React component that displays the files from a search in a table.
  * 
  * @returns {React.ReactElement} - FileTable component
  */
-function FileTable(data) {
-
-  0// just sample data 
+function FileTable() {
+// just sample data 
 // TODO connect to the backend
 /**
  * Retrieves the metadata of the files from the search results.
