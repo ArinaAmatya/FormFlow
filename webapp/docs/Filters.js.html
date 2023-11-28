@@ -1,4 +1,32 @@
-import Button from '@mui/material/Button';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Filters.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Filters.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Button from '@mui/material/Button';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -6,8 +34,14 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FilterInput from './FilterInput.js';
 
-const typedefs = require("../typedefs");
-/** @type {typedefs.ChipData} */
+/**
+ * Represents the essential data of a filter chip.
+ * 
+ * @typedef {Object} ChipData
+ * @property {number} id - The unique ID of the chip.
+ * @property {string} type - The type the chip will filter for.
+ * @property {number} value - The value that will be filtered for.
+ */
 
 /**
  * A react component for the history section of the drawer
@@ -20,70 +54,70 @@ const typedefs = require("../typedefs");
  * @param {function():void} props.handleFilterAndSearchButton - Handles behavior of filter and search button.
  */
 function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
-    return (<>
-        <Accordion className="bg-theme-grey-light"
+    return (&lt;>
+        &lt;Accordion className="bg-theme-grey-light"
             disableGutters
             elevation={0}
             defaultExpanded
         >
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+            &lt;AccordionSummary
+                expandIcon={&lt;ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography>Filters</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-                <FilterInput
+                &lt;Typography>Filters&lt;/Typography>
+            &lt;/AccordionSummary>
+            &lt;AccordionDetails>
+                &lt;FilterInput
                     label="File Name"
                     type="fileName"
                     input={inputs.fileName}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="File Type"
                     type="fileType"
                     input={inputs.fileType}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="Customer Name"
                     type="customerName"
                     input={inputs.customerName}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="Project Name"
                     type="projectName"
                     input={inputs.projectName}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="Proposal Name"
                     type="proposalName"
                     input={inputs.proposalName}
                     setInputs ={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="Resource Name"
                     type="resourceName"
                     input={inputs.resourceName}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="Auction ID"
                     type="auctionID"
                     input={inputs.auctionID}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="Begin Date"
                     type="dateBegin"
                     input={inputs.dateBegin}
@@ -91,7 +125,7 @@ function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <FilterInput
+                &lt;FilterInput
                     label="End Date"
                     type="dateEnd"
                     date
@@ -99,21 +133,43 @@ function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <Button className="h-[56px] w-[316px] mt-[5px] ml-[13px] shadow shadow-theme-logo-blue rounded-xl bg-theme-contrast-blue-light text-xl font-extrabold hover:bg-[#afc3da] hover:border-none"
+                &lt;Button className="h-[56px] w-[316px] mt-[5px] ml-[13px] shadow shadow-theme-logo-blue rounded-xl bg-theme-contrast-blue-light text-xl font-extrabold hover:bg-[#afc3da] hover:border-none"
                     onClick={handleFilterAndSearchButton}
                 >
-                    <svg className="h-[32px] w-[32px] fill-theme-logo-blue mr-[20px]"
+                    &lt;svg className="h-[32px] w-[32px] fill-theme-logo-blue mr-[20px]"
                         xmlns="http://www.w3.org/2000/svg"
                         height="1em"
                         viewBox="0 0 512 512"
                     >
-                        <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
-                    </svg>
-                    Filter & Search
-                </Button>
-            </AccordionDetails>
-        </Accordion>
-    </>);
+                        &lt;path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/>
+                    &lt;/svg>
+                    Filter &amp; Search
+                &lt;/Button>
+            &lt;/AccordionDetails>
+        &lt;/Accordion>
+    &lt;/>);
 }
 
-export default Filters;
+export default Filters;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#FilePreview">FilePreview</a></li><li><a href="global.html#FileTable">FileTable</a></li><li><a href="global.html#FilterInput">FilterInput</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#ResultsRack">ResultsRack</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchHistory">SearchHistory</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Nov 25 2023 20:56:51 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
