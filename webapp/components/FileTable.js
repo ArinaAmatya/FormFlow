@@ -233,7 +233,7 @@ function FileTable(data) {
     ];
   }
 
-  //const rows = retrieveFiles();
+  //rows = retrieveFiles();
 
   const columns = [
     {
@@ -340,7 +340,7 @@ function FileTable(data) {
     <div className="max-w-[1932px]">
       <Box className="max-w-[calc(95vw-380px)]">
         <DataGrid
-          rows={retrieveFiles()}
+          rows={rows}
           columns={columns}
           initialState={{
             sorting: {
