@@ -208,14 +208,15 @@ function Search() {
             fetch(url)
             .then((res) => {
                 if (res.ok){
-                    return res.json();
+                    console.log(res);
+                    return JSON.parse(res);
                 }else{
                     throw new Error("Status code error: " + res.status);
                 }})
             .then((data) => {
                 setData(data)
             })
-            .catch((err) => console.log(err));  
+            .catch((err) => console.log(err));
         }else{
             setData([]);
         }
@@ -305,8 +306,7 @@ function Search() {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
-                <ResultsRack files = {data}/>
-                <br/>
+                <ResultsRack files={data}/>
             </Main>
         </Box>
     );

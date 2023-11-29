@@ -7,11 +7,13 @@ import { useRouter } from 'next/router'
  * A React component that displays the search results table
  * and provides the preview and download buttons for it.
  * 
+ * @param {Object} props - Component properties.
+ * @param {*} props.files - File metadata to display in the table.
  * @returns {React.ReactElement} - ResultsRack component.
  * 
  * @function
  */
-function ResultsRack(data) {
+function ResultsRack({ files }) {
     const router = useRouter();
 
     const tryPreview = () => {
@@ -43,7 +45,7 @@ function ResultsRack(data) {
                 </Button>
             </div>
             <br />
-            <FileTable files={data.files}/>
+            <FileTable files={files}/>
         </>
   );
 }
