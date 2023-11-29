@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
  * 
  * @function
  */
-function ResultsRack() {
+function ResultsRack(data) {
     const router = useRouter();
 
     const tryPreview = () => {
@@ -43,7 +43,7 @@ function ResultsRack() {
                 </Button>
             </div>
             <br />
-            <FileTable />
+            <FileTable files={data.files}/>
         </>
   );
 }

@@ -332,8 +332,8 @@ function FileTable(data) {
     }
   ];
 
-  if (data.props){
-    rows = data.props;
+  if (data.files){
+    rows = data.files;
   }
 
   return (

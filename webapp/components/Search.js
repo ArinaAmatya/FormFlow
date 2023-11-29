@@ -305,9 +305,8 @@ function Search() {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
-                <ResultsRack />
+                <ResultsRack files = {data}/>
                 <br/>
-                <FileTable props={data}/>
             </Main>
         </Box>
     );
