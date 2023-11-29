@@ -11,24 +11,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ResultsRack from './ResultsRack';
-import TextField from '@mui/material/TextField';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Chip from '@mui/material/Chip';
-import Button from '@mui/material/Button';
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { ConstructionRounded } from '@mui/icons-material';
-//import useSWR from 'swr'; 
 import SearchHistory from './SearchHistory.js';
 import SearchBar from './SearchBar.js';
 import Filters from './Filters.js';
-import FileTable from './FileTable.js';
 
 const drawerWidth = 380;
 
@@ -89,7 +74,7 @@ function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
