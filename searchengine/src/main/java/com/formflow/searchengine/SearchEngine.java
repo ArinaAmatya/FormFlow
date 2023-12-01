@@ -38,7 +38,8 @@ public class SearchEngine {
    *         from the input query
    */
   public List<ResultMapping> getFileMetadata(String frontendQuery) {
-    Query sqlQuery = this.parseFrontendQuery(frontendQuery);
+    ParsedQuery parsedQuery = this.parseFrontendQuery(frontendQuery);
+    Query sqlQuery = buildQuery(parsedQuery.getSQLString(), parsedQuery.getHashMap());
     
     if (sqlQuery == null) {
       return null;
@@ -55,7 +56,7 @@ public class SearchEngine {
    * @param frontendQuery The String query
    * @return Query object of MySQL to query the database
    */
-  public Query parseFrontendQuery(String frontendQuery) {
+  public ParsedQuery parseFrontendQuery(String frontendQuery) {
     // Parse the frontend query
     
     String sqlQueryString = """
@@ -199,6 +200,10 @@ public class SearchEngine {
       parameterNameToValueMap.put(parameterNameEnd, sdf.format(endDate));
     }
 
+    return new ParsedQuery(sqlQueryString, parameterNameToValueMap);
+  }
+
+  public Query buildQuery(String sqlQueryString, HashMap<String, String> parameterNameToValueMap) {
     // Create the query out of the String and map it to the ResultMapping class for API response
     Query q = this.entityManager.createNativeQuery(sqlQueryString, "ResultMapping");
 

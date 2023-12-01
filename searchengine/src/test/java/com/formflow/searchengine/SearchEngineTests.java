@@ -2,6 +2,8 @@ package com.formflow.searchengine;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashMap;
+
 import org.junit.jupiter.api.Test;
 
 public class SearchEngineTests {
@@ -74,7 +76,51 @@ public class SearchEngineTests {
 
   @Test
   void parseFrontendQuery1() {
-    String p = se.parseFrontendQuery("projectID=123").getParameterValue(0).toString();
-    assertEquals("123", "123");
+    ParsedQuery pq = se.parseFrontendQuery("projectID=123");
+    String sqlString = pq.getSQLString();
+    HashMap<String, String> h = pq.getHashMap();
+    assertEquals(sqlString.replace("\n", "").replace("\r", "").replace(" ", ""), "SELECT proposal_info.project_id, attach_type.description, proj_info.project_name, proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, res_info.resource_type, period_info.begin_date, period_info.end_date, attachment_file.file_name, attachment_file.file_path FROM attach_proposal INNER JOIN proposal_info ON attach_proposal.proposal_id = proposal_info.proposal_id INNER JOIN attachment_file ON attach_proposal.attachment_id = attachment_file.attachment_id INNER JOIN attach_type ON attach_proposal.attachment_type = attach_type.attachment_type INNER JOIN proj_info ON proposal_info.project_id = proj_info.project_id INNER JOIN proj_type ON proposal_info.project_type = proj_type.project_type INNER JOIN res_info ON proposal_info.resource_id = res_info.resource_id INNER JOIN auc_info ON proposal_info.auction_id = auc_info.auction_id INNER JOIN auc_type ON auc_info.auction_type = auc_type.auction_type INNER JOIN res_type ON res_info.resource_type = res_type.resource_type INNER JOIN cust_info ON proposal_info.customer_id = cust_info.customer_id INNER JOIN period_info ON auc_info.auction_period_id = period_info.period_id WHERE (proposal_info.project_id = :proposal_info.project_id0)".replace("\n", "").replace("\r", "").replace(" ", ""));
+    assertEquals("123", h.get("proposal_info.project_id0"));
+  }
+
+  @Test
+  void parseFrontendQuery2() {
+    ParsedQuery pq = se.parseFrontendQuery("customerName=John Doe");
+    String sqlString = pq.getSQLString();
+    HashMap<String, String> h = pq.getHashMap();
+    assertEquals(sqlString.replace("\n", "").replace("\r", "").replace(" ", ""), "SELECT proposal_info.project_id, attach_type.description, proj_info.project_name, proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, res_info.resource_type, period_info.begin_date, period_info.end_date, attachment_file.file_name, attachment_file.file_path FROM attach_proposal INNER JOIN proposal_info ON attach_proposal.proposal_id = proposal_info.proposal_id INNER JOIN attachment_file ON attach_proposal.attachment_id = attachment_file.attachment_id INNER JOIN attach_type ON attach_proposal.attachment_type = attach_type.attachment_type INNER JOIN proj_info ON proposal_info.project_id = proj_info.project_id INNER JOIN proj_type ON proposal_info.project_type = proj_type.project_type INNER JOIN res_info ON proposal_info.resource_id = res_info.resource_id INNER JOIN auc_info ON proposal_info.auction_id = auc_info.auction_id INNER JOIN auc_type ON auc_info.auction_type = auc_type.auction_type INNER JOIN res_type ON res_info.resource_type = res_type.resource_type INNER JOIN cust_info ON proposal_info.customer_id = cust_info.customer_id INNER JOIN period_info ON auc_info.auction_period_id = period_info.period_id WHERE (cust_info.customer_name = :cust_info.customer_name0)".replace("\n", "").replace("\r", "").replace(" ", ""));
+    assertEquals("John Doe", h.get("cust_info.customer_name0"));
+  }
+
+  @Test
+  void parseFrontendQuery3() {
+    ParsedQuery pq = se.parseFrontendQuery("dateEnd=2021-01-01");
+    String sqlString = pq.getSQLString();
+    HashMap<String, String> h = pq.getHashMap();
+    assertEquals(sqlString.replace("\n", "").replace("\r", "").replace(" ", ""), "SELECT proposal_info.project_id, attach_type.description, proj_info.project_name, proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, res_info.resource_type, period_info.begin_date, period_info.end_date, attachment_file.file_name, attachment_file.file_path FROM attach_proposal INNER JOIN proposal_info ON attach_proposal.proposal_id = proposal_info.proposal_id INNER JOIN attachment_file ON attach_proposal.attachment_id = attachment_file.attachment_id INNER JOIN attach_type ON attach_proposal.attachment_type = attach_type.attachment_type INNER JOIN proj_info ON proposal_info.project_id = proj_info.project_id INNER JOIN proj_type ON proposal_info.project_type = proj_type.project_type INNER JOIN res_info ON proposal_info.resource_id = res_info.resource_id INNER JOIN auc_info ON proposal_info.auction_id = auc_info.auction_id INNER JOIN auc_type ON auc_info.auction_type = auc_type.auction_type INNER JOIN res_type ON res_info.resource_type = res_type.resource_type INNER JOIN cust_info ON proposal_info.customer_id = cust_info.customer_id INNER JOIN period_info ON auc_info.auction_period_id = period_info.period_id WHERE (period_info.begin_date <= :dateEnd) AND (period_info.end_date >= :dateBegin)".replace("\n", "").replace("\r", "").replace(" ", ""));
+    assertEquals("2021-01-01", h.get("dateEnd"));
+    assertEquals("0001-01-01", h.get("dateBegin"));
+  }
+
+  @Test
+  void parseFrontendQuery4() {
+    ParsedQuery pq = se.parseFrontendQuery("dateEnd=2021-01-01&dateBegin=2020-01-01");
+    String sqlString = pq.getSQLString();
+    HashMap<String, String> h = pq.getHashMap();
+    assertEquals(sqlString.replace("\n", "").replace("\r", "").replace(" ", ""), "SELECT proposal_info.project_id, attach_type.description, proj_info.project_name, proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, res_info.resource_type, period_info.begin_date, period_info.end_date, attachment_file.file_name, attachment_file.file_path FROM attach_proposal INNER JOIN proposal_info ON attach_proposal.proposal_id = proposal_info.proposal_id INNER JOIN attachment_file ON attach_proposal.attachment_id = attachment_file.attachment_id INNER JOIN attach_type ON attach_proposal.attachment_type = attach_type.attachment_type INNER JOIN proj_info ON proposal_info.project_id = proj_info.project_id INNER JOIN proj_type ON proposal_info.project_type = proj_type.project_type INNER JOIN res_info ON proposal_info.resource_id = res_info.resource_id INNER JOIN auc_info ON proposal_info.auction_id = auc_info.auction_id INNER JOIN auc_type ON auc_info.auction_type = auc_type.auction_type INNER JOIN res_type ON res_info.resource_type = res_type.resource_type INNER JOIN cust_info ON proposal_info.customer_id = cust_info.customer_id INNER JOIN period_info ON auc_info.auction_period_id = period_info.period_id WHERE (period_info.begin_date <= :dateEnd) AND (period_info.end_date >= :dateBegin)".replace("\n", "").replace("\r", "").replace(" ", ""));
+    assertEquals("2021-01-01", h.get("dateEnd"));
+    assertEquals("2020-01-01", h.get("dateBegin"));
+  }
+
+  @Test
+  void parseFrontendQuery5() {
+    ParsedQuery pq = se.parseFrontendQuery("dateEnd=2021-01-01&dateBegin=2020-01-01&projectID=123&customerName=John Doe");
+    String sqlString = pq.getSQLString();
+    HashMap<String, String> h = pq.getHashMap();
+    assertEquals(sqlString.replace("\n", "").replace("\r", "").replace(" ", ""), "SELECT proposal_info.project_id, attach_type.description, proj_info.project_name, proposal_info.proposal_label, proposal_info.proposal_id, proposal_info.auction_id, proposal_info.period_id, cust_info.customer_id, cust_info.customer_name, res_info.resource_id, res_info.resource_type, period_info.begin_date, period_info.end_date, attachment_file.file_name, attachment_file.file_path FROM attach_proposal INNER JOIN proposal_info ON attach_proposal.proposal_id = proposal_info.proposal_id INNER JOIN attachment_file ON attach_proposal.attachment_id = attachment_file.attachment_id INNER JOIN attach_type ON attach_proposal.attachment_type = attach_type.attachment_type INNER JOIN proj_info ON proposal_info.project_id = proj_info.project_id INNER JOIN proj_type ON proposal_info.project_type = proj_type.project_type INNER JOIN res_info ON proposal_info.resource_id = res_info.resource_id INNER JOIN auc_info ON proposal_info.auction_id = auc_info.auction_id INNER JOIN auc_type ON auc_info.auction_type = auc_type.auction_type INNER JOIN res_type ON res_info.resource_type = res_type.resource_type INNER JOIN cust_info ON proposal_info.customer_id = cust_info.customer_id INNER JOIN period_info ON auc_info.auction_period_id = period_info.period_id WHERE (proposal_info.project_id = :proposal_info.project_id0) AND (cust_info.customer_name = :cust_info.customer_name0) AND (period_info.begin_date <= :dateEnd) AND (period_info.end_date >= :dateBegin)".replace("\n", "").replace("\r", "").replace(" ", ""));
+    assertEquals("123", h.get("proposal_info.project_id0"));
+    assertEquals("John Doe", h.get("cust_info.customer_name0"));
+    assertEquals("2021-01-01", h.get("dateEnd"));
+    assertEquals("2020-01-01", h.get("dateBegin"));
   }
 }
