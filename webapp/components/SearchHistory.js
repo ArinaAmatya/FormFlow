@@ -6,14 +6,8 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Chip from '@mui/material/Chip';
 
-/**
- * Represents the essential data of a filter chip.
- * 
- * @typedef {Object} ChipData
- * @property {number} id - The unique ID of the chip.
- * @property {string} type - The type the chip will filter for.
- * @property {number} value - The value that will be filtered for.
- */
+const typedefs = require("../typedefs");
+/** @type {typedefs.ChipData} */
 
 /**
  * A react component for the history section of the drawer
