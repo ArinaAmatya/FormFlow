@@ -6,13 +6,6 @@ const typedefs = require("../typedefs");
 /** @type {typedefs.FileData} */
 
 /**
- * A React component that displays the files from a search in a table.
- * 
- * @param {Object} props - Component properties.
- * @param {*} props.files - File metadata to display in the table.
- * @returns {React.ReactElement} - FileTable component
- */
-function FileTable({ files }) {
  * @param {Object} props - Component props.
  * @param {FileData[]} props.files - File metadata to display in table.
  * @returns {React.ReactElement} - FileTable component

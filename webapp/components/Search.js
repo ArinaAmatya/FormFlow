@@ -206,11 +206,6 @@ function Search() {
         }else{
             setData([]);
         }
-          //const response = fetch(url, {mode: 'no-cors'});
-          //console.log(response);
-          //console.log(response.json());
-         // console.log(data);
-        }
     }
 
     /**
