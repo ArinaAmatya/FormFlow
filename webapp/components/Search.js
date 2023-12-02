@@ -95,7 +95,7 @@ function Search() {
     //let url = "http://localhost:8080/getFileMetadata/";
     //const [chips, setChips] = useState([]);
     const [prevSearches, setPrevSearches] = useState([]);
-    const [searchFlag, setSearchFlag] = useState(false);
+    const [searchFlags, setSearchFlags] = useState([]);
 
     /**
      * Handles deletion of a filter chip with ID idNum.
@@ -148,9 +148,9 @@ function Search() {
             setAddFiltersButtonVisible(false);
         }
 
-        if (searchFlag) {
-            setSearchFlag(prev => false);
-            search();
+        if (searchFlags.length > 0) {
+            setSearchFlags(prev => []);
+            search(searchFlags);
         }
     }, [chips]);
 
@@ -173,7 +173,7 @@ function Search() {
      * 
      * @function
      */
-    const search = () => {
+    const search = (options) => {
         url = "http://localhost:8080/getFileMetadata/"
         chips.map(c => chipsSearch(c));
         for (const [key, value] of dataMap) {
@@ -185,13 +185,10 @@ function Search() {
           }
           url = url.substring(0, url.length-1);
           url = url.replace(" ", "%20");
-          console.log("url: " + url);
-          console.log(chips.length);
         if (chips.length !== 0){
             fetch(url)
             .then((res) => {
                 if (res.ok){
-                    console.log(res);
                     return JSON.parse(res);
                 }else{
                     throw new Error("Status code error: " + res.status);
@@ -203,6 +200,10 @@ function Search() {
         }else{
             setData([]);
         }
+
+        if (!options.includes("no-history")) {
+            setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
+        }
     }
 
     /**
@@ -213,7 +214,7 @@ function Search() {
      * @function
      */
     const filterAndSearch = () => {
-        setSearchFlag(prev => true);
+        setSearchFlags(prev => ["search"]);
         addChip("all");
     }
 
@@ -238,6 +239,17 @@ function Search() {
      */
     const handleDeleteFiltersButton = () => {
         setChips(prev => []);
+    }
+
+    /**
+     * Restores a snapshot of a previous search to be the
+     * current filters and searches again.
+     * 
+     * @param {ChipData[]} snapshot - Snapshot of previous search. 
+     */
+    const handleRestoreSearch = (snapshot) => {
+        setSearchFlags(prev => ["search", "no-history"]);
+        setChips(prev => snapshot);
     }
 
     return (
@@ -289,6 +301,7 @@ function Search() {
                 <Divider />
                 <SearchHistory
                     history={prevSearches}
+                    handleRestoreSearch={handleRestoreSearch}
                 />
                 <Divider />
             </Drawer>

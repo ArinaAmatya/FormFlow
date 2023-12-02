@@ -27,7 +27,6 @@ function FilterInput({ label, type, input, date = false, setInputs, addChip }) {
      * @function
      */
     const filterUpdateHandler = (d, type) => {
-        console.log(dayjs(undefined));
         let value;
         if (date) {
             let day = dayjs(d).format("YYYY-MM");
