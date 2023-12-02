@@ -27,10 +27,11 @@ function FilterInput({ label, type, input, date = false, setInputs, addChip }) {
      * @function
      */
     const filterUpdateHandler = (d, type) => {
+        console.log(dayjs(undefined));
         let value;
         if (date) {
-            let day = dayjs(d).format();
-            value = day.slice(0, day.indexOf("T"));
+            let day = dayjs(d).format("YYYY-MM");
+            value = day;
         } else {
             value = d.target.value;
         }
@@ -62,7 +63,8 @@ function FilterInput({ label, type, input, date = false, setInputs, addChip }) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker className="w-[320px]"
                             label={label}
-                            value={input || null}
+                            value={input ? dayjs(input) : null}
+                            views={['month', 'year']}
                             onChange={(v) => filterUpdateHandler(v, type)}
                             onKeyDown={(e) => keyHandler(e, type)}
                             slotProps={{ textField: { variant: 'filled' } }}

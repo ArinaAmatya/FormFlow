@@ -78,7 +78,6 @@ function Search() {
     const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
-        fileID: "",
         fileType: "",
         customerName: "",
         customerID: "",
@@ -88,7 +87,6 @@ function Search() {
         proposalID: "",
         resourceName: "",
         resourceID: "",
-        auctionID: "",
         dateBegin: "",
         dateEnd: ""
     });
@@ -156,6 +154,11 @@ function Search() {
         }
     }, [chips]);
 
+    /**
+     * Searches dataMap for a given chip.
+     * 
+     * @param {ChipData} c - Chip to search for. 
+     */
     const chipsSearch = (c) => {
         if (!dataMap.has(c.type)){
             dataMap.set(c.type, [c.value]);
@@ -184,12 +187,6 @@ function Search() {
           url = url.replace(" ", "%20");
           console.log("url: " + url);
           console.log(chips.length);
-          //callAPI();
-          //const { data, error, isLoading } = useSWR(url, fetcher);
-          //setInfo(data);
-          //console.log(data);
-
-          //fetchData();
         if (chips.length !== 0){
             fetch(url)
             .then((res) => {
@@ -274,7 +271,7 @@ function Search() {
                 open={open}
             >
                 <DrawerHeader>
-                <img className="max-w-[250px] ml-auto mr-auto mt-[10px] mb-[10px]"
+                <img className="max-w-[225px] m-auto"
                     src={"/logo.png"}
                     alt="FormFlow Logo"
                 />
