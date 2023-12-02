@@ -5,6 +5,8 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 const typedefs = require("../typedefs");
 /** @type {typedefs.ChipData} */
@@ -14,10 +16,11 @@ const typedefs = require("../typedefs");
  * and its functionality.
  * 
  * @param {Object} props - Component props.
- * @param {ChipData[][]} props.history - An array of ChipData arrays, each of which represent a single search's filters.
+ * @param {ChipData[][]} props.history - An array of ChipData arrays, each of which represent a single search's filters
+ * @param {function(ChipData[]):void} props.handleRestoreSearch - Restores search to corresponding search history and re-searches.
  * @returns {React.ReactElement} - SearchHistory component.
  */
-function SearchHistory({ history = [] }) {
+function SearchHistory({ history = [], handleRestoreSearch }) {
     /**
      * Builds a MUI Chip component using an input ChipData object.
      * 
@@ -51,6 +54,14 @@ function SearchHistory({ history = [] }) {
                     return (
                         <div className="max-w-[347px] border-2 bg-theme-contrast-blue-dark rounded-3xl p-0.5 pb-1" key={k+1}>
                             {snap.map((c) => generateChip(c))}
+                            <Button className="bg-theme-logo-blue text-white hover:bg-theme-logo-blue-selected h-[30px] w-[30px] min-h-[30px] min-w-[30px] rounded-[50%] p-0"
+                                onClick={() => {
+                                    console.log(handleRestoreSearch);
+                                    handleRestoreSearch(snap);
+                                }}
+                            >
+                                <SettingsBackupRestoreIcon className="h-[20px] w-[20px]" />
+                            </Button>
                         </div>
                     )
                 })}

@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors: {
         'theme-logo-blue': '#0084c6',
+        'theme-logo-blue-selected': '#1565c0',
         'theme-bg-blue': '#e4eaf1',
         'theme-contrast-blue-dark': '#b7cbe2',
         'theme-contrast-blue-light': '#cad8e7',
