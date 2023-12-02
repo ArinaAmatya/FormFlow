@@ -19,6 +19,7 @@ const drawerWidth = 380;
 
 let idInc = 0;
 
+
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -73,6 +74,8 @@ function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true);
+    const [data, setData] = useState([]);
+    const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
         fileID: "",
@@ -89,7 +92,10 @@ function Search() {
         dateBegin: "",
         dateEnd: ""
     });
-    const [chips, setChips] = useState([]);
+    const dataMap = new Map(); 
+    let url = "";
+    //let url = "http://localhost:8080/getFileMetadata/";
+    //const [chips, setChips] = useState([]);
     const [prevSearches, setPrevSearches] = useState([]);
     const [searchFlag, setSearchFlag] = useState(false);
 
@@ -150,6 +156,13 @@ function Search() {
         }
     }, [chips]);
 
+    const chipsSearch = (c) => {
+        if (!dataMap.has(c.type)){
+            dataMap.set(c.type, [c.value]);
+        } else{
+            dataMap.get(c.type).push(c.value);
+        }
+    }
     /**
      * Calls to the backend to search the database using the current filters
      * and displays the results.
@@ -157,6 +170,45 @@ function Search() {
      * @function
      */
     const search = () => {
+        url = "http://localhost:8080/getFileMetadata/"
+        chips.map(c => chipsSearch(c));
+        for (const [key, value] of dataMap) {
+            url += key + "=";
+            for (let i = 0; i < value.length - 1; i++){
+              url += value[i] + ",";
+            }
+            url += value[value.length-1] + "&";
+          }
+          url = url.substring(0, url.length-1);
+          url = url.replace(" ", "%20");
+          console.log("url: " + url);
+          console.log(chips.length);
+          //callAPI();
+          //const { data, error, isLoading } = useSWR(url, fetcher);
+          //setInfo(data);
+          //console.log(data);
+
+          //fetchData();
+        if (chips.length !== 0){
+            fetch(url)
+            .then((res) => {
+                if (res.ok){
+                    console.log(res);
+                    return JSON.parse(res);
+                }else{
+                    throw new Error("Status code error: " + res.status);
+                }})
+            .then((data) => {
+                setData(data)
+            })
+            .catch((err) => console.log(err));
+        }else{
+            setData([]);
+        }
+          //const response = fetch(url, {mode: 'no-cors'});
+          //console.log(response);
+          //console.log(response.json());
+         // console.log(data);
         setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
     }
 
@@ -249,7 +301,7 @@ function Search() {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
-                <ResultsRack />
+                <ResultsRack files={data}/>
             </Main>
         </Box>
     );
