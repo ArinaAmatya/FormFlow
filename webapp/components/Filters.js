@@ -56,9 +56,23 @@ function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
                     addChip={addChip}
                 />
                 <FilterInput
+                    label="Customer ID"
+                    type="customerID"
+                    input={inputs.customerID}
+                    setInputs={setInputs}
+                    addChip={addChip}
+                />
+                <FilterInput
                     label="Project Name"
                     type="projectName"
                     input={inputs.projectName}
+                    setInputs={setInputs}
+                    addChip={addChip}
+                />
+                <FilterInput
+                    label="Project ID"
+                    type="projectID"
+                    input={inputs.projectID}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
@@ -70,6 +84,13 @@ function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
                     addChip={addChip}
                 />
                 <FilterInput
+                    label="Proposal ID"
+                    type="proposalID"
+                    input={inputs.proposalID}
+                    setInputs ={setInputs}
+                    addChip={addChip}
+                />
+                <FilterInput
                     label="Resource Name"
                     type="resourceName"
                     input={inputs.resourceName}
@@ -77,9 +98,9 @@ function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
                     addChip={addChip}
                 />
                 <FilterInput
-                    label="Auction ID"
-                    type="auctionID"
-                    input={inputs.auctionID}
+                    label="Resource ID"
+                    type="resourceID"
+                    input={inputs.resourceID}
                     setInputs={setInputs}
                     addChip={addChip}
                 />
