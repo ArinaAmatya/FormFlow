@@ -13,6 +13,11 @@ const typedefs = require("../typedefs");
  * @returns {React.ReactElement} - FileTable component
  */
 function FileTable({ files }) {
+ * @param {Object} props - Component props.
+ * @param {FileData[]} props.files - File metadata to display in table.
+ * @returns {React.ReactElement} - FileTable component
+ */
+function FileTable({ files }) {
   const columns = [
     {
       ...GRID_CHECKBOX_SELECTION_COL_DEF,

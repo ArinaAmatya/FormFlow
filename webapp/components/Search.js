@@ -163,6 +163,7 @@ function Search() {
             dataMap.get(c.type).push(c.value);
         }
     }
+    
     /**
      * Calls to the backend to search the database using the current filters
      * and displays the results.
@@ -209,7 +210,7 @@ function Search() {
           //console.log(response);
           //console.log(response.json());
          // console.log(data);
-        setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
+        }
     }
 
     /**
@@ -301,7 +302,7 @@ function Search() {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
-                <ResultsRack files={data}/>
+                <ResultsRack files={data} />
             </Main>
         </Box>
     );

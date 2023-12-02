@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
  * and provides the preview and download buttons for it.
  * 
  * @param {Object} props - Component properties.
- * @param {*} props.files - File metadata to display in the table.
+ * @param {FileData[]} props.files - File metadata to display in the table.
  * @returns {React.ReactElement} - ResultsRack component.
  * 
  * @function
