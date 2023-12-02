@@ -11,11 +11,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ResultsRack from './ResultsRack';
-//import useSWR from 'swr'; 
 import SearchHistory from './SearchHistory.js';
 import SearchBar from './SearchBar.js';
 import Filters from './Filters.js';
-import FileTable from './FileTable.js';
 
 const drawerWidth = 380;
 
@@ -76,7 +74,7 @@ function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true);
-    const [data, setData] = useState({});
+    const [data, setData] = useState([]);
     const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
@@ -165,7 +163,7 @@ function Search() {
             dataMap.get(c.type).push(c.value);
         }
     }
-
+    
     /**
      * Calls to the backend to search the database using the current filters
      * and displays the results.
@@ -174,7 +172,6 @@ function Search() {
      */
     const search = () => {
         url = "http://localhost:8080/getFileMetadata/"
-
         chips.map(c => chipsSearch(c));
         for (const [key, value] of dataMap) {
             url += key + "=";
@@ -197,22 +194,23 @@ function Search() {
             fetch(url)
             .then((res) => {
                 if (res.ok){
-                    return res.json();
+                    console.log(res);
+                    return JSON.parse(res);
                 }else{
                     throw new Error("Status code error: " + res.status);
                 }})
             .then((data) => {
-                setData(data);
+                setData(data)
             })
-            .catch((err) => console.log(err));  
+            .catch((err) => console.log(err));
         }else{
             setData([]);
         }
-        //const response = fetch(url, {mode: 'no-cors'});
-        //console.log(response);
-        //console.log(response.json());
-        //console.log(data);
-        setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
+          //const response = fetch(url, {mode: 'no-cors'});
+          //console.log(response);
+          //console.log(response.json());
+         // console.log(data);
+        }
     }
 
     /**

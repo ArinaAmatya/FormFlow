@@ -18,7 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import Searchbar from './Searchbar';
+import SearchBar from './SearchBar';
 
 const drawerWidth = 240;
 
@@ -93,8 +93,8 @@ export default function NavBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Searchbar>
-          </Searchbar>
+          <SearchBar>
+          </SearchBar>
         </Toolbar>
       </AppBar>
       <Drawer

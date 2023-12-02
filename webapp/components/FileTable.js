@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';import Button from '@mui/material/Button';
+import { DataGrid, GRID_CHECKBOX_SELECTION_COL_DEF } from '@mui/x-data-grid';
 
 const typedefs = require("../typedefs");
 /** @type {typedefs.FileData} */
@@ -8,214 +8,16 @@ const typedefs = require("../typedefs");
 /**
  * A React component that displays the files from a search in a table.
  * 
+ * @param {Object} props - Component properties.
+ * @param {*} props.files - File metadata to display in the table.
+ * @returns {React.ReactElement} - FileTable component
+ */
+function FileTable({ files }) {
  * @param {Object} props - Component props.
  * @param {FileData[]} props.files - File metadata to display in table.
  * @returns {React.ReactElement} - FileTable component
  */
 function FileTable({ files }) {
-  let rows = [];
-
-  /**
-   * Retrieves the metadata of the files from the search results.
-   * 
-   * @returns {FileData[]} - An array of file metadata.
-   * 
-   * @function
-   */
-  const retrieveFiles = () => {
-    return files?.length > 0 ? files : [
-      {
-        id: 1,
-        fileName: 'ManilaCo_boiler Permit',
-        fileType: 'DOCX',
-        customerID: "379434341",
-        customerName: "ManilaCo",
-        projectID: "223953562",
-        projectName: "ManilaCo Boiler 32",
-        proposalID: "000006534",
-        proposalName: "ManilaCo Big Boiler House",
-        resourceID: "000000100",
-        resourceType: "Big Generator",
-        auctionID: "000000478",
-        periodID: "000000021",
-        dateBegin: "06/01/2020",
-        dateEnd: "06/01/2021"
-      },
-      {
-        id: 2,
-        projectName: "ManilaCo Boiler 32",
-        projectID: "384595373",
-        fileType: 'DOCX',
-        fileName: 'vert_gen_32',
-        proposalName: "ManilaCo Big Boiler House",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "ManilaCo",
-        resourceID: "000000100",
-        resourceType: "Big Generator",
-        dateBegin: "02/28/2018",
-        dateEnd: "02/28/2021"
-      },
-      {
-        id: 3,
-        projectName: "VoltHit Array023",
-        projectID: "276067546",
-        fileType: 'PDF',
-        fileName: 'Array023Permit3',
-        proposalName: "VolRay Maine Field",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "VoltHit",
-        resourceID: "000000100",
-        resourceType: "Solar Aggregation",
-        dateBegin: "03/01/2017",
-        dateEnd: "03/01/2020"
-      },
-      {
-        id: 4,
-        projectName: "ManilaCo Boiler 32",
-        projectID: "968434563",
-        fileType: 'XLS',
-        fileName: 'ManilaCo Boiler Cost Table',
-        proposalName: "ManilaCo Big Boiler House",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "ManilaCo",
-        resourceID: "000000100",
-        resourceType: "Big Generator",
-        dateBegin: "06/01/2020",
-        dateEnd: "06/01/2021"
-      },
-      {
-        id: 5,
-        projectName: "ManilaCo Boiler 32",
-        projectID: "634576784",
-        fileType: 'PDF',
-        fileName: "boiler_proj_det_manilaco",
-        proposalName: "ManilaCo Big Boiler House",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "ManilaCo",
-        resourceID: "000000100",
-        resourceType: "Big Generator",
-        dateBegin: "06/01/2020",
-        dateEnd: "06/01/2021"
-      },
-      {
-        id: 6,
-        projectName: "ManilaCo Boilerhouse Solar Roof",
-        projectID: "536854525",
-        fileType: 'XLS',
-        fileName: 'ManilaCo_roof_costtable',
-        proposalName: "ManilaCo Big Boiler House",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "ManilaCo",
-        resourceID: "000000100",
-        resourceType: "Solar Generator",
-        dateBegin: "06/01/2020",
-        dateEnd: "06/01/2021"
-      },
-      {
-        id: 7,
-        projectName: "ManilaCo Boiler 32",
-        projectID: "836324654",
-        fileType: 'PNG',
-        fileName: 'ManilaCo Boiler Ex',
-        proposalName: "ManilaCo Big Boiler House",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "ManilaCo",
-        resourceID: "000000100",
-        resourceType: "Big Generator",
-        dateBegin: "06/01/2020",
-        dateEnd: "06/01/2021"
-      },
-      {
-        id: 8,
-        projectName: "CMax Expansion",
-        projectID: "298973111",
-        fileType: 'XLS',
-        fileName: 'cmax_expansion_res',
-        proposalName: "CaprioMax Expansion",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "Caprio and Company",
-        resourceID: "000000100",
-        resourceType: "Solar Generator",
-        dateBegin: "07/01/2021",
-        dateEnd: "07/01/2021"
-      },
-      {
-        id: 9,
-        projectName: "ManilaCo Boiler 32",
-        projectID: "536854525",
-        fileType: 'XLS',
-        fileName: 'ManilaCo_q3_20',
-        proposalName: "ManilaCo Big Boiler House",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "ManilaCo",
-        resourceID: "000000100",
-        resourceType: "Big Generator",
-        dateBegin: "06/01/2020",
-        dateEnd: "06/01/2021"
-      },
-      {
-        id: 10,
-        projectName: "Sunwalk North",
-        projectID: "836324654",
-        fileType: 'PNG',
-        fileName: 'north-aerial-view',
-        proposalName: "CaprioMax Sunwalk",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "Caprio and Company",
-        resourceID: "000000100",
-        resourceType: "Big Generator",
-        dateBegin: "06/01/2018",
-        dateEnd: "06/01/2019"
-      },
-      {
-        id: 11,
-        projectName: "Sunwalk South",
-        projectID: "298973111",
-        fileType: 'CSV',
-        fileName: 'south-rsrces2433',
-        proposalName: "CaprioMax Sunwalk",
-        proposalID: "000006534",
-        auctionID: "000000478",
-        periodID: "000000021",
-        customerID: "379434341",
-        customerName: "Caprio and Company",
-        resourceID: "000000100",
-        resourceType: "Solar Generator",
-        dateBegin: "07/01/2018",
-        dateEnd: "07/01/2019"
-      },
-    ];
-  }
-
-  //rows = retrieveFiles();
-
   const columns = [
     {
       ...GRID_CHECKBOX_SELECTION_COL_DEF,
@@ -333,7 +135,6 @@ function FileTable({ files }) {
           checkboxSelection
         />
       </Box>
-      <Button onClick={() => console.log(files)}></Button>
     </div>
   );
 }
