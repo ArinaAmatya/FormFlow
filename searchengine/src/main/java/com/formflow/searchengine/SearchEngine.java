@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import com.formflow.searchengine.Models.ResultMapping;
+import com.jcraft.jsch.*;
 
 /**
  * Performs main searching functionality for documents, metadata, and user profiles.
@@ -83,8 +84,42 @@ public class SearchEngine {
         if (sent != true){
             return "Error";
         }
+
+        JSch jsch = new JSch();
+        Session session = null;
+        String userid = "sribatschamaharana";
+        String sourceservername = "";
+        String sourceserverpassword = ""; //replace with frontend username and pwd
+        int sourceserverport = 22;
+
+        try {
+          session = jsch.getSession(userid, sourceservername, sourceserverport);
+          session.setPassword(sourceserverpassword);
+          session.setConfig("StrictHostKeyChecking", "no");
+          session.connect();
+          ChannelSftp channelSftp = null;
+            try{
+              channelSftp = (ChannelSftp) session.openChannel("sftp");
+              channelSftp.connect();
+              channelSftp.put(path, destinationDirectory);// Uploading the local file to the remote destination directory
+              return "file transferred";
+            } catch (SftpException e) {
+              throw new IOException("Error transferring file using SFTP", e);
+            } finally {
+              if (channelSftp != null && channelSftp.isConnected()) {
+                channelSftp.disconnect();
+              }
+            }
+        } catch (JSchException e) {
+          throw new IOException("Error establishing JSch session", e);
+        } finally {
+          if (session != null && session.isConnected()) {
+            session.disconnect();
+          }
+        }
+        
         //Send file via scp here, or via 
-        return name;
+
       }
 
   /**
