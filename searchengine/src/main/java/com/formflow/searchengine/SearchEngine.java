@@ -83,6 +83,7 @@ public class SearchEngine {
         if (sent != true){
             return "Error";
         }
+        //Send file via scp here, or via 
         return name;
       }
 
