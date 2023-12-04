@@ -7,6 +7,14 @@ import jakarta.persistence.Query;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -14,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import com.formflow.searchengine.Models.ResultMapping;
+import com.jcraft.jsch.*;
 
 /**
  * Performs main searching functionality for documents, metadata, and user profiles.
@@ -29,6 +38,89 @@ public class SearchEngine {
    */
   @PersistenceContext
   public EntityManager entityManager;
+
+  /**
+   * Fetches the file object found in the database at a given path and sends
+   * the file to the frontend
+   * @param path The string path for the file in the database
+   * @param destinationDirectory The String directory at which to send the file on the frontend server
+   * @return String The name of the file for reference by the frontend
+   * @throws IOException
+   */
+    public String getFileObject(String path, String destinationDirectory) throws IOException {
+        //When I was testing this I had the bucket file included in the path, but when finish and finalize things we can add it to the URL string instead of the path
+        String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/" + path + "?download";
+        URL obj = new URL(GET_URL);
+        String name = "";
+        HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
+        int responseCode = httpURLConnection.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        long curr = System.currentTimeMillis();
+        long end = curr + 10 * 1000;
+        boolean sent = false;
+        while(System.currentTimeMillis() < end){
+            if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                InputStream input = httpURLConnection.getInputStream();
+                String[] namer = path.split("/");
+                name = namer[namer.length-1];
+                FileOutputStream outputStream = new FileOutputStream(name);
+                int byter = -1;
+                byte[] buff = new byte[4096];
+                while ((byter = input.read(buff)) != -1){
+                    outputStream.write(buff, 0, byter);
+                }
+                outputStream.close();
+                input.close();
+                System.out.println("File downloaded");
+                sent = true;
+                break;
+            } 
+            else {
+                sent = false;
+                System.out.println("Error");
+                break;
+            }
+        }
+        if (sent != true){
+            return "Error";
+        }
+
+        JSch jsch = new JSch();
+        Session session = null;
+        String userid = "sribatschamaharana";
+        String sourceservername = "";
+        String sourceserverpassword = ""; //replace with frontend username and pwd
+        int sourceserverport = 22;
+
+        try {
+          session = jsch.getSession(userid, sourceservername, sourceserverport);
+          session.setPassword(sourceserverpassword);
+          session.setConfig("StrictHostKeyChecking", "no");
+          session.connect();
+          ChannelSftp channelSftp = null;
+            try{
+              channelSftp = (ChannelSftp) session.openChannel("sftp");
+              channelSftp.connect();
+              channelSftp.put(path, destinationDirectory);// Uploading the local file to the remote destination directory
+              return "file transferred";
+            } catch (SftpException e) {
+              throw new IOException("Error transferring file using SFTP", e);
+            } finally {
+              if (channelSftp != null && channelSftp.isConnected()) {
+                channelSftp.disconnect();
+              }
+            }
+        } catch (JSchException e) {
+          throw new IOException("Error establishing JSch session", e);
+        } finally {
+          if (session != null && session.isConnected()) {
+            session.disconnect();
+          }
+        }
+        
+        //Send file via scp here, or via 
+
+      }
 
   /**
    * Fetches the file metadata corresponding to a frontend styled query selection
