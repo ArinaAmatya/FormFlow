@@ -87,7 +87,7 @@ public class SearchEngine {
 
         JSch jsch = new JSch();
         Session session = null;
-        String userid = "sribatschamaharana";
+        String userid = "";
         String sourceservername = "";
         String sourceserverpassword = ""; //replace with frontend username and pwd
         int sourceserverport = 22;
