@@ -94,8 +94,6 @@ function Search() {
     });
     const dataMap = new Map(); 
     let url = "";
-    //let url = "http://localhost:8080/getFileMetadata/";
-    //const [chips, setChips] = useState([]);
     const [prevSearches, setPrevSearches] = useState([]);
     const [searchFlag, setSearchFlag] = useState(false);
 
@@ -184,12 +182,6 @@ function Search() {
           url = url.replace(" ", "%20");
           console.log("url: " + url);
           console.log(chips.length);
-          //callAPI();
-          //const { data, error, isLoading } = useSWR(url, fetcher);
-          //setInfo(data);
-          //console.log(data);
-
-          //fetchData();
         if (chips.length !== 0){
             fetch(url)
             .then((res) => {
@@ -263,7 +255,7 @@ function Search() {
                         handleAddAllButton={handleAddFiltersButton}
                         handleDeleteAllButton={handleDeleteFiltersButton}
                         buttonVisible={addFiltersButtonVisible}
-                        handleSearch={search}
+                        handleSearch={() => search(["search"])}
                     />
                 </Toolbar>
             </AppBar>
