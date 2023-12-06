@@ -87,39 +87,39 @@ public class SearchEngine {
 
         JSch jsch = new JSch();
         Session session = null;
+        int sourceserverport = 22;
         String userid = "";
         String sourceservername = "";
-        String sourceserverpassword = ""; //replace with frontend username and pwd
-        int sourceserverport = 22;
+        String sourceserverpassword = ""; // replace with frontend username and pwd
 
         try {
+          // initialize and configure Jsch Session
           session = jsch.getSession(userid, sourceservername, sourceserverport);
           session.setPassword(sourceserverpassword);
           session.setConfig("StrictHostKeyChecking", "no");
           session.connect();
           ChannelSftp channelSftp = null;
+          // connect with SFTP type connection to upload file identified by 'name'
             try{
               channelSftp = (ChannelSftp) session.openChannel("sftp");
               channelSftp.connect();
-              channelSftp.put(path, destinationDirectory);// Uploading the local file to the remote destination directory
-              return "file transferred";
+              channelSftp.put(name, destinationDirectory);// Uploading the local file to the remote destination directory
+              return "file transferred"; 
             } catch (SftpException e) {
               throw new IOException("Error transferring file using SFTP", e);
             } finally {
               if (channelSftp != null && channelSftp.isConnected()) {
-                channelSftp.disconnect();
+                channelSftp.disconnect(); // finish
               }
             }
         } catch (JSchException e) {
           throw new IOException("Error establishing JSch session", e);
         } finally {
-          if (session != null && session.isConnected()) {
+          if (session != null && session.isConnected()) { // finally disconnect JSch session
             session.disconnect();
           }
         }
-        
-        //Send file via scp here, or via 
-
+        //Send file via scp here, or worst case via manual mv 
       }
 
   /**
