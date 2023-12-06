@@ -182,12 +182,13 @@ function Search() {
             url += value[value.length-1] + "&";
           }
           url = url.substring(0, url.length-1);
-          url = url.replace(" ", "%20");
+          url = url.replaceAll(" ", "%20");
+          console.log(url);
         if (chips.length !== 0){
             fetch(url)
             .then((res) => {
                 if (res.ok){
-                    return JSON.parse(res);
+                    return res.json();
                 }else{
                     throw new Error("Status code error: " + res.status);
                 }})
