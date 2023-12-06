@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import FilterInput from '../FilterInput';
 
-describe('FilterInput', () => {
+describe('FilterInput tests', () => {
   test('calling setInput alone doesnt change the number of chips', () => {
     const setInputsMock = jest.fn();
     const addChipMock = jest.fn();
