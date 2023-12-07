@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import FileTable from './FileTable';
 import { useRouter } from 'next/router'
@@ -15,11 +15,33 @@ import { useRouter } from 'next/router'
  */
 function ResultsRack({ files }) {
     const router = useRouter();
+    const [selectedFiles, setSelectedFiles] = useState([]);
+
+    const handleFileSelection = (selected) => {
+        setSelectedFiles(selected);
+    };
+
+    const queryForFiles = () => {
+        return '/test_files/TEST%20handleFileSelectionPDF.pdf'; // Static path to your PDF file
+    };
 
     const tryPreview = () => {
-        let query = queryForFiles();
+        console.log('Preview button clicked, selected files:', selectedFiles);
 
-        router.push('/preview');
+        if (selectedFiles.length === 0) {
+            console.log('No files selected');
+            return; // Exit the function if no files are selected
+          }
+
+        selectedFiles.forEach((file) => {
+            // Construct the file URL dynamically based on the file's stored path or URL
+            // const fileURL = `http://localhost:3000/test_files/${file.fileName}`;
+            const fileURL = `http://localhost:3000/test_files/TEST PDF.pdf`;
+
+            console.log(`Opening file #${index + 1}:`, fileURL);
+            
+            window.open(fileURL, '_blank');
+          });
     }
 
     const tryDownload = () => {
@@ -45,9 +67,9 @@ function ResultsRack({ files }) {
                 </Button>
             </div>
             <br />
-            <FileTable files={files}/>
+            <FileTable files={files} onSelectionChange={handleFileSelection} />
         </>
   );
-}
+};
 
 export default ResultsRack;

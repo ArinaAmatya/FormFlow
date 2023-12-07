@@ -10,7 +10,7 @@ const typedefs = require("../typedefs");
  * @param {FileData[]} props.files - File metadata to display in table.
  * @returns {React.ReactElement} - FileTable component
  */
-function FileTable({ files }) {
+function FileTable({ files, onSelectionChange}) {
   const columns = [
     {
       ...GRID_CHECKBOX_SELECTION_COL_DEF,
@@ -108,12 +108,22 @@ function FileTable({ files }) {
     }
   ];
 
+  const handleSelection = (selectionModel) => {
+    console.log('Selection model:', selectionModel);
+    const selected = selectionModel.map(id => files.find(file => file.id === id));
+    // Make sure to pass the selected files up to the parent component
+    console.log('Selected files:', selected);
+    onSelectionChange(selected);
+  };
+
+
   return (
     <div className="max-w-[1932px]">
       <Box className="max-w-[calc(95vw-380px)]">
         <DataGrid
           rows={files}
           columns={columns}
+          onSelectionModelChange={handleSelection}
           initialState={{
             sorting: {
               sortModel: [{ field: 'fileName', sort: 'asc' }],
