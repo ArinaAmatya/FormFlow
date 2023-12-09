@@ -1,7 +1,7 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import React from 'react';
 
 /**
  * A React component that displays previews for selected files.
@@ -11,7 +11,19 @@ import React from 'react';
  * @function
  */
 function FilePreview() {
-    const [value, setValue] = React.useState(0);
+    const router = useRouter();
+    const [selectedTab, setSelectedTab] = React.useState(0);
+    const [selectedRows, setSelectedRows] = useState([]);
+
+    useEffect(() => {
+        const { selectedRows: selectedRowsParam } = router.query;
+        if (selectedRowsParam) {
+          const decodedRows = JSON.parse(decodeURIComponent(selectedRowsParam));
+          setSelectedRows(decodedRows);
+        }
+
+        console.log(JSON.stringify(selectedRows));
+      }, [router.query]);
 
     /**
      * Gets the titles for the previewed files from the backend
@@ -21,8 +33,6 @@ function FilePreview() {
      * @function
      */
     const getTabLabels = () => {
-        // TODO: Hook into backend for this
-
         return ["boiler_proj_det_manilaco.pdf", "ManilaCo Boiler Cost Table.xls", "ManilaCo_boiler Permit.docx", "ManilaCo_gen_32.docx", "ManilaCo_q3.xls", "ManilaCo Boiler Ex.png"];
     }
 
@@ -46,13 +56,13 @@ function FilePreview() {
      * @function
      */
     const handleTab = (event, newValue) => {
-        setValue(newValue);
+        setSelectedTab(newValue);
     };
 
     return (
     <Box>
         <Tabs
-            value={value}
+            value={selectedTab}
             onChange={handleTab}
             variant="scrollable"
             scrollButtons="auto"

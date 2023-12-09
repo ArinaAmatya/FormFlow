@@ -24,24 +24,31 @@ function ResultsRack({ files }) {
     const queryForFiles = () => {
         return '/test_files/TEST%20handleFileSelectionPDF.pdf'; // Static path to your PDF file
     };
+    
+    const handleNavigate = () => {
+        const selectedRows = encodeURIComponent(JSON.stringify(selectionModel)); // Convert to query-friendly format
+        router.push(`/newPage?selectedRows=${selectedRows}`);
+      };
 
     const tryPreview = () => {
         console.log('Preview button clicked, selected files:', selectedFiles);
 
-        if (selectedFiles.length === 0) {
-            console.log('No files selected');
-            return; // Exit the function if no files are selected
-          }
+        handleNavigate();
 
-        selectedFiles.forEach((file) => {
-            // Construct the file URL dynamically based on the file's stored path or URL
-            // const fileURL = `http://localhost:3000/test_files/${file.fileName}`;
-            const fileURL = `http://localhost:3000/test_files/TEST PDF.pdf`;
+        // if (selectedFiles.length === 0) {
+        //     console.log('No files selected');
+        //     return; // Exit the function if no files are selected
+        //   }
 
-            console.log(`Opening file #${index + 1}:`, fileURL);
+        // selectedFiles.forEach((file) => {
+        //     // Construct the file URL dynamically based on the file's stored path or URL
+        //     // const fileURL = `http://localhost:3000/test_files/${file.fileName}`;
+        //     const fileURL = `http://localhost:3000/test_files/TEST PDF.pdf`;
+
+        //     console.log(`Opening file #${index + 1}:`, fileURL);
             
-            window.open(fileURL, '_blank');
-          });
+        //     window.open(fileURL, '_blank');
+        // });
     }
 
     const tryDownload = () => {
