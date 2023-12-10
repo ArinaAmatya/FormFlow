@@ -49,26 +49,25 @@ function FilePreview() {
      * @function
      */
     const handleTab = (event, newValue) => {
-        setSelectedFile(newValue);
+        setSelectedFile(tabData[newValue]);
         setSelectedTab(newValue);
     };
 
     const fetchFiles = () => {
         try {
-            let encodedPath = "";
-            let encodedDest = encodeURIComponent("G:/Other/Downloads");
+            let filePromises = [];
+            let fileData = [];
             selectedRows.forEach((file) => {
-                encodedPath += "&" + encodeURIComponent(file.filePath.replace("Attachments/", ""));
-                setTabData(prev => prev.concat([{
+                let encodedPath = encodeURIComponent(file.filePath.replace("Attachments/", ""));
+                filePromises.push(fetch(`http://localhost:8080/getFileObject/${encodedPath}`));
+                fileData.push({
                     label: file.fileName,
-                    path: file.filePath,
-                    type: file.fileType
-                }]));
+                    path: "/retrieved_files/" + file.fileName,
+                    type: "pdf"
+                })
             });
 
-            encodedPath = encodedPath.slice(1);
-
-            fetch(`http://localhost:8080/getFileObjects/${encodedPath}/${encodedDest}`).then(setSelectedFile(tabData[0]));
+            Promise.all(filePromises).then(() => setTabData(prev => fileData));
         } catch(e) {
             console.log(e);
         }
@@ -77,6 +76,10 @@ function FilePreview() {
     useEffect(() => {
         fetchFiles();
     }, [selectedRows]);
+
+    useEffect(() => {
+        setSelectedFile(tabData[0]);
+    }, [tabData]);
 
     return (<>
     <Box>
@@ -90,16 +93,16 @@ function FilePreview() {
             {getTabs()}
         </Tabs>
         {
-            selectedFile ?
+            selectedFile && ["png", "jpeg", "gif", "bmp", "pdf", "csv", "xslx", "docx"].includes(selectedFile?.type) ?
                 <FileViewer
                     fileType={selectedFile?.type}
                     filePath={selectedFile?.path}
                 />
                 :
-                <Typography>Oh no! No files to display.</Typography>
+                <Typography>This file cannot be previewed. Download it to view.</Typography>
         }
     </Box>
-    <Button onClick={() => console.log(JSON.stringify(selectedRows))}></Button>
+    <Button onClick={() => console.log(JSON.stringify(selectedFile))}></Button>
     </>);
 }
 
