@@ -61,8 +61,20 @@ public class FrontendController {
    * @return File object that was fetched
    * */
   @GetMapping("/getFileObject/{filePath}")
-  public String getFileObject(@PathVariable("filePath") String filePath) {
-    return "Fetching File Object...";
+  public ResponseEntity<String> getFileObject(@PathVariable("filePath") String filePath) {
+    try {
+      System.out.println(filePath);
+      String fileName = this.searchEngine.getFileObject(filePath);
+
+      if (fileName == null) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      return new ResponseEntity<>(fileName, HttpStatus.OK);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /**

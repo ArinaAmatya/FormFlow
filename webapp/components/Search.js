@@ -92,8 +92,6 @@ function Search() {
     });
     const dataMap = new Map(); 
     let url = "";
-    //let url = "http://localhost:8080/getFileMetadata/";
-    //const [chips, setChips] = useState([]);
     const [prevSearches, setPrevSearches] = useState([]);
     const [searchFlags, setSearchFlags] = useState([]);
 
@@ -184,12 +182,12 @@ function Search() {
             url += value[value.length-1] + "&";
           }
           url = url.substring(0, url.length-1);
-          url = url.replace(" ", "%20");
+          url = url.replaceAll(" ", "%20");
         if (chips.length !== 0){
             fetch(url)
             .then((res) => {
                 if (res.ok){
-                    return JSON.parse(res);
+                    return res.json();
                 }else{
                     throw new Error("Status code error: " + res.status);
                 }})
@@ -272,7 +270,7 @@ function Search() {
                         handleAddAllButton={handleAddFiltersButton}
                         handleDeleteAllButton={handleDeleteFiltersButton}
                         buttonVisible={addFiltersButtonVisible}
-                        handleSearch={search}
+                        handleSearch={() => search(["search"])}
                     />
                 </Toolbar>
             </AppBar>

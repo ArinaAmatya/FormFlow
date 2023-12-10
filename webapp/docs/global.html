@@ -156,7 +156,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_FilePreview.js.html">components/FilePreview.js</a>, <a href="components_FilePreview.js.html#line13">line 13</a>
+        <a href="components_FilePreview.js.html">components/FilePreview.js</a>, <a href="components_FilePreview.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -214,16 +214,13 @@
     
 
     
-    <h4 class="name" id="FileTable"><span class="type-signature"></span>FileTable<span class="signature">()</span><span class="type-signature"> &rarr; {React.ReactElement}</span></h4>
+    <h4 class="name" id="FileTable"><span class="type-signature"></span>FileTable<span class="signature">(props)</span><span class="type-signature"> &rarr; {React.ReactElement}</span></h4>
     
 
     
 
 
 
-<div class="description">
-    A React component that displays the files from a search in a table.
-</div>
 
 
 
@@ -231,6 +228,126 @@
 
 
 
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Component props.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>files</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;FileData></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">File metadata to display in table.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onSelectionChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">State updater for keeping track of selected rows.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -266,7 +383,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_FileTable.js.html">components/FileTable.js</a>, <a href="components_FileTable.js.html#line13">line 13</a>
+        <a href="components_FileTable.js.html">components/FileTable.js</a>, <a href="components_FileTable.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -295,7 +412,7 @@
 
         
 <div class="param-desc">
-    - FileTable component
+    - FileTable component.
 </div>
 
 
@@ -479,6 +596,29 @@
 
         <tr>
             
+                <td class="name"><code>date</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Determines if this input handles dates or not.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>setInputs</code></td>
             
 
@@ -566,7 +706,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_FilterInput.js.html">components/FilterInput.js</a>, <a href="components_FilterInput.js.html#line20">line 20</a>
+        <a href="components_FilterInput.js.html">components/FilterInput.js</a>, <a href="components_FilterInput.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -879,7 +1019,7 @@
     
 
     
-    <h4 class="name" id="ResultsRack"><span class="type-signature"></span>ResultsRack<span class="signature">()</span><span class="type-signature"> &rarr; {React.ReactElement}</span></h4>
+    <h4 class="name" id="ResultsRack"><span class="type-signature"></span>ResultsRack<span class="signature">(props)</span><span class="type-signature"> &rarr; {React.ReactElement}</span></h4>
     
 
     
@@ -896,6 +1036,104 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Component properties.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>files</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;FileData></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">File metadata to display in the table.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -931,7 +1169,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_ResultsRack.js.html">components/ResultsRack.js</a>, <a href="components_ResultsRack.js.html#line14">line 14</a>
+        <a href="components_ResultsRack.js.html">components/ResultsRack.js</a>, <a href="components_ResultsRack.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -1041,7 +1279,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_Search.js.html">components/Search.js</a>, <a href="components_Search.js.html#line72">line 72</a>
+        <a href="components_Search.js.html">components/Search.js</a>, <a href="components_Search.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -1231,6 +1469,52 @@
 
         <tr>
             
+                <td class="name"><code>handleAddAllButton</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Handles the add filters button behavior.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handleDeleteAllButton</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Handles the delete all filters button behavior.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>buttonVisible</code></td>
             
 
@@ -1254,7 +1538,7 @@
 
         <tr>
             
-                <td class="name"><code>handleButton</code></td>
+                <td class="name"><code>handleSearch</code></td>
             
 
             <td class="type">
@@ -1270,7 +1554,7 @@
 
             
 
-            <td class="description last">Handles the add filters button behavior.</td>
+            <td class="description last">Handles starting a search.</td>
         </tr>
 
     
@@ -1318,7 +1602,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_SearchBar.js.html">components/SearchBar.js</a>, <a href="components_SearchBar.js.html#line18">line 18</a>
+        <a href="components_SearchBar.js.html">components/SearchBar.js</a>, <a href="components_SearchBar.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -1478,7 +1762,30 @@
 
             
 
-            <td class="description last">An array of ChipData arrays, each of which represent a single search's filters.</td>
+            <td class="description last">An array of ChipData arrays, each of which represent a single search's filters</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handleRestoreSearch</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Restores search to corresponding search history and re-searches.</td>
         </tr>
 
     
@@ -1526,7 +1833,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_SearchHistory.js.html">components/SearchHistory.js</a>, <a href="components_SearchHistory.js.html#line20">line 20</a>
+        <a href="components_SearchHistory.js.html">components/SearchHistory.js</a>, <a href="components_SearchHistory.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -1600,7 +1907,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Nov 25 2023 21:07:09 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sun Dec 10 2023 07:01:13 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

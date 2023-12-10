@@ -1,7 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import React from 'react';
+import FileViewer from 'react-file-viewer';
+import Button from '@mui/material/Button';
+import { useRouter } from 'next/router'
+import { Typography } from '@mui/material';
 
 /**
  * A React component that displays previews for selected files.
@@ -11,30 +15,29 @@ import React from 'react';
  * @function
  */
 function FilePreview() {
-    const [value, setValue] = React.useState(0);
+    const router = useRouter();
+    const [selectedTab, setSelectedTab] = React.useState(0);
+    const [selectedRows, setSelectedRows] = React.useState([]);
+    const [tabData, setTabData] = React.useState([]);
+    const [selectedFile, setSelectedFile] = React.useState({});
 
-    /**
-     * Gets the titles for the previewed files from the backend
-     * 
-     * @returns {string[]} - An array of labels for the files
-     * 
-     * @function
-     */
-    const getTabLabels = () => {
-        // TODO: Hook into backend for this
-
-        return ["boiler_proj_det_manilaco.pdf", "ManilaCo Boiler Cost Table.xls", "ManilaCo_boiler Permit.docx", "ManilaCo_gen_32.docx", "ManilaCo_q3.xls", "ManilaCo Boiler Ex.png"];
-    }
+    useEffect(() => {
+        const { selectedRows: selectedRowsParam } = router.query;
+        if (selectedRowsParam) {
+          const decodedRows = JSON.parse(decodeURIComponent(selectedRowsParam));
+          setSelectedRows(decodedRows);
+        }
+    }, [router.query]);
 
     /**
      * Builds an array of Tabs out of the labels given to it.
      * 
-     * @returns {React.ReactComponentElement[]} - Tab component array.
+     * @returns {React.ReactElement[]} - Tab component array.
      * 
      * @function
      */
-    const getTabs = (labels = []) => {
-        return labels.map((v) => <Tab className="normal-case" label={v} key={v}></Tab>);
+    const getTabs = () => {
+        return tabData.map((t, i) => <Tab className="normal-case" label={t.label} key={i}></Tab>);
     }
 
     /**
@@ -46,22 +49,61 @@ function FilePreview() {
      * @function
      */
     const handleTab = (event, newValue) => {
-        setValue(newValue);
+        setSelectedFile(tabData[newValue]);
+        setSelectedTab(newValue);
     };
 
-    return (
+    const fetchFiles = () => {
+        try {
+            let filePromises = [];
+            let fileData = [];
+            selectedRows.forEach((file) => {
+                let encodedPath = encodeURIComponent(file.filePath.replace("Attachments/", ""));
+                filePromises.push(fetch(`http://localhost:8080/getFileObject/${encodedPath}`));
+                fileData.push({
+                    label: file.fileName,
+                    path: "/retrieved_files/" + file.fileName,
+                    type: "pdf"
+                })
+            });
+
+            Promise.all(filePromises).then(() => setTabData(prev => fileData));
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        fetchFiles();
+    }, [selectedRows]);
+
+    useEffect(() => {
+        setSelectedFile(tabData[0]);
+    }, [tabData]);
+
+    return (<>
     <Box>
         <Tabs
-            value={value}
+            value={selectedTab}
             onChange={handleTab}
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
         >
-            {getTabs(getTabLabels())}
+            {getTabs()}
         </Tabs>
+        {
+            selectedFile && ["png", "jpeg", "gif", "bmp", "pdf", "csv", "xslx", "docx"].includes(selectedFile?.type) ?
+                <FileViewer
+                    fileType={selectedFile?.type}
+                    filePath={selectedFile?.path}
+                />
+                :
+                <Typography>This file cannot be previewed. Download it to view.</Typography>
+        }
     </Box>
-    );
+    <Button onClick={() => console.log(JSON.stringify(selectedFile))}></Button>
+    </>);
 }
 
 export default FilePreview;
