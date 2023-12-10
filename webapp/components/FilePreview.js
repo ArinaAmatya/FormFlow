@@ -53,20 +53,20 @@ function FilePreview() {
 
     const fetchFiles = () => {
         try {
-            let filePromises = [];
+            let encodedPath = "";
+            let encodedDest = encodeURIComponent("G:\\Other\\Downloads");
             selectedRows.forEach((file) => {
-                let encodedPath = encodeURIComponent(file.filePath);
-                let encodedDest = encodeURIComponent("/temp/" + file.fileName);
-                filePromises.push(
-                    fetch(`https://localhost:8080/getFileObject/${encodedPath}/${encodedDest}`)
-                );
+                encodedPath += "&" + encodeURIComponent(file.filePath.replace("Attachments/", "").replace(/\//ig, "\\"));
                 setTabData(prev => prev.concat([{
                     label: file.fileName,
                     path: file.filePath,
                     type: file.fileType
                 }]));
             });
-            Promise.all(filePromises).then(setSelectedFile(tabData[0]));
+
+            encodedPath = encodedPath.slice(1);
+
+            fetch(`http://localhost:8080/getFileObject/${encodedPath}/${encodedDest}`).then(setSelectedFile(tabData[0]));
         } catch(e) {
             console.log("WAH" + e);
         }
