@@ -13,11 +13,13 @@ import dayjs from 'dayjs';
  * @param {string} props.label - The label for the filter.
  * @param {string} props.type - The type of filter to apply.
  * @param {string} props.input - Varaible to store input.
+ * @param {boolean} props.date - Determines if this input handles dates or not.
  * @param {function(Object):void} props.setInputs - Function to set inputs object of parent.
  * @param {function(string):void} props.addChip - Function to add the filter chip.
  * @returns {React.ReactElement} - FilterInput component.
  */
 function FilterInput({ label, type, input, date = false, setInputs, addChip }) {
+
     /**
      * Updates the stored values of the filter textboxes.
      * 

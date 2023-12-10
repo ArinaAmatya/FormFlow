@@ -12,9 +12,10 @@ const typedefs = require("../typedefs");
  * @param {Object} props - Component props.
  * @param {ChipData[]} props.chips - The filter chips.
  * @param {function(string):void} props.handleDelete - Handles the deletion of a chip of input ID.
- * @param {boolean} props.buttonVisible - Determines if the add filters button is visible.
  * @param {function():void} props.handleAddAllButton - Handles the add filters button behavior.
  * @param {function():void} props.handleDeleteAllButton - Handles the delete all filters button behavior.
+ * @param {boolean} props.buttonVisible - Determines if the add filters button is visible.
+ * @param {function():void} props.handleSearch - Handles starting a search.
  * @returns {React.ReactElement} - FilterInput component
  */
 function SearchBar({ chips, handleDelete, handleAddAllButton, handleDeleteAllButton, buttonVisible, handleSearch }) {

@@ -47,6 +47,7 @@ const drawerWidth = 380;
 
 let idInc = 0;
 
+
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -101,9 +102,10 @@ function Search() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [addFiltersButtonVisible, setAddFiltersButtonVisible] = React.useState(true);
+    const [data, setData] = useState([]);
+    const [chips, setChips] = useState([]);
     const [inputs, setInputs] = useState({
         fileName: "",
-        fileID: "",
         fileType: "",
         customerName: "",
         customerID: "",
@@ -113,13 +115,13 @@ function Search() {
         proposalID: "",
         resourceName: "",
         resourceID: "",
-        auctionID: "",
         dateBegin: "",
         dateEnd: ""
     });
-    const [chips, setChips] = useState([]);
+    const dataMap = new Map(); 
+    let url = "";
     const [prevSearches, setPrevSearches] = useState([]);
-    const [searchFlag, setSearchFlag] = useState(false);
+    const [searchFlags, setSearchFlags] = useState([]);
 
     /**
      * Handles deletion of a filter chip with ID idNum.
@@ -172,20 +174,62 @@ function Search() {
             setAddFiltersButtonVisible(false);
         }
 
-        if (searchFlag) {
-            setSearchFlag(prev => false);
-            search();
+        if (searchFlags.length > 0) {
+            setSearchFlags(prev => []);
+            search(searchFlags);
         }
     }, [chips]);
 
+    /**
+     * Searches dataMap for a given chip.
+     * 
+     * @param {ChipData} c - Chip to search for. 
+     */
+    const chipsSearch = (c) => {
+        if (!dataMap.has(c.type)){
+            dataMap.set(c.type, [c.value]);
+        } else{
+            dataMap.get(c.type).push(c.value);
+        }
+    }
+    
     /**
      * Calls to the backend to search the database using the current filters
      * and displays the results.
      * 
      * @function
      */
-    const search = () => {
-        setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
+    const search = (options) => {
+        url = "http://localhost:8080/getFileMetadata/"
+        chips.map(c => chipsSearch(c));
+        for (const [key, value] of dataMap) {
+            url += key + "=";
+            for (let i = 0; i &lt; value.length - 1; i++){
+              url += value[i] + ",";
+            }
+            url += value[value.length-1] + "&amp;";
+          }
+          url = url.substring(0, url.length-1);
+          url = url.replaceAll(" ", "%20");
+        if (chips.length !== 0){
+            fetch(url)
+            .then((res) => {
+                if (res.ok){
+                    return res.json();
+                }else{
+                    throw new Error("Status code error: " + res.status);
+                }})
+            .then((data) => {
+                setData(data)
+            })
+            .catch((err) => console.log(err));
+        }else{
+            setData([]);
+        }
+
+        if (!options.includes("no-history")) {
+            setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
+        }
     }
 
     /**
@@ -196,7 +240,7 @@ function Search() {
      * @function
      */
     const filterAndSearch = () => {
-        setSearchFlag(prev => true);
+        setSearchFlags(prev => ["search"]);
         addChip("all");
     }
 
@@ -212,6 +256,26 @@ function Search() {
         } else {
             addChip("all");
         }
+    }
+
+    /**
+     * Removes all filters from the search bar.
+     * 
+     * @function
+     */
+    const handleDeleteFiltersButton = () => {
+        setChips(prev => []);
+    }
+
+    /**
+     * Restores a snapshot of a previous search to be the
+     * current filters and searches again.
+     * 
+     * @param {ChipData[]} snapshot - Snapshot of previous search. 
+     */
+    const handleRestoreSearch = (snapshot) => {
+        setSearchFlags(prev => ["search", "no-history"]);
+        setChips(prev => snapshot);
     }
 
     return (
@@ -231,9 +295,10 @@ function Search() {
                     &lt;SearchBar
                         chips={chips}
                         handleDelete={handleDelete}
-                        handleButton={handleAddFiltersButton}
+                        handleAddAllButton={handleAddFiltersButton}
+                        handleDeleteAllButton={handleDeleteFiltersButton}
                         buttonVisible={addFiltersButtonVisible}
-                        handleSearch={search}
+                        handleSearch={() => search(["search"])}
                     />
                 &lt;/Toolbar>
             &lt;/AppBar>
@@ -244,7 +309,7 @@ function Search() {
                 open={open}
             >
                 &lt;DrawerHeader>
-                &lt;img className="max-w-[250px] ml-auto mr-auto mt-[10px] mb-[10px]"
+                &lt;img className="max-w-[225px] m-auto"
                     src={"/logo.png"}
                     alt="FormFlow Logo"
                 />
@@ -262,12 +327,13 @@ function Search() {
                 &lt;Divider />
                 &lt;SearchHistory
                     history={prevSearches}
+                    handleRestoreSearch={handleRestoreSearch}
                 />
                 &lt;Divider />
             &lt;/Drawer>
             &lt;Main open={open}>
                 &lt;DrawerHeader />
-                &lt;ResultsRack />
+                &lt;ResultsRack files={data} />
             &lt;/Main>
         &lt;/Box>
     );
@@ -289,7 +355,7 @@ export default Search;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Nov 25 2023 21:07:09 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sun Dec 10 2023 07:01:13 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

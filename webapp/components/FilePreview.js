@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab';
 import FileViewer from 'react-file-viewer';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
+import { Typography } from '@mui/material';
 
 /**
  * A React component that displays previews for selected files.
@@ -31,7 +32,7 @@ function FilePreview() {
     /**
      * Builds an array of Tabs out of the labels given to it.
      * 
-     * @returns {React.ReactComponentElement[]} - Tab component array.
+     * @returns {React.ReactElement[]} - Tab component array.
      * 
      * @function
      */
@@ -48,15 +49,16 @@ function FilePreview() {
      * @function
      */
     const handleTab = (event, newValue) => {
+        setSelectedFile(newValue);
         setSelectedTab(newValue);
     };
 
     const fetchFiles = () => {
         try {
             let encodedPath = "";
-            let encodedDest = encodeURIComponent("G:\\Other\\Downloads");
+            let encodedDest = encodeURIComponent("G:/Other/Downloads");
             selectedRows.forEach((file) => {
-                encodedPath += "&" + encodeURIComponent(file.filePath.replace("Attachments/", "").replace(/\//ig, "\\"));
+                encodedPath += "&" + encodeURIComponent(file.filePath.replace("Attachments/", ""));
                 setTabData(prev => prev.concat([{
                     label: file.fileName,
                     path: file.filePath,
@@ -66,9 +68,9 @@ function FilePreview() {
 
             encodedPath = encodedPath.slice(1);
 
-            fetch(`http://localhost:8080/getFileObject/${encodedPath}/${encodedDest}`).then(setSelectedFile(tabData[0]));
+            fetch(`http://localhost:8080/getFileObjects/${encodedPath}/${encodedDest}`).then(setSelectedFile(tabData[0]));
         } catch(e) {
-            console.log("WAH" + e);
+            console.log(e);
         }
     }
 
@@ -87,10 +89,15 @@ function FilePreview() {
         >
             {getTabs()}
         </Tabs>
-        <FileViewer
-            fileType={selectedFile?.type}
-            filePath={selectedFile?.path}
-        />
+        {
+            selectedFile ?
+                <FileViewer
+                    fileType={selectedFile?.type}
+                    filePath={selectedFile?.path}
+                />
+                :
+                <Typography>Oh no! No files to display.</Typography>
+        }
     </Box>
     <Button onClick={() => console.log(JSON.stringify(selectedRows))}></Button>
     </>);

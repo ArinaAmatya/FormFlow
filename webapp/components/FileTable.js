@@ -8,7 +8,8 @@ const typedefs = require("../typedefs");
 /**
  * @param {Object} props - Component props.
  * @param {FileData[]} props.files - File metadata to display in table.
- * @returns {React.ReactElement} - FileTable component
+ * @param {function(FileData[]):void} props.onSelectionChange - State updater for keeping track of selected rows.
+ * @returns {React.ReactElement} - FileTable component.
  */
 function FileTable({ files, onSelectionChange}) {
   const columns = [
