@@ -26,9 +26,9 @@ function ResultsRack({ files }) {
     };
     
     const handleNavigate = () => {
-        const selectedRows = encodeURIComponent(JSON.stringify(selectionModel)); // Convert to query-friendly format
-        router.push(`/newPage?selectedRows=${selectedRows}`);
-      };
+        const selectedRows = encodeURIComponent(JSON.stringify(selectedFiles)); // Convert to query-friendly format
+        router.push(`/preview?selectedRows=${selectedRows}`);
+    };
 
     const tryPreview = () => {
         console.log('Preview button clicked, selected files:', selectedFiles);

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { useRouter } from 'next/router'
 
 /**
  * A React component that displays previews for selected files.
@@ -23,7 +24,7 @@ function FilePreview() {
         }
 
         console.log(JSON.stringify(selectedRows));
-      }, [router.query]);
+    }, [router.query]);
 
     /**
      * Gets the titles for the previewed files from the backend
