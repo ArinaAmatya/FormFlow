@@ -31,7 +31,7 @@ function ResultsRack({ files }) {
     };
 
     const tryPreview = () => {
-        console.log('Preview button clicked, selected files:', selectedFiles);
+        console.log('Preview button clicked, selected files: ', selectedFiles);
 
         handleNavigate();
 

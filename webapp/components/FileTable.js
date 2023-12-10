@@ -123,7 +123,6 @@ function FileTable({ files, onSelectionChange}) {
         <DataGrid
           rows={files}
           columns={columns}
-          onSelectionModelChange={handleSelection}
           initialState={{
             sorting: {
               sortModel: [{ field: 'fileName', sort: 'asc' }],
@@ -136,6 +135,7 @@ function FileTable({ files, onSelectionChange}) {
           }}
           pageSizeOptions={[5, 10, 20]}
           checkboxSelection
+          onRowSelectionModelChange={handleSelection}
         />
       </Box>
     </div>
