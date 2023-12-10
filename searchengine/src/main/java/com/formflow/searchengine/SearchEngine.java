@@ -50,46 +50,62 @@ public class SearchEngine {
    * @return String The name of the file for reference by the frontend
    * @throws IOException
    */
-    public String getFileObject(String path) throws IOException {
-        //When I was testing this I had the bucket file included in the path, but when finish and finalize things we can add it to the URL string instead of the path
-        String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/Attachments/" + path + "?download";
-        URL obj = new URL(GET_URL);
-        String name = "";
-        HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
-        int responseCode = httpURLConnection.getResponseCode();
-        System.out.println("GET Response Code :: " + responseCode);
-        long curr = System.currentTimeMillis();
-        long end = curr + 10 * 1000;
-        boolean sent = false;
-        while(System.currentTimeMillis() < end){
-            if (responseCode == HttpURLConnection.HTTP_OK) { // success
-                InputStream input = httpURLConnection.getInputStream();
-                String[] namer = path.split("/");
-                name = namer[namer.length-1];
-                FileOutputStream outputStream = new FileOutputStream(name);
-                int byter = -1;
-                byte[] buff = new byte[4096];
-                while ((byter = input.read(buff)) != -1){
-                    outputStream.write(buff, 0, byter);
-                }
-                outputStream.close();
-                input.close();
-                System.out.println("File downloaded");
-                sent = true;
-                break;
-            } 
-            else {
-                sent = false;
-                System.out.println("Error");
-                break;
+  public String getFileObject(String path) throws IOException {
+    //When I was testing this I had the bucket file included in the path, but when finish and finalize things we can add it to the URL string instead of the path
+    String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/Attachments/" + path + "?download";
+    URL obj = new URL(GET_URL);
+    String name = "";
+    HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
+    int responseCode = httpURLConnection.getResponseCode();
+    System.out.println("GET Response Code :: " + responseCode);
+    long curr = System.currentTimeMillis();
+    long end = curr + 10 * 1000;
+    boolean sent = false;
+    while(System.currentTimeMillis() < end){
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            InputStream input = httpURLConnection.getInputStream();
+            String[] namer = path.split("/");
+            name = namer[namer.length-1];
+            FileOutputStream outputStream = new FileOutputStream(name);
+            int byter = -1;
+            byte[] buff = new byte[4096];
+            while ((byter = input.read(buff)) != -1){
+                outputStream.write(buff, 0, byter);
             }
+            outputStream.close();
+            input.close();
+            System.out.println("File downloaded");
+            sent = true;
+            break;
+        } 
+        else {
+            sent = false;
+            System.out.println("Error");
+            break;
         }
-        if (sent != true){
-            return "Error";
-        }
+    }
+    if (sent != true) {
+        return "Error";
+    }
 
-        return name;
-      }
+    SearchEngine.moveFile("./" + name, "../webapp/public/retrieved_files/" + name);
+
+    return name;
+  }
+  
+  private static void moveFile(String src, String dest ) {
+    Path result = null;
+    try {
+        result = Files.move(Paths.get(src), Paths.get(dest));
+    } catch (IOException e) {
+        System.out.println("Exception while moving file: " + e.getMessage());
+    }
+    if(result != null) {
+        System.out.println("File moved successfully.");
+    }else{
+        System.out.println("File movement failed.");
+    }
+  }
 
   /**
    * Fetches the file metadata corresponding to a frontend styled query selection
