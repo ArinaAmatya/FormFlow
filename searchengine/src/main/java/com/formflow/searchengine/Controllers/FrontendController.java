@@ -60,10 +60,11 @@ public class FrontendController {
    * @param filePath The path of the object in the file store database
    * @return File object that was fetched
    * */
-  @GetMapping("/getFileObject/{filePath}/{destinationDirectory}")
-  public ResponseEntity<String> getFileObject(@PathVariable("filePath") String filePath, @PathVariable("destinationDirectory") String destinationDirectory) {
+  @GetMapping("/getFileObject/{filePath}")
+  public ResponseEntity<String> getFileObject(@PathVariable("filePath") String filePath) {
     try {
-      String fileName = this.searchEngine.getFileObject(filePath, destinationDirectory);
+      System.out.println(filePath);
+      String fileName = this.searchEngine.getFileObject(filePath);
 
       if (fileName == null) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

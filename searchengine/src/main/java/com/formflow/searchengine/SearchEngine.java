@@ -15,6 +15,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -47,9 +50,9 @@ public class SearchEngine {
    * @return String The name of the file for reference by the frontend
    * @throws IOException
    */
-    public String getFileObject(String path, String destinationDirectory) throws IOException {
+    public String getFileObject(String path) throws IOException {
         //When I was testing this I had the bucket file included in the path, but when finish and finalize things we can add it to the URL string instead of the path
-        String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/" + path + "?download";
+        String GET_URL = "https://qrdodpfmxnaayhniehnt.supabase.co/storage/v1/object/public/Attachments/" + path + "?download";
         URL obj = new URL(GET_URL);
         String name = "";
         HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
@@ -85,41 +88,7 @@ public class SearchEngine {
             return "Error";
         }
 
-        JSch jsch = new JSch();
-        Session session = null;
-        int sourceserverport = 22;
-        String userid = "";
-        String sourceservername = "";
-        String sourceserverpassword = ""; // replace with frontend username and pwd
-
-        try {
-          // initialize and configure Jsch Session
-          session = jsch.getSession(userid, sourceservername, sourceserverport);
-          session.setPassword(sourceserverpassword);
-          session.setConfig("StrictHostKeyChecking", "no");
-          session.connect();
-          ChannelSftp channelSftp = null;
-          // connect with SFTP type connection to upload file identified by 'name'
-            try{
-              channelSftp = (ChannelSftp) session.openChannel("sftp");
-              channelSftp.connect();
-              channelSftp.put(name, destinationDirectory);// Uploading the local file to the remote destination directory
-              return "file transferred"; 
-            } catch (SftpException e) {
-              throw new IOException("Error transferring file using SFTP", e);
-            } finally {
-              if (channelSftp != null && channelSftp.isConnected()) {
-                channelSftp.disconnect(); // finish
-              }
-            }
-        } catch (JSchException e) {
-          throw new IOException("Error establishing JSch session", e);
-        } finally {
-          if (session != null && session.isConnected()) { // finally disconnect JSch session
-            session.disconnect();
-          }
-        }
-        //Send file via scp here, or worst case via manual mv 
+        return name;
       }
 
   /**

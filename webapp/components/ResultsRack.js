@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import FileTable from './FileTable';
 import { useRouter } from 'next/router'
@@ -15,11 +15,24 @@ import { useRouter } from 'next/router'
  */
 function ResultsRack({ files }) {
     const router = useRouter();
+    const [selectedFiles, setSelectedFiles] = useState([]);
+
+    const handleFileSelection = (selected) => {
+        setSelectedFiles(selected);
+    };
+
+    const queryForFiles = () => {
+        return '/test_files/TEST%20handleFileSelectionPDF.pdf';
+    };
 
     const tryPreview = () => {
-        let query = queryForFiles();
+        if (selectedFiles.length === 0) {
+            console.log('No files selected');
+            return;
+        }
 
-        router.push('/preview');
+        const selectedRows = encodeURIComponent(JSON.stringify(selectedFiles));
+        router.push(`/preview?selectedRows=${selectedRows}`);
     }
 
     const tryDownload = () => {
@@ -45,9 +58,9 @@ function ResultsRack({ files }) {
                 </Button>
             </div>
             <br />
-            <FileTable files={files}/>
+            <FileTable files={files} onSelectionChange={handleFileSelection} />
         </>
   );
-}
+};
 
 export default ResultsRack;

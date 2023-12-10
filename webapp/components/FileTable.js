@@ -8,9 +8,10 @@ const typedefs = require("../typedefs");
 /**
  * @param {Object} props - Component props.
  * @param {FileData[]} props.files - File metadata to display in table.
- * @returns {React.ReactElement} - FileTable component
+ * @param {function(FileData[]):void} props.onSelectionChange - State updater for keeping track of selected rows.
+ * @returns {React.ReactElement} - FileTable component.
  */
-function FileTable({ files }) {
+function FileTable({ files, onSelectionChange}) {
   const columns = [
     {
       ...GRID_CHECKBOX_SELECTION_COL_DEF,
@@ -108,6 +109,12 @@ function FileTable({ files }) {
     }
   ];
 
+  const handleSelection = (selectionModel) => {
+    const selected = selectionModel.map(id => files.find(file => file.id === id));
+    onSelectionChange(selected);
+  };
+
+
   return (
     <div className="max-w-[1932px]">
       <Box className="max-w-[calc(95vw-380px)]">
@@ -126,6 +133,7 @@ function FileTable({ files }) {
           }}
           pageSizeOptions={[5, 10, 20]}
           checkboxSelection
+          onRowSelectionModelChange={handleSelection}
         />
       </Box>
     </div>
