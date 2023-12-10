@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import FileViewer from 'react-file-viewer';
+import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 
 /**
@@ -14,7 +16,9 @@ import { useRouter } from 'next/router'
 function FilePreview() {
     const router = useRouter();
     const [selectedTab, setSelectedTab] = React.useState(0);
-    const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedRows, setSelectedRows] = React.useState([]);
+    const [tabData, setTabData] = React.useState([]);
+    const [selectedFile, setSelectedFile] = React.useState({});
 
     useEffect(() => {
         const { selectedRows: selectedRowsParam } = router.query;
@@ -22,20 +26,7 @@ function FilePreview() {
           const decodedRows = JSON.parse(decodeURIComponent(selectedRowsParam));
           setSelectedRows(decodedRows);
         }
-
-        console.log(JSON.stringify(selectedRows));
     }, [router.query]);
-
-    /**
-     * Gets the titles for the previewed files from the backend
-     * 
-     * @returns {string[]} - An array of labels for the files
-     * 
-     * @function
-     */
-    const getTabLabels = () => {
-        return ["boiler_proj_det_manilaco.pdf", "ManilaCo Boiler Cost Table.xls", "ManilaCo_boiler Permit.docx", "ManilaCo_gen_32.docx", "ManilaCo_q3.xls", "ManilaCo Boiler Ex.png"];
-    }
 
     /**
      * Builds an array of Tabs out of the labels given to it.
@@ -44,8 +35,8 @@ function FilePreview() {
      * 
      * @function
      */
-    const getTabs = (labels = []) => {
-        return labels.map((v) => <Tab className="normal-case" label={v} key={v}></Tab>);
+    const getTabs = () => {
+        return tabData.map((t, i) => <Tab className="normal-case" label={t.label} key={i}></Tab>);
     }
 
     /**
@@ -60,7 +51,32 @@ function FilePreview() {
         setSelectedTab(newValue);
     };
 
-    return (
+    const fetchFiles = () => {
+        try {
+            let filePromises = [];
+            selectedRows.forEach((file) => {
+                let encodedPath = encodeURIComponent(file.filePath);
+                let encodedDest = encodeURIComponent("/temp/" + file.fileName);
+                filePromises.push(
+                    fetch(`https://localhost:8080/getFileObject/${encodedPath}/${encodedDest}`)
+                );
+                setTabData(prev => prev.concat([{
+                    label: file.fileName,
+                    path: file.filePath,
+                    type: file.fileType
+                }]));
+            });
+            Promise.all(filePromises).then(setSelectedFile(tabData[0]));
+        } catch(e) {
+            console.log("WAH" + e);
+        }
+    }
+
+    useEffect(() => {
+        fetchFiles();
+    }, [selectedRows]);
+
+    return (<>
     <Box>
         <Tabs
             value={selectedTab}
@@ -69,10 +85,15 @@ function FilePreview() {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
         >
-            {getTabs(getTabLabels())}
+            {getTabs()}
         </Tabs>
+        <FileViewer
+            fileType={selectedFile?.type}
+            filePath={selectedFile?.path}
+        />
     </Box>
-    );
+    <Button onClick={() => console.log(JSON.stringify(selectedRows))}></Button>
+    </>);
 }
 
 export default FilePreview;

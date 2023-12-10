@@ -183,7 +183,6 @@ function Search() {
           }
           url = url.substring(0, url.length-1);
           url = url.replaceAll(" ", "%20");
-          console.log(url);
         if (chips.length !== 0){
             fetch(url)
             .then((res) => {

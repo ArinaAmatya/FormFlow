@@ -109,10 +109,7 @@ function FileTable({ files, onSelectionChange}) {
   ];
 
   const handleSelection = (selectionModel) => {
-    console.log('Selection model:', selectionModel);
     const selected = selectionModel.map(id => files.find(file => file.id === id));
-    // Make sure to pass the selected files up to the parent component
-    console.log('Selected files:', selected);
     onSelectionChange(selected);
   };
 

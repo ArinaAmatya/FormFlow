@@ -22,17 +22,15 @@ function ResultsRack({ files }) {
     };
 
     const queryForFiles = () => {
-        return '/test_files/TEST%20handleFileSelectionPDF.pdf'; // Static path to your PDF file
+        return '/test_files/TEST%20handleFileSelectionPDF.pdf';
     };
     
     const handleNavigate = () => {
-        const selectedRows = encodeURIComponent(JSON.stringify(selectedFiles)); // Convert to query-friendly format
+        const selectedRows = encodeURIComponent(JSON.stringify(selectedFiles));
         router.push(`/preview?selectedRows=${selectedRows}`);
     };
 
     const tryPreview = () => {
-        console.log('Preview button clicked, selected files: ', selectedFiles);
-
         handleNavigate();
 
         // if (selectedFiles.length === 0) {
