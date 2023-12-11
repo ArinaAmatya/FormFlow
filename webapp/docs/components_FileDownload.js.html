@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/ResultsRack.js</title>
+    <title>JSDoc: Source: components/FileDownload.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/ResultsRack.js</h1>
+    <h1 class="page-title">Source: components/FileDownload.js</h1>
 
     
 
@@ -26,57 +26,58 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, {useEffect, useState} from 'react';
+            <pre class="prettyprint source linenums"><code>import React, {useState} from 'react';
 import Button from '@mui/material/Button';
-import FileTable from './FileTable';
-import FileDownload from './FileDownload.js';
-import { useRouter } from 'next/router'
 import { FileData } from '../typedefs.js';
 
 /**
- * A React component that displays the search results table
- * and provides the preview and download buttons for it.
+ * A React component button that downloads files selected in the file table.
  * 
  * @param {Object} props - Component properties.
- * @param {FileData[]} props.files - File metadata to display in the table.
+ * @param {FileData[]} props.selectedFiles - Info for files to download.
  * @returns {React.ReactElement} - ResultsRack component.
  * 
  * @function
  */
-function ResultsRack({ files }) {
-    const router = useRouter();
-    const [selectedFiles, setSelectedFiles] = useState([]);
+function FileDownload({ selectedFiles }) {
+    const tryDownload = () => {
+        try {
+            if (selectedFiles.length === 0) {
+                return;
+            }
 
-    const handleFileSelection = (selected) => {
-        setSelectedFiles(selected);
-    };
-
-    const tryPreview = () => {
-        if (selectedFiles.length === 0) {
-            console.log('No files selected');
-            return;
+            let rawPath = "";
+            selectedFiles.forEach((file) => {
+                rawPath += "&amp;" + file.filePath.replace("Attachments/", "");
+            });
+            let encodedPath = encodeURIComponent(rawPath.slice(1));
+            fetch(`http://localhost:8080/getZippedFiles/${encodedPath}`).then((res) => res.text())
+            .then((dlPath) => {
+                const anchor = document.createElement('a');
+                anchor.href = "retrieved_files/" + dlPath;
+                anchor.download = 'selected-files.zip';
+                document.body.appendChild(anchor);
+                anchor.click();
+                document.body.removeChild(anchor);
+            })
+            .catch(e => console.log(e));
+        } catch(e) {
+            console.log(e);
         }
-
-        const selectedRows = encodeURIComponent(JSON.stringify(selectedFiles));
-        router.push(`/preview?selectedRows=${selectedRows}`);
     }
 
-    return (&lt;>
-        &lt;div className="flex">
-            &lt;Button
-                variant="outlined"
-                onClick={tryPreview}
-            >
-                Preview Selected Files
-            &lt;/Button>
-            &lt;FileDownload selectedFiles={selectedFiles} />
-        &lt;/div>
-        &lt;br />
-        &lt;FileTable files={files} onSelectionChange={handleFileSelection} />
-    &lt;/>);
+    return (
+        &lt;Button className="ml-[20px] bg-theme-logo-blue"
+            variant="contained"
+            onClick={tryDownload}
+        >
+            Download Selected Files
+        &lt;/Button>
+    );
 };
 
-export default ResultsRack;</code></pre>
+export default FileDownload;
+</code></pre>
         </article>
     </section>
 

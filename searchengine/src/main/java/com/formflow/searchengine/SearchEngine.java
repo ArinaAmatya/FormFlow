@@ -4,26 +4,33 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import com.formflow.searchengine.Models.ResultMapping;
 import com.jcraft.jsch.*;
 
@@ -41,6 +48,71 @@ public class SearchEngine {
    */
   @PersistenceContext
   public EntityManager entityManager;
+
+  public static int zipId = 0;
+
+  public static File zip(List<File> files, String filename) {
+    File zipfile = new File(filename);
+    // Create a buffer for reading the files
+    byte[] buf = new byte[1024];
+    try {
+      // create the ZIP file
+      ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipfile));
+      // compress the files
+      for(int i=0; i<files.size(); i++) {
+        FileInputStream in = new FileInputStream(files.get(i));
+        // add ZIP entry to output stream
+        out.putNextEntry(new ZipEntry(files.get(i).getName()));
+        // transfer bytes from the file to the ZIP file
+        int len;
+        while((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        // complete the entry
+        out.closeEntry();
+        in.close();
+      }
+      // complete the ZIP file
+      out.close();
+      System.out.println("zipping successfuly");
+      return zipfile;
+    } catch (IOException ex) {
+      System.err.println(ex.getMessage());
+    }
+    return null;
+  }
+
+  public String getZippedFileObjects(String[] paths) throws IOException {
+    ArrayList<File> files = new ArrayList<>();
+
+    for (String path: paths) {
+      String name = this.getFileObject(path);
+      files.add(new File("./" + name));
+    }
+
+    String zipName = "fileRequestResults" + zipId + ".zip";
+    SearchEngine.zipId += 1;
+
+    SearchEngine.zip(files, zipName);
+
+    SearchEngine.moveFile("./" + zipName, "../webapp/public/retrieved_files/" + zipName);
+
+    for (File file : files) {
+      file.delete();
+    }
+
+    return zipName;
+  }
+
+  public ArrayList<String> getFileObjects(String[] paths) throws IOException {
+    ArrayList<String> output = new ArrayList<String>();
+    for (String path : paths) {
+      String name = this.getFileObject(path);
+      SearchEngine.moveFile("./" + name, "../webapp/public/retrieved_files/" + name);
+      output.add(name);
+    }
+    return output;
+  }
 
   /**
    * Fetches the file object found in the database at a given path and sends
@@ -88,7 +160,42 @@ public class SearchEngine {
         return "Error";
     }
 
-    SearchEngine.moveFile("./" + name, "../webapp/public/retrieved_files/" + name);
+  //   JSch jsch = new JSch();
+  //   Session session = null;
+  //   int sourceserverport = 22;
+  //   String userid = "";
+  //   String sourceservername = "";
+  //   String sourceserverpassword = ""; // replace with frontend username and pwd
+
+  //   try {
+  //     // initialize and configure Jsch Session
+  //     session = jsch.getSession(userid, sourceservername, sourceserverport);
+  //     session.setPassword(sourceserverpassword);
+  //     session.setConfig("StrictHostKeyChecking", "no");
+  //     session.connect();
+  //     ChannelSftp channelSftp = null;
+  //     // connect with SFTP type connection to upload file identified by 'name'
+  //       try{
+  //         channelSftp = (ChannelSftp) session.openChannel("sftp");
+  //         channelSftp.connect();
+  //         channelSftp.put(name, destinationDirectory);// Uploading the local file to the remote destination directory
+  //         return "file transferred"; 
+  //       } catch (SftpException e) {
+  //         throw new IOException("Error transferring file using SFTP", e);
+  //       } finally {
+  //         if (channelSftp != null && channelSftp.isConnected()) {
+  //           channelSftp.disconnect(); // finish
+  //         }
+  //       }
+  //   } catch (JSchException e) {
+  //     throw new IOException("Error establishing JSch session", e);
+  //   } finally {
+  //     if (session != null && session.isConnected()) { // finally disconnect JSch session
+  //       session.disconnect();
+  //     }
+  //   }
+  //   //Send file via scp here, or worst case via manual mv 
+  // }
 
     return name;
   }
@@ -96,7 +203,10 @@ public class SearchEngine {
   private static void moveFile(String src, String dest ) {
     Path result = null;
     try {
-        result = Files.move(Paths.get(src), Paths.get(dest));
+      CopyOption[] options = new CopyOption[]{
+        StandardCopyOption.ATOMIC_MOVE
+      };
+      result = Files.move(Paths.get(src), Paths.get(dest), options);
     } catch (IOException e) {
         System.out.println("Exception while moving file: " + e.getMessage());
     }

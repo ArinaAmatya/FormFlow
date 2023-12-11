@@ -5,9 +5,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FilterInput from './FilterInput.js';
-
-const typedefs = require("../typedefs");
-/** @type {typedefs.ChipData} */
+import { ChipData } from '../typedefs.js';
 
 /**
  * A react component for the history section of the drawer

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: components/FileDisplay.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,41 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: components/FileDisplay.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import FileViewer from 'react-file-viewer';
+import { FileInfo } from '../typedefs.js';
 
+/**
+ * A React component that uses react-file-viewer to attempt to view a file.
+ * 
+ * @param {Object} props - Component props.
+ * @param {FileInfo} props.file - Info needed to display the file.
+ * @returns {React.ReactElement} - FileDisplay component.
+ * 
+ * @function
+ */
+function FileDisplay({ file }) {
+    return (
+        &lt;FileViewer
+            key={file?.path}
+            fileType={file?.type}
+            filePath={file?.path}
+        />
+    );
+}
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default FileDisplay;</code></pre>
+        </article>
+    </section>
 
 
 
