@@ -14,6 +14,7 @@ import ResultsRack from './ResultsRack';
 import SearchHistory from './SearchHistory.js';
 import SearchBar from './SearchBar.js';
 import Filters from './Filters.js';
+import { ChipData } from '../typedefs.js';
 
 const drawerWidth = 380;
 
@@ -192,7 +193,12 @@ function Search() {
                     throw new Error("Status code error: " + res.status);
                 }})
             .then((data) => {
-                setData(data)
+                setData(data.map(d => {
+                    return {
+                        ...d,
+                        fileType: d.fileName.split('.')[1]
+                    };
+                }));
             })
             .catch((err) => console.log(err));
         }else{

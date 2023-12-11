@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import FileTable from './FileTable';
 import { useRouter } from 'next/router'
+import { FileData } from '../typedefs.js';
 
 /**
  * A React component that displays the search results table
