@@ -17,9 +17,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -106,6 +108,7 @@ public class SearchEngine {
     ArrayList<String> output = new ArrayList<String>();
     for (String path : paths) {
       String name = this.getFileObject(path);
+      SearchEngine.moveFile("./" + name, "../webapp/public/retrieved_files/" + name);
       output.add(name);
     }
     return output;
@@ -194,18 +197,16 @@ public class SearchEngine {
   //   //Send file via scp here, or worst case via manual mv 
   // }
 
-    SearchEngine.moveFile("./" + name, "../webapp/public/retrieved_files/" + name);
-
-    File f = new File("./" + name);
-    f.delete();
-
     return name;
   }
   
   private static void moveFile(String src, String dest ) {
     Path result = null;
     try {
-        result = Files.move(Paths.get(src), Paths.get(dest));
+      CopyOption[] options = new CopyOption[]{
+        StandardCopyOption.ATOMIC_MOVE
+      };
+      result = Files.move(Paths.get(src), Paths.get(dest), options);
     } catch (IOException e) {
         System.out.println("Exception while moving file: " + e.getMessage());
     }
