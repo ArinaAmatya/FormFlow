@@ -44,7 +44,7 @@ function ResultsRack({ files }) {
             <FileDownload selectedFiles={selectedFiles} />
         </div>
         <br />
-        <FileTable files={files} onSelectionChange={handleFileSelection} updateDLLink={updateDLLink} />
+        <FileTable files={files} onSelectionChange={handleFileSelection} />
     </>);
 };
 

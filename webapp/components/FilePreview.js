@@ -5,7 +5,6 @@ import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 import FileDisplay from './FileDisplay';
-const extract = require('extract-zip');
 
 /**
  * A React component that displays previews for selected files.

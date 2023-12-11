@@ -19,21 +19,20 @@ function FileDownload({ selectedFiles }) {
             }
 
             let rawPath = "";
-            selectedRows.forEach((file) => {
+            selectedFiles.forEach((file) => {
                 rawPath += "&" + file.filePath.replace("Attachments/", "");
             });
             let encodedPath = encodeURIComponent(rawPath.slice(1));
-            fetch(`http://localhost:8080/getFiles/${encodedPath}`)
-                .then((dlPath) => {
-                    setDLEnabled(true);
-                    const anchor = document.createElement('a');
-                    anchor.href = dlPath;
-                    anchor.download = 'selected-files.zip';
-                    document.body.appendChild(anchor);
-                    anchor.click();
-                    document.body.removeChild(anchor);
-                })
-                .catch(e => console.log(e));
+            fetch(`http://localhost:8080/getZippedFiles/${encodedPath}`).then((res) => res.text())
+            .then((dlPath) => {
+                const anchor = document.createElement('a');
+                anchor.href = "retrieved_files" + dlPath;
+                anchor.download = 'selected-files.zip';
+                document.body.appendChild(anchor);
+                anchor.click();
+                document.body.removeChild(anchor);
+            })
+            .catch(e => console.log(e));
         } catch(e) {
             console.log(e);
         }
