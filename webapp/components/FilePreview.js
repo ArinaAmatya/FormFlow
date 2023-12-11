@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import FileViewer from 'react-file-viewer';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
-import { Typography } from '@mui/material';
 import FileDisplay from './FileDisplay';
+const extract = require('extract-zip');
 
 /**
  * A React component that displays previews for selected files.
@@ -45,11 +44,10 @@ function FilePreview() {
 
     const fetchFiles = () => {
         try {
-            let filePromises = [];
+            let rawPath = "";
             let fileData = [];
             selectedRows.forEach((file) => {
-                let encodedPath = encodeURIComponent(file.filePath.replace("Attachments/", ""));
-                filePromises.push(fetch(`http://localhost:8080/getFileObject/${encodedPath}`));
+                rawPath += "&" + file.filePath.replace("Attachments/", "");
                 if (["png", "jpeg", "gif", "bmp", "pdf", "csv", "xlsx", "docx"].includes(file?.fileType)) {
                     fileData.push({
                         label: file.fileName,
@@ -58,24 +56,24 @@ function FilePreview() {
                     })
                 }
             });
-
-            Promise.all(filePromises).then(() => setTabData(prev => fileData));
+            let encodedPath = encodeURIComponent(rawPath.slice(1));
+            fetch(`http://localhost:8080/getZippedFiles/${encodedPath}`)
+                .then(() => setTabData(fileData))
+                .catch(e => console.log(e));
         } catch(e) {
             console.log(e);
         }
     }
 
     useEffect(() => {
-        fetchFiles();
+        if (selectedRows.length > 0) {
+            fetchFiles();
+        }
     }, [selectedRows]);
 
     useEffect(() => {
         setSelectedFile(tabData[0]);
     }, [tabData]);
-
-    useEffect(() => {
-        console.log(selectedFile);
-    }, [selectedFile]);
 
     return (<>
     <Box>
