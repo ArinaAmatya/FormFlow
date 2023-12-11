@@ -26,7 +26,7 @@ function FileDownload({ selectedFiles }) {
             fetch(`http://localhost:8080/getZippedFiles/${encodedPath}`).then((res) => res.text())
             .then((dlPath) => {
                 const anchor = document.createElement('a');
-                anchor.href = "retrieved_files" + dlPath;
+                anchor.href = "retrieved_files/" + dlPath;
                 anchor.download = 'selected-files.zip';
                 document.body.appendChild(anchor);
                 anchor.click();
