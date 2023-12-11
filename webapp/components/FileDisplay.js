@@ -7,7 +7,7 @@ import { FileInfo } from '../typedefs.js';
  * 
  * @param {Object} props - Component props.
  * @param {FileInfo} props.file - Info needed to display the file.
- * @returns {React.ReactElement} - FileDisplay component
+ * @returns {React.ReactElement} - FileDisplay component.
  * 
  * @function
  */

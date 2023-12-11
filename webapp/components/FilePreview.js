@@ -9,7 +9,7 @@ import FileDisplay from './FileDisplay';
 /**
  * A React component that displays previews for selected files.
  * 
- * @returns {React.ReactElement} - FilePreview component
+ * @returns {React.ReactElement} - FilePreview component.
  * 
  * @function
  */
