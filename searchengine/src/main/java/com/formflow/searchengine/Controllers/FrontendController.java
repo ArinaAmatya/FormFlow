@@ -1,5 +1,6 @@
 package com.formflow.searchengine.Controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,31 @@ public class FrontendController {
   }
 
   /* 
+   * Fetch file objects based on a search query originating from the frontend
+   * @param filePaths The paths of the objects in the file store database concatenated together with "&"
+   * @return Response entity with the list of strings that were moved to the frontend
+   * */
+  @GetMapping("/getFiles/{filePaths}")
+  public ResponseEntity<ArrayList<String>> getFiles(@PathVariable("filePaths") String filePaths) {
+    try {
+      System.out.println(filePaths);
+      ArrayList<String> fileName = this.searchEngine.getFileObjects(filePaths.split("&"));
+
+      if (fileName == null) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      return new ResponseEntity<>(fileName, HttpStatus.OK);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /* 
    * Fetch zipped file objects based on a search query originating from the frontend
-   * @param filePaths The path of the object in the file store database
-   * @return File object that was fetched
+   * @param filePaths The paths of the objects in the file store database concatenated together with "&"
+   * @return Response entity with the name of the zipped file that was moved to the frontend
    * */
   @GetMapping("/getZippedFiles/{filePaths}")
   public ResponseEntity<String> getZippedFiles(@PathVariable("filePaths") String filePaths) {
@@ -77,6 +100,7 @@ public class FrontendController {
   }
 
   /**
+   * This is just a template for if this sort of functionality is needed in the future
    * Received information on the current state of frontend web application
    * @param state The updated state of the web application
    * @return Status code indicating the result of processing the message body information

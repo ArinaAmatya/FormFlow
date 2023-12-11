@@ -102,6 +102,15 @@ public class SearchEngine {
     return zipName;
   }
 
+  public ArrayList<String> getFileObjects(String[] paths) throws IOException {
+    ArrayList<String> output = new ArrayList<String>();
+    for (String path : paths) {
+      String name = this.getFileObject(path);
+      output.add(name);
+    }
+    return output;
+  }
+
   /**
    * Fetches the file object found in the database at a given path and sends
    * the file to the frontend
@@ -184,6 +193,11 @@ public class SearchEngine {
   //   }
   //   //Send file via scp here, or worst case via manual mv 
   // }
+
+    SearchEngine.moveFile("./" + name, "../webapp/public/retrieved_files/" + name);
+
+    File f = new File("./" + name);
+    f.delete();
 
     return name;
   }
