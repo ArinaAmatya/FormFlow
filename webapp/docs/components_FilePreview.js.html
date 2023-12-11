@@ -34,6 +34,7 @@ import FileViewer from 'react-file-viewer';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 import { Typography } from '@mui/material';
+import FileDisplay from './FileDisplay';
 
 /**
  * A React component that displays previews for selected files.
@@ -58,17 +59,6 @@ function FilePreview() {
     }, [router.query]);
 
     /**
-     * Builds an array of Tabs out of the labels given to it.
-     * 
-     * @returns {React.ReactElement[]} - Tab component array.
-     * 
-     * @function
-     */
-    const getTabs = () => {
-        return tabData.map((t, i) => &lt;Tab className="normal-case" label={t.label} key={i}>&lt;/Tab>);
-    }
-
-    /**
      * Handles the changing of the selected tab to the one that is clicked.
      * 
      * @param {Event} event - The click event.
@@ -77,26 +67,27 @@ function FilePreview() {
      * @function
      */
     const handleTab = (event, newValue) => {
-        setSelectedFile(newValue);
+        setSelectedFile(tabData[newValue]);
         setSelectedTab(newValue);
     };
 
     const fetchFiles = () => {
         try {
-            let encodedPath = "";
-            let encodedDest = encodeURIComponent("G:/Other/Downloads");
+            let filePromises = [];
+            let fileData = [];
             selectedRows.forEach((file) => {
-                encodedPath += "&amp;" + encodeURIComponent(file.filePath.replace("Attachments/", ""));
-                setTabData(prev => prev.concat([{
-                    label: file.fileName,
-                    path: file.filePath,
-                    type: file.fileType
-                }]));
+                let encodedPath = encodeURIComponent(file.filePath.replace("Attachments/", ""));
+                filePromises.push(fetch(`http://localhost:8080/getFileObject/${encodedPath}`));
+                if (["png", "jpeg", "gif", "bmp", "pdf", "csv", "xlsx", "docx"].includes(file?.fileType)) {
+                    fileData.push({
+                        label: file.fileName,
+                        path: "/retrieved_files/" + file.fileName,
+                        type: file.fileType
+                    })
+                }
             });
 
-            encodedPath = encodedPath.slice(1);
-
-            fetch(`http://localhost:8080/getFileObjects/${encodedPath}/${encodedDest}`).then(setSelectedFile(tabData[0]));
+            Promise.all(filePromises).then(() => setTabData(prev => fileData));
         } catch(e) {
             console.log(e);
         }
@@ -105,6 +96,14 @@ function FilePreview() {
     useEffect(() => {
         fetchFiles();
     }, [selectedRows]);
+
+    useEffect(() => {
+        setSelectedFile(tabData[0]);
+    }, [tabData]);
+
+    useEffect(() => {
+        console.log(selectedFile);
+    }, [selectedFile]);
 
     return (&lt;>
     &lt;Box>
@@ -115,19 +114,11 @@ function FilePreview() {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
         >
-            {getTabs()}
+            {tabData.map((t) => &lt;Tab className="normal-case" label={t.label} key={t.label}>&lt;/Tab>)}
         &lt;/Tabs>
-        {
-            selectedFile ?
-                &lt;FileViewer
-                    fileType={selectedFile?.type}
-                    filePath={selectedFile?.path}
-                />
-                :
-                &lt;Typography>Oh no! No files to display.&lt;/Typography>
-        }
+        &lt;FileDisplay file={selectedFile} />
     &lt;/Box>
-    &lt;Button onClick={() => console.log(JSON.stringify(selectedRows))}>&lt;/Button>
+    &lt;Button onClick={() => console.log(JSON.stringify(selectedFile))}>&lt;/Button>
     &lt;/>);
 }
 
@@ -141,13 +132,13 @@ export default FilePreview;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="typedefs.html">typedefs</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FilePreview">FilePreview</a></li><li><a href="global.html#FileTable">FileTable</a></li><li><a href="global.html#FilterInput">FilterInput</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#ResultsRack">ResultsRack</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchHistory">SearchHistory</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="typedefs.html">typedefs</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FileDisplay">FileDisplay</a></li><li><a href="global.html#FilePreview">FilePreview</a></li><li><a href="global.html#FileTable">FileTable</a></li><li><a href="global.html#FilterInput">FilterInput</a></li><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#ResultsRack">ResultsRack</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchHistory">SearchHistory</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sun Dec 10 2023 07:01:13 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sun Dec 10 2023 20:36:09 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

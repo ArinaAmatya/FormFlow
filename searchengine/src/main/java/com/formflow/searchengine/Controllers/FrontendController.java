@@ -86,7 +86,6 @@ public class FrontendController {
   @GetMapping("/getZippedFiles/{filePaths}")
   public ResponseEntity<String> getZippedFiles(@PathVariable("filePaths") String filePaths) {
     try {
-      System.out.println(filePaths);
       String fileName = this.searchEngine.getZippedFileObjects(filePaths.split("&"));
 
       if (fileName == null) {

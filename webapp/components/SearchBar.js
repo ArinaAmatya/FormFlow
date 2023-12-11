@@ -1,9 +1,7 @@
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-
-const typedefs = require("../typedefs");
-/** @type {typedefs.ChipData} */
+import { ChipData } from '../typedefs.js';
 
 /**
  * A react component for the history section of the drawer

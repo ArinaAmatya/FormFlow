@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import FileTable from './FileTable';
+import FileDownload from './FileDownload.js';
 import { useRouter } from 'next/router'
+import { FileData } from '../typedefs.js';
 
 /**
  * A React component that displays the search results table
@@ -21,10 +23,6 @@ function ResultsRack({ files }) {
         setSelectedFiles(selected);
     };
 
-    const queryForFiles = () => {
-        return '/test_files/TEST%20handleFileSelectionPDF.pdf';
-    };
-
     const tryPreview = () => {
         if (selectedFiles.length === 0) {
             console.log('No files selected');
@@ -35,32 +33,19 @@ function ResultsRack({ files }) {
         router.push(`/preview?selectedRows=${selectedRows}`);
     }
 
-    const tryDownload = () => {
-        // TODO: Get zipped files from backend
-
-        let query = queryForFiles();
-    }
-
-    return (
-        <>
-            <div className="flex">
-                <Button
-                    variant="outlined"
-                    onClick={tryPreview}
-                    >
-                    Preview Selected Files
-                </Button>
-                <Button className="ml-[20px] bg-theme-logo-blue"
-                    variant="contained"
-                    onClick={tryDownload}
-                    >
-                    Download Selected Files
-                </Button>
-            </div>
-            <br />
-            <FileTable files={files} onSelectionChange={handleFileSelection} />
-        </>
-  );
+    return (<>
+        <div className="flex">
+            <Button
+                variant="outlined"
+                onClick={tryPreview}
+            >
+                Preview Selected Files
+            </Button>
+            <FileDownload selectedFiles={selectedFiles} />
+        </div>
+        <br />
+        <FileTable files={files} onSelectionChange={handleFileSelection} />
+    </>);
 };
 
 export default ResultsRack;

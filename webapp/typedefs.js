@@ -14,6 +14,17 @@
  */
 
 /**
+ * Represents the essential data of a filter chip.
+ * 
+ * @typedef {Object} FileInfo
+ * @property {number} id - The unique ID of the chip.
+ * @property {string} type - The type the chip will filter for.
+ * @property {number} value - The value that will be filtered for.
+ * 
+ * @memberof typedefs
+ */
+
+/**
  * Represents the metadata of a file for display in the results table.
  * 
  * @typedef {Object} FileData

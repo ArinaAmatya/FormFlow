@@ -7,9 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-
-const typedefs = require("../typedefs");
-/** @type {typedefs.ChipData} */
+import { ChipData } from '../typedefs.js';
 
 /**
  * A react component for the history section of the drawer
