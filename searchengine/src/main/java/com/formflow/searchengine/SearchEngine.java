@@ -51,6 +51,11 @@ public class SearchEngine {
 
   public static int zipId = 0;
 
+  /**
+   * Compresses a group of files into one single zip file
+   * @param files The list of File objects to zip
+   * @param fileName The name of the new zip File
+   */
   public static File zip(List<File> files, String filename) {
     File zipfile = new File(filename);
     // Create a buffer for reading the files
@@ -82,6 +87,13 @@ public class SearchEngine {
     return null;
   }
 
+  /**
+   * Gets a zipped file containing the files locates at a given list of paths in the Supabase file store
+   * Moves the zipped file to the frontend server
+   * @param paths The list of paths of the target files in the file store
+   * @return String of the compressed file name
+   * @throws IOException
+   */
   public String getZippedFileObjects(String[] paths) throws IOException {
     ArrayList<File> files = new ArrayList<>();
 
@@ -104,6 +116,12 @@ public class SearchEngine {
     return zipName;
   }
 
+  /**
+   * Gets a list files locates at a given list of paths in the Supabase file store
+   * @param paths The list of paths to fetch from the file store
+   * @return List of the files that are fetched and sent to the frontend
+   * @throws IOException
+   */
   public ArrayList<String> getFileObjects(String[] paths) throws IOException {
     ArrayList<String> output = new ArrayList<String>();
     for (String path : paths) {
@@ -160,6 +178,9 @@ public class SearchEngine {
         return "Error";
     }
 
+  // NOTE this following code is for sending the file via scp to the frontend server. Since our demo runs the backend and frontend
+  // servers on the same machine, this is overkill and a simple move is utilized. However, to run them on seperate machines, use this code:
+  
   //   JSch jsch = new JSch();
   //   Session session = null;
   //   int sourceserverport = 22;
@@ -200,7 +221,12 @@ public class SearchEngine {
     return name;
   }
   
-  private static void moveFile(String src, String dest ) {
+  /**
+   * Move a file from one location to another
+   * @param src The source location the file is located in
+   * @param dest The target destination for the file move
+   */
+  private static void moveFile(String src, String dest) {
     Path result = null;
     try {
       CopyOption[] options = new CopyOption[]{
