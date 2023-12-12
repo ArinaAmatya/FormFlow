@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import FileViewer from 'react-file-viewer';
 import { FileInfo } from '../typedefs.js';
 import Typography from '@mui/material/Typography';

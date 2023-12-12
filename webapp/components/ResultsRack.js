@@ -35,7 +35,7 @@ function ResultsRack({ files }) {
 
     return (<>
         <div className="flex">
-            <Button
+            <Button className="font-sans"
                 variant="outlined"
                 onClick={tryPreview}
             >

@@ -45,7 +45,7 @@ function SearchHistory({ history = [], handleRestoreSearch }) {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography>Search History</Typography>
+                <Typography className="font-sans font-semibold text-lg">Search History</Typography>
             </AccordionSummary>
             <AccordionDetails className="h-[400px] overflow-y-auto">
                 {history.map((snap, k) => {

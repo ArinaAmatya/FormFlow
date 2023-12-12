@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import { FileData } from '../typedefs.js';
 
@@ -39,7 +38,7 @@ function FileDownload({ selectedFiles }) {
     }
 
     return (
-        <Button className="ml-[20px] bg-theme-logo-blue"
+        <Button className="ml-[20px] font-sans bg-theme-logo-blue"
             variant="contained"
             onClick={tryDownload}
         >

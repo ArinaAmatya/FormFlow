@@ -29,7 +29,7 @@ function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography>Filters</Typography>
+                <Typography className="font-sans font-semibold text-lg">Filters</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <FilterInput
@@ -118,7 +118,7 @@ function Filters({ inputs, setInputs, addChip, handleFilterAndSearchButton }) {
                     setInputs={setInputs}
                     addChip={addChip}
                 />
-                <Button className="h-[56px] w-[316px] mt-[5px] ml-[13px] shadow shadow-theme-logo-blue rounded-xl bg-theme-contrast-blue-light text-xl font-extrabold hover:bg-[#afc3da] hover:border-none"
+                <Button className="h-[56px] w-[316px] mt-[5px] ml-[13px] shadow font-sans shadow-theme-logo-blue rounded-xl bg-theme-contrast-blue-light text-xl font-extrabold hover:bg-[#afc3da] hover:border-none"
                     onClick={handleFilterAndSearchButton}
                 >
                     <svg className="h-[32px] w-[32px] fill-theme-logo-blue mr-[20px]"
