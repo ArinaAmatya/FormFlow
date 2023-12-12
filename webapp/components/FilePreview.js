@@ -56,7 +56,7 @@ function FilePreview() {
                 }
             });
             let encodedPath = encodeURIComponent(rawPath.slice(1));
-            fetch(`http://localhost:8080/getZippedFiles/${encodedPath}`)
+            fetch(`http://localhost:8080/getFiles/${encodedPath}`)
                 .then(() => setTabData(fileData))
                 .catch(e => console.log(e));
         } catch(e) {

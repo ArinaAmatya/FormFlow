@@ -175,10 +175,8 @@ function Search() {
      */
     const search = (options) => {
         url = "http://localhost:8080/getFileMetadata/";
-        console.log(JSON.stringify(chips));
         chips.map(c => chipsSearch(c));
         for (const [key, value] of dataMap) {
-            console.log("Searching with: " + key + ":" + value);
             url += key + "=";
             for (let i = 0; i < value.length - 1; i++){
               url += value[i] + ",";
