@@ -5,6 +5,7 @@ export default class MyDocument extends Document {
         return ( 
 			<Html>
 				<Head>
+					<title>FormFlow</title>
 					<meta name="description"
 						content="A webapp for searching files" />
 					<meta name="author"
