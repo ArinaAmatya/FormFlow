@@ -5,6 +5,8 @@ import Tab from '@mui/material/Tab';
 import { useRouter } from 'next/router'
 import FileDisplay from './FileDisplay';
 
+let idInc = 0;
+
 /**
  * A React component that displays previews for selected files.
  * 
@@ -82,7 +84,7 @@ function FilePreview() {
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
             >
-                {tabData.map((t) => <Tab className="normal-case" label={t.label} key={t.label}></Tab>)}
+                {tabData.map((t) => <Tab className="normal-case" label={t.label} key={t.label + ":" + idInc++}></Tab>)}
             </Tabs>
             <FileDisplay file={selectedFile} />
         </Box>
