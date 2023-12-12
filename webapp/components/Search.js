@@ -189,7 +189,7 @@ function Search() {
             fetch(url)
             .then((res) => {
                 if (res.ok){
-                    return res.json();
+                    return res ? res.json() : [];
                 }else{
                     throw new Error("Status code error: " + res.status);
                 }})

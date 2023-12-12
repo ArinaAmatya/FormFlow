@@ -74,21 +74,20 @@ function FilePreview() {
         setSelectedFile(tabData[0]);
     }, [tabData]);
 
-    return (<>
-    <Box>
-        <Tabs
-            value={selectedTab}
-            onChange={handleTab}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="scrollable auto tabs example"
-        >
-            {tabData.map((t) => <Tab className="normal-case" label={t.label} key={t.label}></Tab>)}
-        </Tabs>
-        <FileDisplay file={selectedFile} />
-    </Box>
-    <Button onClick={() => console.log(JSON.stringify(selectedFile))}></Button>
-    </>);
+    return (
+        <Box>
+            <Tabs
+                value={selectedTab}
+                onChange={handleTab}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+            >
+                {tabData.map((t) => <Tab className="normal-case" label={t.label} key={t.label}></Tab>)}
+            </Tabs>
+            <FileDisplay file={selectedFile} />
+        </Box>
+    );
 }
 
 export default FilePreview;
