@@ -32,7 +32,7 @@ function FilePreview() {
      * Handles the changing of the selected tab to the one that is clicked.
      * 
      * @param {Event} event - The click event.
-     * @param {*} newValue - The index of the tab clicked.
+     * @param {number} newValue - The index of the tab clicked.
      * 
      * @function
      */
