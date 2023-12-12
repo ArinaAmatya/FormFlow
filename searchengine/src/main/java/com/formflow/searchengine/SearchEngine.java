@@ -300,7 +300,7 @@ public class SearchEngine {
     Dictionary<String, String> filterDict= new Hashtable<>();
     filterDict.put("projectName", "proj_info.project_name");
     filterDict.put("projectID", "proposal_info.project_id");
-    filterDict.put("fileType", "attach_type.description");
+    filterDict.put("fileType", "attachment_file.file_type");
     filterDict.put("fileName", "attachment_file.file_name"); // new
     filterDict.put("filePath", "attachment_file.file_path"); //new
     filterDict.put("proposalName", "proposal_info.proposal_label");
@@ -310,7 +310,7 @@ public class SearchEngine {
     filterDict.put("customerID", "cust_info.customer_id");
     filterDict.put("customerName", "cust_info.customer_name");
     filterDict.put("resourceID", "res_info.resource_id");
-    filterDict.put("resourceType", "res_info.resource_type");
+    filterDict.put("resourceName", "res_info.resource_type");
     filterDict.put("dateBegin", "period_info.begin_date");
     filterDict.put("dateEnd", "period_info.end_date");
 

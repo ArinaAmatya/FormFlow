@@ -32,7 +32,7 @@ function FilterInput({ label, type, input, date = false, setInputs, addChip }) {
         let value;
         if (date) {
             let day = dayjs(d).format("YYYY-MM");
-            value = day;
+            value = day === "Invalid Date" ? "" : day;
         } else {
             value = d.target.value;
         }

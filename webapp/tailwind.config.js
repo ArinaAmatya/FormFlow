@@ -17,6 +17,11 @@ module.exports = {
         'theme-grey-light': '#eeeeee'
       }
     },
+    fontFamily: {
+      'sans': ['Josefin Sans', 'ui-sans-serif', 'system-ui'],
+      'serif': ['ui-serif'],
+      'mono': ['ui-monospace']
+    }
   },
   plugins: [],
 }

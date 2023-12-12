@@ -2,7 +2,6 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
 import Image from 'next/image'
 import logo from '../public/icons/logo512.png';
 import Button from '@mui/material/Button';

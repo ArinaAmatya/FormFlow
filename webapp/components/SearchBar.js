@@ -61,8 +61,8 @@ function SearchBar({ chips, handleDelete, handleAddAllButton, handleDeleteAllBut
     
     return (
         <div className="flex">
-            <div className="rounded-l-xl bg-theme-contrast-blue-dark p-[10px] h-[56px] min-w-[320px] overflow-x-auto">
-                <Button className={buttonVisible ? "bg-theme-logo-blue w-[300px]" : "hidden"}
+            <div className="rounded-l-xl bg-theme-contrast-blue-dark p-[10px] h-[56px] min-w-[320px] overflow-x-auto overflow-y-clip">
+                <Button className={buttonVisible ? "bg-theme-logo-blue w-[300px] font-sans" : "hidden"}
                     variant="contained"
                     onClick={handleAddAllButton}
                 >Add Filters</Button>

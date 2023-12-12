@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
 import FileDisplay from './FileDisplay';
 
@@ -32,7 +31,7 @@ function FilePreview() {
      * Handles the changing of the selected tab to the one that is clicked.
      * 
      * @param {Event} event - The click event.
-     * @param {*} newValue - The index of the tab clicked.
+     * @param {number} newValue - The index of the tab clicked.
      * 
      * @function
      */
@@ -74,21 +73,20 @@ function FilePreview() {
         setSelectedFile(tabData[0]);
     }, [tabData]);
 
-    return (<>
-    <Box>
-        <Tabs
-            value={selectedTab}
-            onChange={handleTab}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="scrollable auto tabs example"
-        >
-            {tabData.map((t) => <Tab className="normal-case" label={t.label} key={t.label}></Tab>)}
-        </Tabs>
-        <FileDisplay file={selectedFile} />
-    </Box>
-    <Button onClick={() => console.log(JSON.stringify(selectedFile))}></Button>
-    </>);
+    return (
+        <Box>
+            <Tabs
+                value={selectedTab}
+                onChange={handleTab}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+            >
+                {tabData.map((t) => <Tab className="normal-case" label={t.label} key={t.label}></Tab>)}
+            </Tabs>
+            <FileDisplay file={selectedFile} />
+        </Box>
+    );
 }
 
 export default FilePreview;
