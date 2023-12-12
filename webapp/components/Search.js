@@ -65,6 +65,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+const dataMap = new Map(); 
+
 /**
  * A React component that represents the search bar and the filters & history
  * drawer and their functionality.
@@ -91,7 +93,6 @@ function Search() {
         dateBegin: "",
         dateEnd: ""
     });
-    const dataMap = new Map(); 
     let url = "";
     const [prevSearches, setPrevSearches] = useState([]);
     const [searchFlags, setSearchFlags] = useState([]);
@@ -130,7 +131,7 @@ function Search() {
         filters.forEach(filter => {
                 if (inputs[filter] !== "" && !chips.some(c => c.type === filter && c.value === inputs[filter])) {
                 chipsToAdd.push({
-                    id: idInc++,
+                    id: filter + ":" + inputs[filter] + "-" + idInc++,
                     type: filter,
                     value: inputs[filter]
                 });
@@ -173,17 +174,19 @@ function Search() {
      * @function
      */
     const search = (options) => {
-        url = "http://localhost:8080/getFileMetadata/"
+        url = "http://localhost:8080/getFileMetadata/";
+        console.log(JSON.stringify(chips));
         chips.map(c => chipsSearch(c));
         for (const [key, value] of dataMap) {
+            console.log("Searching with: " + key + ":" + value);
             url += key + "=";
             for (let i = 0; i < value.length - 1; i++){
               url += value[i] + ",";
             }
             url += value[value.length-1] + "&";
-          }
-          url = url.substring(0, url.length-1);
-          url = url.replaceAll(" ", "%20");
+        }
+        url = url.substring(0, url.length-1);
+        url = url.replaceAll(" ", "%20");
         if (chips.length !== 0){
             fetch(url)
             .then((res) => {
@@ -201,9 +204,11 @@ function Search() {
                 }));
             })
             .catch((err) => console.log(err));
-        }else{
+        } else{
             setData([]);
         }
+
+        dataMap.clear();
 
         if (!options.includes("no-history")) {
             setPrevSearches(prev => chips.length > 0 ? [chips].concat(prev) : prev);
