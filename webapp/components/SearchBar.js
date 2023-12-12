@@ -1,3 +1,4 @@
+import * as React from 'react';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -70,6 +71,7 @@ function SearchBar({ chips, handleDelete, handleAddAllButton, handleDeleteAllBut
                 <Button className={!buttonVisible ? "bg-theme-logo-blue pl-[6px] pr-[6px] max-w-[24px] rounded-3xl" : "hidden"}
                     variant="contained"
                     onClick={handleDeleteAllButton}
+                    data-testid="DelAllButton"
                 >
                     <HighlightOffIcon />
                 </Button>
@@ -78,6 +80,7 @@ function SearchBar({ chips, handleDelete, handleAddAllButton, handleDeleteAllBut
             <Button className="rounded-r-xl rounded-l-none border-none bg-theme-contrast-blue-light hover:bg-[#afc3da] hover:border-none"
                 variant="outlined"
                 onClick={handleSearch}
+                data-testid="SearchButton"
             >
                 <svg className="h-[32px] w-[32px] fill-theme-logo-blue"
                     xmlns="http://www.w3.org/2000/svg"
